@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PCBrouterDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ModelList">
+    <Key>
+      <PropertyRef Name="Id" />
+      <PropertyRef Name="Model" />
+      <PropertyRef Name="Xval" />
+      <PropertyRef Name="Yval" />
+      <PropertyRef Name="PCBnum" />
+      <PropertyRef Name="R_MotionShape_num" />
+      <PropertyRef Name="R_MotionShape_distance_Y" />
+      <PropertyRef Name="R_distance_X" />
+      <PropertyRef Name="R_pos_Y" />
+      <PropertyRef Name="C_MotionShape_num" />
+      <PropertyRef Name="C_MotionShape_distance_X" />
+      <PropertyRef Name="C_distance_Y" />
+      <PropertyRef Name="C_pos_X" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Model" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Xval" Type="Int32" Nullable="false" />
+    <Property Name="Yval" Type="Int32" Nullable="false" />
+    <Property Name="PCBnum" Type="Int32" Nullable="false" />
+    <Property Name="R_MotionShape_num" Type="Int32" Nullable="false" />
+    <Property Name="R_MotionShape_distance_Y" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="R_distance_X" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="R_pos_Y" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="C_MotionShape_num" Type="Int32" Nullable="false" />
+    <Property Name="C_MotionShape_distance_X" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="C_distance_Y" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="C_pos_X" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="PCBrouterDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ModelLists" EntityType="Self.ModelList" />
+  </EntityContainer>
+</Schema>
