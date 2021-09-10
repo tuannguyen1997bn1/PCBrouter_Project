@@ -197,19 +197,19 @@ namespace PCBrouter_prj.ViewModel
             {
                 if (p.ToString() == "btn_SetSpeedX")
                 {
-                   // SpeedSet(SpeedValueX,"");
+                    SpeedSet(SpeedValueX,"DXXX","DXXX");
                 }  
                 else if (p.ToString() == "btn_SetSpeedY")
                 {
-                    //SpeedSet(SpeedValueY, "");
+                    SpeedSet(SpeedValueY, "DXXX", "DXXX");
                 }
                 else if (p.ToString() == "btn_SetSpeedZ1")
                 {
-                   //SpeedSet(SpeedValueZ1, "");
+                    SpeedSet(SpeedValueZ1, "DXXX", "DXXX");
                 }
                 else if (p.ToString() == "btn_SetSpeedZ2")
                 {
-                   // SpeedSet(SpeedValueZ2, "");
+                    SpeedSet(SpeedValueZ2, "DXXX", "DXXX");
                 }
             });
             ForwardUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
@@ -411,7 +411,8 @@ namespace PCBrouter_prj.ViewModel
             bool canConvert = int.TryParse(speedVal, out speed);
             if (canConvert == true)
             {
-                plc.SetDevice(buffer1, speed); // thanh ghi Dxxx
+                plc.SetDevice(buffer1, speed % 65536); // thanh ghi Dxxx
+                plc.SetDevice(buffer2, speed / 65536); // thanh ghi Dxxx
             }
             else
             {

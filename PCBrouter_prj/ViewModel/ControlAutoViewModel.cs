@@ -1,4 +1,4 @@
-﻿using ActUtlTypeLib;
+﻿//using ActUtlTypeLib;
 using PCBrouter_prj.Model;
 using System;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading;
+using ActUtlTypeLib;
 
 namespace PCBrouter_prj.ViewModel
 {
@@ -152,12 +153,12 @@ namespace PCBrouter_prj.ViewModel
             LoadModelCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
                 plc = MainViewModel.plc;
-                ctrAuto.Dispatcher.Invoke(() =>
-                {
-                    ctrAuto.btn_Run.IsEnabled = true;
-                });
                 if (SelectedItems != null)
                 {
+                    ctrAuto.Dispatcher.Invoke(() =>
+                    {
+                        ctrAuto.btn_Run.IsEnabled = true;
+                    });
                     ModelSelected = SelectedItems.Model.ToString();
                     XvalSelected = SelectedItems.Xval.ToString();
                     YvalSelected = SelectedItems.Yval.ToString();
@@ -174,7 +175,7 @@ namespace PCBrouter_prj.ViewModel
                 }
             });
         }
-        #region threadTest
+        #region AUTO EXECUTION
         // thread test
         public Thread ExecutionThread;
         public void StartThread()
@@ -265,15 +266,15 @@ namespace PCBrouter_prj.ViewModel
                         int d200;
                         int d400;
                         plc.GetDevice("D200", out d200);
-                        plc.GetDevice("D400", out d400);
-                        if ( d200 == 0 && d400 == 0)
-                        {
-                            plc.SetDevice("M1888", 1);
-                            flag1 = 0;
-                            flag2 = 0;
-                            i = 1;
-                        }    
-                    }    
+                        plc.GetDevice("D400", out d400); 
+                         if ( d200 == 0 && d400 == 0)
+                         {
+                             plc.SetDevice("M1888", 1);
+                             flag1 = 0;
+                             flag2 = 0;
+                             i = 1;
+                         }    
+                    }
                 }
             }
             catch (Exception)
@@ -337,7 +338,7 @@ namespace PCBrouter_prj.ViewModel
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                plc.SetDevice("M400", 1); 
+                plc.SetDevice("M400", 1);
             });
         }
         private int[] SumPosCalculate(string StrPos)

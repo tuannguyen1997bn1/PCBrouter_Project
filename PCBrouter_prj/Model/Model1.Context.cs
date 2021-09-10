@@ -16,7 +16,7 @@ namespace PCBrouter_prj.Model
     public partial class PCBrouterDBEntities : DbContext
     {
         public PCBrouterDBEntities()
-            : base("name=PCBrouterDBEntities")
+            : base(@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-FPLJSMH\KSTDATABASE;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';")
         {
         }
     

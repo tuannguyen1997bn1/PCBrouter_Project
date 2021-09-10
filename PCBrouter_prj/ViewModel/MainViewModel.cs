@@ -49,7 +49,7 @@ namespace PCBrouter_prj.ViewModel
             {
                
             });
-           ModeCommand = new RelayCommand<object>((p) => { return true; }, (p)=>
+            ModeCommand = new RelayCommand<object>((p) => { return true; }, (p)=>
             {
                 if (p.ToString() == "ManualModeParameter")
                 {
@@ -138,7 +138,7 @@ namespace PCBrouter_prj.ViewModel
         //    plc.SetDevice("D200", 0);
         //    plc.SetDevice("D100", 0);
         //}
-    
+
 
     }
 }
