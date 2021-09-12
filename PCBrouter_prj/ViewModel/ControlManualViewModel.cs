@@ -7,11 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PCBrouter_prj.ViewModel
 {
     public class ControlManualViewModel : BaseViewModel
     {
+        public static DispatcherTimer TimerCheckErrors;
+        public static string flag_KnifeSelect = "knife1";
         #region Defination
         private ActUtlType plc;
         private UserControlKteam.ControlManual ctrManual;
@@ -186,30 +189,194 @@ namespace PCBrouter_prj.ViewModel
         public ICommand HomeCommand { get; set; }
         public ICommand ExcuteNoCommand { get; set; }
         public ICommand ExcuteValCommand { get; set; }
+        public ICommand KnifeSelectCommand { get; set; }
+        public ICommand RunKnifeCommand { get; set; }
+        public ICommand Knife_Speed1_Command { get; set; }
+        public ICommand Knife_Speed2_Command { get; set; }
+        public ICommand Knife_Speed3_Command { get; set; }
+        public ICommand Brake1_Command { get; set; }
+        public ICommand Brake2_Command { get; set; }
         public ControlManualViewModel()
         {
             LoadedManualUCCommand = new RelayCommand<UserControlKteam.ControlManual>((p) => { return true; }, (p) =>
             {
                 plc = MainViewModel.plc;
                 ctrManual = p;
+                TimerCheckErrors = new DispatcherTimer();
+                TimerCheckErrors.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                TimerCheckErrors.Tick += TimerCheckErrors_Tick;
+                TimerCheckErrors.Start();
+            });
+            KnifeSelectCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                if (p.ToString() == "rad_btn_knife1")
+                {
+                    flag_KnifeSelect = "knife1";
+                }
+                else if (p.ToString() == "AutoModeParameter")
+                {
+                    flag_KnifeSelect = "knife2";
+                }
+            });
+            Brake1_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                int m115;
+                plc.GetDevice("M115", out m115);
+                if (m115 == 0) 
+                {
+                    plc.SetDevice("M115", 1);
+                }
+                else
+                {
+                    plc.SetDevice("M115", 0);
+                }
+            });
+            Brake2_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                int m116;
+                plc.GetDevice("M116", out m116);
+                if (m116 == 0)
+                {
+                    plc.SetDevice("M116", 1);
+                }
+                else
+                {
+                    plc.SetDevice("M116", 0);
+                }
+            });
+            RunKnifeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                if (flag_KnifeSelect == "knife1")
+                {
+                    int m107;
+                    plc.GetDevice("M107", out m107);
+                    if (m107 == 0)
+                    {
+                        plc.SetDevice("M107", 1);
+                    }   
+                    else
+                    {
+                        plc.SetDevice("M107", 0);
+                    }    
+                }   
+                if (flag_KnifeSelect == "knife2")
+                {
+                    int m111;
+                    plc.GetDevice("M111", out m111);
+                    if (m111 == 0)
+                    {
+                        plc.SetDevice("M111", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M111", 0);
+                    }
+                }    
+            });
+            Knife_Speed1_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                if (flag_KnifeSelect == "knife1")
+                {
+                    int m108;
+                    plc.GetDevice("M108", out m108);
+                    if (m108 == 0)
+                    {
+                        plc.SetDevice("M108", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M108", 0);
+                    }
+                }
+                if (flag_KnifeSelect == "knife2")
+                {
+                    int m112;
+                    plc.GetDevice("M112", out m112);
+                    if (m112 == 0)
+                    {
+                        plc.SetDevice("M112", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M112", 0);
+                    }
+                }
+            });
+            Knife_Speed2_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                if (flag_KnifeSelect == "knife1")
+                {
+                    int m109;
+                    plc.GetDevice("M109", out m109);
+                    if (m109 == 0)
+                    {
+                        plc.SetDevice("M109", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M109", 0);
+                    }
+                }
+                if (flag_KnifeSelect == "knife2")
+                {
+                    int m113;
+                    plc.GetDevice("M113", out m113);
+                    if (m113 == 0)
+                    {
+                        plc.SetDevice("M113", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M113", 0);
+                    }
+                }
+            });
+            Knife_Speed3_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                if (flag_KnifeSelect == "knife1")
+                {
+                    int m110;
+                    plc.GetDevice("M110", out m110);
+                    if (m110 == 0)
+                    {
+                        plc.SetDevice("M110", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M110", 0);
+                    }
+                }
+                if (flag_KnifeSelect == "knife2")
+                {
+                    int m114;
+                    plc.GetDevice("M114", out m114);
+                    if (m114 == 0)
+                    {
+                        plc.SetDevice("M114", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M114", 0);
+                    }
+                }
             });
             SetSpeedCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 if (p.ToString() == "btn_SetSpeedX")
                 {
-                    SpeedSet(SpeedValueX,"DXXX","DXXX");
+                    SpeedSet(SpeedValueX,"D200","D201");
                 }  
                 else if (p.ToString() == "btn_SetSpeedY")
                 {
-                    SpeedSet(SpeedValueY, "DXXX", "DXXX");
+                    SpeedSet(SpeedValueY, "D220", "D221");
                 }
                 else if (p.ToString() == "btn_SetSpeedZ1")
                 {
-                    SpeedSet(SpeedValueZ1, "DXXX", "DXXX");
+                    SpeedSet(SpeedValueZ1, "D240", "D241");
                 }
                 else if (p.ToString() == "btn_SetSpeedZ2")
                 {
-                    SpeedSet(SpeedValueZ2, "DXXX", "DXXX");
+                    SpeedSet(SpeedValueZ2, "D260", "D261");
                 }
             });
             ForwardUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
@@ -218,28 +385,28 @@ namespace PCBrouter_prj.ViewModel
                 {
                     if (Convert.ToInt32(SpeedValueX) > 0)
                     {
-                        plc.SetDevice("M501", 1);
+                        plc.SetDevice("M155", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ForwardY")
                 {
                     if (Convert.ToInt32(SpeedValueY) > 0)
                     {
-                        plc.SetDevice("M503", 1);
+                        plc.SetDevice("M165", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ForwardZ1")
                 {
                     if (Convert.ToInt32(SpeedValueZ1) > 0)
                     {
-                        plc.SetDevice("M505", 1);
+                        plc.SetDevice("M175", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ForwardZ2")
                 {
                     if (Convert.ToInt32(SpeedValueZ2) > 0)
                     {
-                        plc.SetDevice("M507", 1);
+                        plc.SetDevice("M185", 1);
                     }
                 }
             });
@@ -247,19 +414,19 @@ namespace PCBrouter_prj.ViewModel
             {
                 if (p.ToString() == "btn_ForwardX")
                 {
-                    plc.SetDevice("M501", 0);
+                    plc.SetDevice("M155", 0);
                 }
                 else if (p.ToString() == "btn_ForwardY")
                 {
-                    plc.SetDevice("M503", 0);
+                    plc.SetDevice("M165", 0);
                 }
                 else if (p.ToString() == "btn_ForwardZ1")
                 {
-                    plc.SetDevice("M505", 0);
+                    plc.SetDevice("M175", 0);
                 }
                 else if (p.ToString() == "btn_ForwardZ2")
                 {
-                    plc.SetDevice("M507", 0);
+                    plc.SetDevice("M185", 0);
                 }
             });
             ReverseUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
@@ -268,28 +435,28 @@ namespace PCBrouter_prj.ViewModel
                 {
                     if (Convert.ToInt32(SpeedValueX) > 0)
                     {
-                        plc.SetDevice("M502", 1);
+                        plc.SetDevice("M156", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ReverseY")
                 {
                     if (Convert.ToInt32(SpeedValueY) > 0)
                     {
-                        plc.SetDevice("M504", 1);
+                        plc.SetDevice("M166", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ReverseZ1")
                 {
                     if (Convert.ToInt32(SpeedValueZ1) > 0)
                     {
-                        plc.SetDevice("M506", 1);
+                        plc.SetDevice("M176", 1);
                     }
                 }
                 else if (p.ToString() == "btn_ReverseZ2")
                 {
                     if (Convert.ToInt32(SpeedValueZ2) > 0)
                     {
-                        plc.SetDevice("M508", 1);
+                        plc.SetDevice("M186", 1);
                     }
                 }
             });
@@ -297,114 +464,171 @@ namespace PCBrouter_prj.ViewModel
             {
                 if (p.ToString() == "btn_ReverseX")
                 {
-                    plc.SetDevice("M502", 0);
+                    plc.SetDevice("M156", 0);
                 }
                 else if (p.ToString() == "btn_ReverseY")
                 {
-                    plc.SetDevice("M504", 0);
+                    plc.SetDevice("M166", 0);
                 }
                 else if (p.ToString() == "btn_ReverseZ1")
                 {
-                    plc.SetDevice("M506", 0);
+                    plc.SetDevice("M176", 0);
                 }
                 else if (p.ToString() == "btn_ReverseZ2")
                 {
-                    plc.SetDevice("M508", 0);
+                    plc.SetDevice("M186", 0);
                 }
             });
             ResetCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 if (p.ToString() == "btn_ResetX")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M154", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M154", 0);
                 }
                 else if (p.ToString() == "btn_ResetY")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M164", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M164", 0);
                 }
                 else if (p.ToString() == "btn_ResetZ1")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M174", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M174", 0);
                 }
                 else if (p.ToString() == "btn_ResetZ2")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M184", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M184", 0);
                 }
             });
             HomeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 if (p.ToString() == "btn_HomeX")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M152", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M152", 0);
                 }
                 else if (p.ToString() == "btn_HomeY")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M162", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M162", 0);
                 }
                 else if (p.ToString() == "btn_HomeZ1")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M172", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M172", 0);
                 }
                 else if (p.ToString() == "btn_HomeZ2")
                 {
-                    plc.SetDevice("", 1);
+                    plc.SetDevice("M182", 1);
                     Thread.Sleep(100);
-                    plc.SetDevice("", 0);
+                    plc.SetDevice("M182", 0);
                 }
             });
             ExcuteNoCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 if (p.ToString() == "btn_ExcuteNoX")
                 {
-                    PositionSet(PositionNoX, "buffer", "bit");
+                    PositionSet(PositionNoX, "D208", "M157");
                 }
                 else if (p.ToString() == "btn_ExcuteNoY")
                 {
-                    PositionSet(PositionNoY, "buffer", "bit");
+                    PositionSet(PositionNoY, "D228", "M167");
                 }
                 else if (p.ToString() == "btn_ExcuteNoZ1")
                 {
-                    PositionSet(PositionNoZ1, "buffer", "bit");
+                    PositionSet(PositionNoZ1, "D248", "M177");
                 }
                 else if (p.ToString() == "btn_ExcuteNoZ2")
                 {
-                    PositionSet(PositionNoZ2, "buffer", "bit");
+                    PositionSet(PositionNoZ2, "D268", "M187");
                 }
             });
             ExcuteValCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-                if (p.ToString() == "btn_ExcuteValX")
-                {
-                    PositionSet(PositionValX, "buffer", "bit");
-                }
-                else if (p.ToString() == "btn_ExcuteValY")
-                {
-                    PositionSet(PositionValY, "buffer", "bit");
-                }
-                else if (p.ToString() == "btn_ExcuteValZ1")
-                {
-                    PositionSet(PositionValZ1, "buffer", "bit");
-                }
-                else if (p.ToString() == "btn_ExcuteValZ2")
-                {
-                    PositionSet(PositionValZ2, "buffer", "bit");
-                }
+                //if (p.ToString() == "btn_ExcuteValX")
+                //{
+                //    PositionSet(PositionValX, "buffer", "bit");
+                //}
+                //else if (p.ToString() == "btn_ExcuteValY")
+                //{
+                //    PositionSet(PositionValY, "buffer", "bit");
+                //}
+                //else if (p.ToString() == "btn_ExcuteValZ1")
+                //{
+                //    PositionSet(PositionValZ1, "buffer", "bit");
+                //}
+                //else if (p.ToString() == "btn_ExcuteValZ2")
+                //{
+                //    PositionSet(PositionValZ2, "buffer", "bit");
+                //}
             });
         }
+        private void CheckBrake()
+        {
+            int m115;
+            plc.GetDevice("M115", out m115);
+            if (m115 == 0)
+            {
+                ctrManual.Dispatcher.Invoke(() =>
+                {
+                    ctrManual.badged_brake1.Badge = "OFF";
+                    ctrManual.badged_brake1.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Dark;
+                });
+            }
+            else
+            {
+                ctrManual.Dispatcher.Invoke(() =>
+                {
+                    ctrManual.badged_brake1.Badge = "ON";
+                    ctrManual.badged_brake1.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Standard;
+                });
+            }
+            int m116;
+            plc.GetDevice("M116", out m116);
+            if (m116 == 0)
+            {
+                ctrManual.Dispatcher.Invoke(() =>
+                {
+                    ctrManual.badged_brake2.Badge = "OFF";
+                    ctrManual.badged_brake2.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Dark;
+                });
+            }
+            else
+            {
+                ctrManual.Dispatcher.Invoke(() =>
+                {
+                    ctrManual.badged_brake2.Badge = "ON";
+                    ctrManual.badged_brake2.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Standard;
+                });
+            }
+        }
+        private void TimerCheckErrors_Tick(object sender, EventArgs e)
+        {
+            ErrorCheck();
+            CheckBrake();
+        }
+        public void ErrorCheck()
+        {
+            int errX, errY, errZ1, errZ2;
+            plc.GetDevice("D20",out errX);
+            plc.GetDevice("D50", out errY);
+            plc.GetDevice("D80", out errZ1);
+            plc.GetDevice("D120", out errZ2);
+            ErrorCodeX = errX.ToString();
+            ErrorCodeY = errY.ToString();
+            ErrorCodeZ1 = errZ1.ToString();
+            ErrorCodeZ2 = errZ2.ToString();
+        }
+
         private void SpeedSet(string speedVal, string buffer1, string buffer2)
         {
             int speed;

@@ -16,8 +16,9 @@ namespace PCBrouter_prj.Model
     public partial class PCBrouterDBEntities : DbContext
     {
         public PCBrouterDBEntities()
-            : base(@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-FPLJSMH\KSTDATABASE;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';")
+            : base(@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-QRDMR9C\SQLRAV;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';")
         {
+            //@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-FPLJSMH\KSTDATABASE;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';"
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

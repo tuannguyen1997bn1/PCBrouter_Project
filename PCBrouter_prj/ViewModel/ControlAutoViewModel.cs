@@ -120,9 +120,9 @@ namespace PCBrouter_prj.ViewModel
                     ctrAuto.grid_dataBox.IsEnabled = false;
                     ctrAuto.grid_tableDB.IsEnabled = false;
                 });
-                plc.SetDevice("", 1);
+                plc.SetDevice("M101", 1);
                 Thread.Sleep(100);
-                plc.SetDevice("", 0);
+                plc.SetDevice("M101", 0);
             });
             StopCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
@@ -137,18 +137,21 @@ namespace PCBrouter_prj.ViewModel
                     ctrAuto.grid_dataBox.IsEnabled = true;
                     ctrAuto.grid_tableDB.IsEnabled = true;
                 });
+                plc.SetDevice("M102", 1);
+                Thread.Sleep(100);
+                plc.SetDevice("M102", 0);
             });
             ResetCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
-                plc.SetDevice("", 1);
+                plc.SetDevice("M103", 1);
                 Thread.Sleep(100);
-                plc.SetDevice("", 0);
+                plc.SetDevice("M103", 0);
             });
             HomeCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
-                plc.SetDevice("", 1);
+                plc.SetDevice("M104", 1);
                 Thread.Sleep(100);
-                plc.SetDevice("", 0);
+                plc.SetDevice("M104", 0);
             });
             LoadModelCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {

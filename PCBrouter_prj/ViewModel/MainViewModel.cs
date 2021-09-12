@@ -19,9 +19,8 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
-        
         public static ActUtlType plc = new ActUtlType();
-        private DispatcherTimer TimerCheckStatus;
+        public static DispatcherTimer TimerCheckStatus;
         public ICommand LoadedWindowCommand { get; set; }
         public ICommand ClosingWindowCommand { get; set; }
         public ICommand ModeCommand { get; set; }
@@ -41,9 +40,18 @@ namespace PCBrouter_prj.ViewModel
        
         public MainViewModel()
         {
-            ServoOnCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
+            ServoOnCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-
+                int m120;
+                plc.GetDevice("M120",out m120);
+                if (m120 == 1)
+                {
+                    plc.SetDevice("M120", 0);
+                }   
+                else
+                {
+                    plc.SetDevice("M120", 1);
+                }    
             });
             ClosingWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) =>
             {
@@ -54,10 +62,12 @@ namespace PCBrouter_prj.ViewModel
                 if (p.ToString() == "ManualModeParameter")
                 {
                     UCview = new ControlManualViewModel();
+                    plc.SetDevice("M105", 0);
                 }    
                 else if (p.ToString() == "AutoModeParameter")
                 {
                     UCview = new ControlAutoViewModel();
+                    plc.SetDevice("M105", 1);
                 }    
             });
             LoadedWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) => {
@@ -65,7 +75,7 @@ namespace PCBrouter_prj.ViewModel
                 Connection();
                 UCview = new ControlAutoViewModel();
                 TimerCheckStatus = new DispatcherTimer();
-                TimerCheckStatus.Interval = new TimeSpan(0, 0, 0, 0, 100);
+                TimerCheckStatus.Interval = new TimeSpan(0, 0, 0, 0, 250);
                 TimerCheckStatus.Tick += TimerCheckStatus_Tick;
                 TimerCheckStatus.Start();
             });
@@ -77,9 +87,9 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ServoOnCheck()
         {
-            int m400 = 0;
-            plc.GetDevice("M400", out m400);
-            if (m400 == 1) // m100 == 1
+            int m120;
+            plc.GetDevice("M120", out m120);
+            if (m120 == 1) // m100 == 1
             {
                 mwd.Dispatcher.Invoke(() =>
                 {
