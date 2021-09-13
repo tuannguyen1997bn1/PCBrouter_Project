@@ -91,16 +91,19 @@
                             <RadioButton
                                 x:Name="rad_btn_Auto"
                                 GroupName="Mode"
+                                ToolTip="AUTO MODE"
                                 Grid.Column="0" Grid.Row="0"
                                 Command="{Binding ModeCommand, UpdateSourceTrigger=PropertyChanged}"
                                 CommandParameter="AutoModeParameter"
-                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
                                 IsChecked="True"
                                 Style="{StaticResource MaterialDesignRadioButton}">
                             </RadioButton>
                             <RadioButton
                                 x:Name="rad_btn_Manual"
                                 GroupName="Mode"
+                                ToolTip="MANUAL MODE"
                                 Grid.Column="1" Grid.Row="0"
                                 Command="{Binding ModeCommand, UpdateSourceTrigger=PropertyChanged}"
                                 CommandParameter="ManualModeParameter"
@@ -145,7 +148,7 @@
                                 Width="auto"
                                 Height="auto"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                
                                 Command="{Binding ServoOnCommand}"   
                                 CommandParameter="{Binding ElementName=btn_ServoOn}"
                                 VerticalAlignment="Stretch" 
@@ -195,9 +198,11 @@
             HorizontalAlignment="Stretch"
             Grid.Row="2">
             <UserControl 
+                x:Name="cmm"
                 Content="{Binding UCview, UpdateSourceTrigger=PropertyChanged}"
                 VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"/>
+                HorizontalAlignment="Stretch">
+            </UserControl>
         </materialDesign:Card>
         
 

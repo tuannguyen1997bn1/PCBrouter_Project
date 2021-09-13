@@ -13,9 +13,10 @@ namespace PCBrouter_prj.ViewModel
 {
     public class ControlManualViewModel : BaseViewModel
     {
+
+        #region Defination
         public static DispatcherTimer TimerCheckErrors;
         public static string flag_KnifeSelect = "knife1";
-        #region Defination
         private ActUtlType plc;
         private UserControlKteam.ControlManual ctrManual;
         private string _ErrorCodeX;

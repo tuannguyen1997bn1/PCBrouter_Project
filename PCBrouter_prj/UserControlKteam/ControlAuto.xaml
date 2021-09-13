@@ -220,13 +220,19 @@
                             UniformCornerRadius="5"
                             Grid.Column="0" 
                             Grid.Row="6" 
-                            Grid.ColumnSpan="3">
-                            <Image
-                                x:Name="image_Model" 
-                                Visibility="Visible"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Stretch"              
-                                Stretch="UniformToFill" />
+                            Grid.ColumnSpan="3" Background="#FF383560">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                            </Grid>
                         </materialDesign:Card>
 
                     </Grid>

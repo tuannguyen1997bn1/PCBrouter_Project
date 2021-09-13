@@ -27,8 +27,8 @@
             <materialDesign:Card.Background>
                 <ImageBrush ImageSource="pcb1.jpg" Stretch="UniformToFill"/>
             </materialDesign:Card.Background>
-            
-            
+
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -40,7 +40,7 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                
+
                 <!--4 engine-->
                 <materialDesign:Card 
                     Margin="5"
@@ -163,7 +163,7 @@
                                         Command="{Binding SetSpeedCommand}"
                                         CommandParameter="btn_SetSpeedX"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                        
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Height="40"
@@ -201,7 +201,7 @@
                                         VerticalAlignment="Center"
                                         Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -241,7 +241,7 @@
                                         VerticalAlignment="Center"
                                         Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -283,7 +283,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -317,7 +317,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -376,7 +376,7 @@
                                         Command="{Binding ExcuteNoCommand}"
                                         CommandParameter="btn_ExcuteNoX"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                        
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
@@ -529,7 +529,7 @@
                                         Command="{Binding SetSpeedCommand}"
                                        CommandParameter="btn_SetSpeedY"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                        
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Height="40"
@@ -568,7 +568,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -604,7 +604,7 @@
                                     <Button
                                          x:Name="btn_ForwardY"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
+                                        
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
@@ -652,7 +652,7 @@
                                         VerticalAlignment="Center"
                                         Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -686,7 +686,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -745,7 +745,6 @@
                                         Command="{Binding ExcuteNoCommand}"
                                         CommandParameter="btn_ExcuteNoY"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
@@ -898,7 +897,6 @@
                                         Command="{Binding SetSpeedCommand}"
                                         CommandParameter="btn_SetSpeedZ1"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Height="40"
@@ -937,7 +935,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -977,7 +975,6 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
                                         FontWeight="Bold" FontSize="20">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseUp">
@@ -1019,8 +1016,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
-                                        Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        Width="110" FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -1054,7 +1050,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                        FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -1113,7 +1109,6 @@
                                         Command="{Binding ExcuteNoCommand}"
                                         CommandParameter="btn_ExcuteNoZ1"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
@@ -1266,7 +1261,6 @@
                                         Command="{Binding SetSpeedCommand}"
                                         CommandParameter="btn_SetSpeedZ2"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Height="40"
@@ -1304,7 +1298,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -1344,7 +1338,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
+                                         
                                         FontWeight="Bold" FontSize="20">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseUp">
@@ -1387,7 +1381,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -1421,7 +1415,7 @@
                                         VerticalAlignment="Center"
                                          Height="40"
                                         Width="110"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" FontWeight="Bold" FontSize="20">
+                                         FontWeight="Bold" FontSize="20">
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition/>
@@ -1480,7 +1474,7 @@
                                         Command="{Binding ExcuteNoCommand}"
                                         CommandParameter="btn_ExcuteNoZ2"
                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                        
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                          Height="40"
@@ -1539,19 +1533,30 @@
                             <ColumnDefinition ></ColumnDefinition>
                             <ColumnDefinition ></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" >
+                        <materialDesign:Card 
+                            Margin="3"
+                            Grid.Row="0" 
+                            UniformCornerRadius="15"
+                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch" Background="#FFDBF1B9" Opacity="0.75" >
+                            
+                        </materialDesign:Card>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3" Grid.Row="0" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
                             <RadioButton
+                                Margin="0 10 0 0"
                                 x:Name="rad_btn_knife1"
-                                GroupName="Mode"
-                                Grid.Column="0" Grid.Row="0"
+                                GroupName="ModeKnife"
+                                    ToolTip="KNIFE-1"
+                                Grid.Column="0" 
+                                Grid.Row="0"
                                 Command="{Binding KnifeSelectCommand, UpdateSourceTrigger=PropertyChanged}"
                                 CommandParameter="rad_btn_knife1"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -1559,8 +1564,10 @@
                                 Style="{StaticResource MaterialDesignRadioButton}">
                             </RadioButton>
                             <RadioButton
+                                Margin="0 10 0 0"
                                 x:Name="rad_btn_knife2"
-                                GroupName="Mode"
+                                GroupName="ModeKnife"
+                                    ToolTip="KNIFE-2"
                                 Grid.Column="1" Grid.Row="0"
                                 Command="{Binding KnifeSelectCommand, UpdateSourceTrigger=PropertyChanged}"
                                 CommandParameter="rad_btn_knife2"
@@ -1572,7 +1579,7 @@
                                 Background="#FF051105"
                                 Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                Margin="10 2"        
+                                Margin="10 5 10 6"        
                                 UniformCornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" FontWeight="Bold">
                                  KNIFE 1
@@ -1584,7 +1591,7 @@
                                 Background="#FF051105"
                                 Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                Margin="10 2"        
+                                Margin="10 5 10 6"     
                                 UniformCornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" FontWeight="Bold">
                                  KNIFE 2
@@ -1594,11 +1601,11 @@
                         <Button
                             Command="{Binding RunKnifeCommand}"
                             Style="{StaticResource MaterialDesignRaisedButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                            
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Grid.Column="1"
-                            Margin="20"
+                            Margin="25"
                             Height="40"
                             Width="110"
                             FontWeight="Bold" 
@@ -1628,7 +1635,7 @@
                         <Button
                             Command="{Binding Knife_Speed1_Command}"
                             Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
+                                         
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Grid.Column="2"
@@ -1661,7 +1668,7 @@
                         <Button
                             Command="{Binding Knife_Speed2_Command}"
                             Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
+                                         
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Grid.Column="3"
@@ -1694,7 +1701,7 @@
                         <Button
                             Command="{Binding Knife_Speed1_Command}"
                             Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedAccentButton" 
+                             
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Grid.Column="4"
@@ -1737,7 +1744,7 @@
                                 Height="40"
                                 Width="110"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                
                                 Command="{Binding Brake1_Command}"   
                                 CommandParameter="{Binding ElementName=btn_brake1}"
                                 VerticalAlignment="Stretch" 
@@ -1780,7 +1787,7 @@
                                 Height="40"
                                 Width="110"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
-                                ToolTip="Resource name: MaterialDesignRaisedLightButton"
+                                
                                 Command="{Binding Brake2_Command}"  
                                 CommandParameter="{Binding ElementName=badged_brake2}"
                                 VerticalAlignment="Stretch" 

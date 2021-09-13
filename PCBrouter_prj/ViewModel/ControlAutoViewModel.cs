@@ -7,13 +7,24 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading;
 using ActUtlTypeLib;
-
+using System.Windows.Threading;
+using PCBrouter_prj.ViewModel;
 namespace PCBrouter_prj.ViewModel
 {
 
     public class ControlAutoViewModel : BaseViewModel
     {
         private ActUtlType plc;
+        private static  bool _flagtest;
+        public static bool flagtest
+        {
+            get { return _flagtest; }
+            set
+            {
+                _flagtest = value;
+            }
+        }
+        public static MainWindow mwd { get; set; }
         public static bool autoFlag = false;
         public static int C_sumPosXY;
         public static int R_sumPosYX;
@@ -21,6 +32,8 @@ namespace PCBrouter_prj.ViewModel
         public static int R_sumYX;
         public static int[,] C_arrPosXY;
         public static int[,] R_arrPosYX;
+        public static DispatcherTimer TimerStartAuto;
+        public static DispatcherTimer TimerStopAuto;
         private UserControlKteam.ControlAuto ctrAuto;
         public ICommand RunCommand { get; set; }
         public ICommand StopCommand { get; set; }
@@ -93,7 +106,14 @@ namespace PCBrouter_prj.ViewModel
             
             LoadedAutoUCCommand = new RelayCommand<UserControlKteam.ControlAuto>((p) => { return true; }, (p) =>
             {
+                mwd = new MainWindow();
                 ctrAuto = p;
+                TimerStartAuto = new DispatcherTimer();
+                TimerStartAuto.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                TimerStopAuto = new DispatcherTimer();
+                TimerStopAuto.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                TimerStartAuto.Tick += TimerStartAuto_Tick;
+                TimerStopAuto.Tick += TimerStopAuto_Tick;
                 ctrAuto.Dispatcher.Invoke(() =>
                 {
                     ctrAuto.btn_Run.IsEnabled = false;
@@ -108,9 +128,14 @@ namespace PCBrouter_prj.ViewModel
             });
             RunCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
-                autoFlag = true;
-                StartThread();
-                ctrAuto.Dispatcher.Invoke(() => 
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    autoFlag = true;
+                });
+               
+                //StartThread();
+                StartTest();
+                ctrAuto.Dispatcher.Invoke(() =>
                 {
                     ctrAuto.btn_Run.IsEnabled = false;
                     ctrAuto.btn_Stop.IsEnabled = true;
@@ -120,13 +145,17 @@ namespace PCBrouter_prj.ViewModel
                     ctrAuto.grid_dataBox.IsEnabled = false;
                     ctrAuto.grid_tableDB.IsEnabled = false;
                 });
-                plc.SetDevice("M101", 1);
-                Thread.Sleep(100);
-                plc.SetDevice("M101", 0);
+                    plc.SetDevice("M101", 1);
+                    Thread.Sleep(100);
+                    plc.SetDevice("M101", 0);
             });
             StopCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
-                autoFlag = false;
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    autoFlag = false;
+                });
+                
                 ctrAuto.Dispatcher.Invoke(() =>
                 {
                     ctrAuto.btn_Run.IsEnabled = true;
@@ -178,170 +207,91 @@ namespace PCBrouter_prj.ViewModel
                 }
             });
         }
-        #region AUTO EXECUTION
-        // thread test
-        public Thread ExecutionThread;
-        public void StartThread()
+
+        private void TimerStopAuto_Tick(object sender, EventArgs e)
         {
-            if (ExecutionThread != null)
+            if (ctrAuto.btn_Stop.IsEnabled == true)
             {
-                ExecutionThread.Abort();
-            }
-            ExecutionThread = new Thread(new ThreadStart(ExecutionMethod));
-            ExecutionThread.IsBackground = true;
-            ExecutionThread.Start();
-        }
-        public void ExecutionMethod()
-        {
-            try
-            {
-                plc = MainViewModel.plc;
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int flag1 = 0;
-                int flag2 = 0;
-                int flag3 = 0;
-                int totalPosXY = C_sumPosXY * data.C_MotionShape_num;
-                int totalPosYX = R_sumPosYX * data.R_MotionShape_num;
-                MessageBox.Show("Auto Mode Running!");
-                while (autoFlag == true)
+                int bit;
+                plc.GetDevice("M1", out bit);
+                if (bit == 1)
                 {
-                    int i = 0;
-                    int j = 0;
-                    while (flag1 == 0 && flag2 == 0 && flag3 == 0 && autoFlag == true)
+                    try
                     {
-                        Utilities.WriteLogError("Waiting for M400");
-                        int m400; // bắt đầu chu trình
-                        plc.GetDevice("M400", out m400);
-                        if (m400 == 1)
+                        ctrAuto.Dispatcher.Invoke(() =>
                         {
-                            plc.SetDevice("M1999", 1);
-                            flag1 = 1;
-                        }
+                            ctrAuto.btn_Run.IsEnabled = true;
+                            ctrAuto.btn_Stop.IsEnabled = false;
+                            ctrAuto.btn_Reset.IsEnabled = true;
+                            ctrAuto.btn_Home.IsEnabled = true;
+                            ctrAuto.btn_LoadModel.IsEnabled = true;
+                            ctrAuto.grid_dataBox.IsEnabled = true;
+                            ctrAuto.grid_tableDB.IsEnabled = true;
+                        });
+                        StopModeEnable();
+                        autoFlag = false;
+                        MessageBox.Show(" Auto mode is disabled!!!");
                     }
-                    while (flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true) // === XY ===
+                    catch
                     {
-                        if (i < totalPosXY)
-                        {
-                            int m1999;
-                            plc.GetDevice("M1999", out m1999);
-                            if (m1999 == 1)
-                            {
-                                plc.SetDevice("M1999", 0);
-                                if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
-                                {
-                                    ExecutePosXY(i);
-                                    Thread.Sleep(200);
-                                    plc.SetDevice("M1111", 1);
-                                    i++;
-                                }
-                            }
-                        }    
-                        else
-                        {
-                            flag2 = 1;
-                        }    
-                    }
-                    while (flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true) // === XY ===
-                    {
-                        if (j < totalPosXY)
-                        {
-                            int m1999;
-                            plc.GetDevice("M1999", out m1999);
-                            if (m1999 == 1)
-                            {
-                                plc.SetDevice("M1999", 0);
-                                if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
-                                {
-                                    ExecutePosYX(j);
-                                    Thread.Sleep(200);
-                                    plc.SetDevice("M2222", 1);
-                                    j++;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            flag3 = 1;
-                        }
-                    }
-                    while (flag1 == 1 && flag2 == 1 && flag3 == 1 && autoFlag == true)
-                    {
-                        int d200;
-                        int d400;
-                        plc.GetDevice("D200", out d200);
-                        plc.GetDevice("D400", out d400); 
-                         if ( d200 == 0 && d400 == 0)
-                         {
-                             plc.SetDevice("M1888", 1);
-                             flag1 = 0;
-                             flag2 = 0;
-                             i = 1;
-                         }    
+                        MessageBox.Show("Error to stop Auto!!!");
                     }
                 }
-            }
-            catch (Exception)
+            }    
+        }
+
+        private void TimerStartAuto_Tick(object sender, EventArgs e)
+        {
+            if (ctrAuto.btn_Run.IsEnabled == true)
             {
-                throw;
-            }
-            finally
-            {
-                if (ExecutionThread != null)
+                int bit;
+                plc.GetDevice("M0", out bit);
+                if (bit == 1)
                 {
-                    MessageBox.Show("Auto Mode Stop!");
-                    ExecutionThread.Abort();
+                    try
+                    {
+                        ctrAuto.Dispatcher.Invoke(() =>
+                        {
+                            ctrAuto.btn_Run.IsEnabled = false;
+                            ctrAuto.btn_Stop.IsEnabled = true;
+                            ctrAuto.btn_Reset.IsEnabled = false;
+                            ctrAuto.btn_Home.IsEnabled = false;
+                            ctrAuto.btn_LoadModel.IsEnabled = false;
+                            ctrAuto.grid_dataBox.IsEnabled = false;
+                            ctrAuto.grid_tableDB.IsEnabled = false;
+                        });
+                        RunModeEnable();
+                        autoFlag = true;
+                        StartTest();
+                        //StartThread();
+                        MessageBox.Show(" Auto mode is enabled!!!");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Error to start Auto!!!");
+                    }
                 }
-            }
+            }    
         }
-        public void ExecutePosXY(int i)
+        private void RunModeEnable()
         {
-            try
-            {
-                int[,] arrPosPinXY = C_arrPosXY;
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault(); 
-                int Yval = arrPosPinXY[i,1];
-                int Xval = arrPosPinXY[i,0] + (i / C_sumPosXY) * int.Parse(data.C_MotionShape_distance_X);
-                plc.SetDevice("D800", Xval % 65536); // X value
-                plc.SetDevice("D801", Xval / 65536); // X value
-                plc.SetDevice("D1000", Yval % 65536); // Y value
-                plc.SetDevice("D1001", Yval / 65536); // Y value
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            TimerStartAuto.IsEnabled = false;
+            TimerStartAuto.Stop();
+            TimerStopAuto.IsEnabled = true;
+            TimerStopAuto.Start();
         }
-        public void ExecutePosYX(int i)
+        private void StopModeEnable()
         {
-            try
-            {
-                int[,] arrPosPinYX = R_arrPosYX;
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int Yval = arrPosPinYX[i, 0] + (i / R_sumPosYX) * int.Parse(data.C_MotionShape_distance_X);
-                int Xval = arrPosPinYX[i, 1];
-                plc.SetDevice("D800", Xval % 65536); // X value
-                plc.SetDevice("D801", Xval / 65536); // X value
-                plc.SetDevice("D1000", Yval % 65536); // Y value
-                plc.SetDevice("D1001", Yval / 65536); // Y value
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            TimerStopAuto.IsEnabled = false;
+            TimerStopAuto.Stop();
+            TimerStartAuto.IsEnabled = true;
+            TimerStartAuto.Start();
         }
-        public void InvokeUI(Action a)
-        {
-           // System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(new System.Windows.Forms.MethodInvoker(a));
-            System.Windows.Application.Current.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(a));
-        }
-        #endregion
         public void RunExecute()
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                plc.SetDevice("M400", 1);
+                plc.SetDevice("M1666", 1);
             });
         }
         private int[] SumPosCalculate(string StrPos)
@@ -536,5 +486,288 @@ namespace PCBrouter_prj.ViewModel
                 GC.Collect();
             }
         }
+        #region AUTO EXECUTION
+        // thread test
+        public Thread ExecutionThread;
+        public void StartThread()
+        {
+            if (ExecutionThread != null)
+            {
+                ExecutionThread.Abort();
+            }
+            ExecutionThread = new Thread(new ThreadStart(ExecutionMethod));
+            ExecutionThread.IsBackground = true;
+            ExecutionThread.Start();
+        }
+        public void StartTest()
+        {
+            if (ExecutionThread != null)
+            {
+                ExecutionThread.Abort();
+            }
+            ExecutionThread = new Thread(new ThreadStart(ExecutionTest));
+            ExecutionThread.IsBackground = true;
+            ExecutionThread.Start();
+        }
+        public void ExecutionTest()
+        {
+            // m200 ghi tọa độ + chạy
+            // D1000 X
+            // D1100 Y
+            // bit vào chu trình M1666
+            // bit hoàn thành M1777
+            // bit ngắt chu trình M1444
+            try
+            {
+                int flag1 = 0;
+                int flag2 = 0;
+                int i = 0;
+                int[,] arr = new int[4, 2] { { 200000, 20000 }, { 500000, 200000 }, { 500000, 500000 }, { 200000, 500000 } };
+                int total = arr.Length / 2;
+                if (autoFlag == true)
+                {
+                    //MessageBox.Show("Auto Mode Running!");
+                }
+                while (flag1 == 0 && flag2 == 0 && autoFlag == true)
+                    {
+                        int m1666;
+                        plc.GetDevice("M1666", out m1666);
+                        if (m1666 == 1)
+                        {
+                            plc.SetDevice("M1777", 1);
+                            flag1 = 1;
+
+                        }
+                    }
+                while (flag1 == 1 && flag2 == 0 && autoFlag == true)
+                    {
+                        if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
+                        {
+                            int m1777;
+                            plc.GetDevice("M1777", out m1777);
+                            if (m1777 == 1)
+                            {
+                                if (i <= 4)
+                                {
+                                    plc.SetDevice("M1777", 0);
+                                    if (i < 4)
+                                    {
+                                        plc.SetDevice("D1000", arr[i, 0] % 65536);
+                                        plc.SetDevice("D1001", arr[i, 0] / 65536);
+                                        plc.SetDevice("D1100", arr[i, 1] % 65536);
+                                        plc.SetDevice("D1101", arr[i, 1] / 65536);
+                                    }
+                                    else if (i == 4)
+                                    {
+                                        plc.SetDevice("D1000", 0 % 65536);
+                                        plc.SetDevice("D1001", 0 / 65536);
+                                        plc.SetDevice("D1100", 0 % 65536);
+                                        plc.SetDevice("D1101", 0 / 65536);
+                                    }
+                                    Thread.Sleep(100);
+                                    plc.SetDevice("M200", 1);
+                                    i++;
+                                }
+                                else
+                                {
+                                    flag2 = 1;
+                                }
+                            }
+                        }
+                    }
+                while (flag1 == 1 && flag2 == 1 && autoFlag == true)
+                    {
+                        plc.SetDevice("M1444", 1);
+                        flag1 = 0;
+                        flag2 = 0;
+                    }
+               
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                if (ExecutionThread != null)
+                {
+                    MessageBox.Show("Auto Mode Stop!");
+                    ExecutionThread.Abort();
+                }
+            }
+        }
+        public void ExecutionMethod()
+        {
+            try
+            {
+                plc = MainViewModel.plc;
+                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
+                int flag1 = 0;
+                int flag2 = 0;
+                int flag3 = 0;
+                int totalPosXY = C_sumPosXY * data.C_MotionShape_num;
+                int totalPosYX = R_sumPosYX * data.R_MotionShape_num;
+                if (autoFlag == true)
+                {
+                    MessageBox.Show("Auto Mode Running!");
+                }
+                while (autoFlag == true)
+                {
+                    InvokeUI(() =>
+                    {
+                        flagtest = true;
+                    });
+
+                    int i = 0;
+                    int j = 0;
+                    while (flag1 == 0 && flag2 == 0 && flag3 == 0 && autoFlag == true)
+                    {
+                        int m1666; // bắt đầu chu trình
+                        plc.GetDevice("M1666", out m1666);
+                        if (m1666 == 1)
+                        {
+                            plc.SetDevice("M1777", 1);
+                            flag1 = 1;
+                        }
+                    }
+                    while (flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true) // === XY ===
+                    {
+                        if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
+                        {
+                            int m1777;
+                            plc.GetDevice("M1777", out m1777);
+                            if (m1777 == 1)
+                            {
+                                if (i <= totalPosXY)
+                                {
+                                    plc.SetDevice("M1777", 0);
+                                    if (i < totalPosXY)
+                                    {
+                                        ExecutePosXY(i);
+                                    }
+                                    else if (i == totalPosXY)
+                                    {
+                                        plc.SetDevice("D1000", 0 % 65536);
+                                        plc.SetDevice("D1001", 0 / 65536);
+                                        plc.SetDevice("D1100", 0 % 65536);
+                                        plc.SetDevice("D1101", 0 / 65536);
+                                    }
+                                    Thread.Sleep(100);
+                                    plc.SetDevice("M200", 1); // bit chạy ngang
+                                    i++;
+                                }
+                                else
+                                {
+                                    flag2 = 1;
+                                }
+                            }
+                        }
+                    }
+                    while (flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true) // === YX ===
+                    {
+                        if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
+                        {
+                            int m1777;
+                            plc.GetDevice("M1777", out m1777);
+                            if (m1777 == 1)
+                            {
+                                if (j <= totalPosXY)
+                                {
+                                    plc.SetDevice("M1777", 0);
+                                    if (j < totalPosXY)
+                                    {
+                                        ExecutePosYX(i);
+                                    }
+                                    else if (j == totalPosXY)
+                                    {
+                                        plc.SetDevice("D1000", 0 % 65536);
+                                        plc.SetDevice("D1001", 0 / 65536);
+                                        plc.SetDevice("D1100", 0 % 65536);
+                                        plc.SetDevice("D1101", 0 / 65536);
+                                    }
+                                    Thread.Sleep(100);
+                                    plc.SetDevice("M201", 1); // bit chạy dọc
+                                    j++;
+                                }
+                                else
+                                {
+                                    flag3 = 1;
+                                }
+                            }
+                        }
+                    }
+                    while (flag1 == 1 && flag2 == 1 && flag3 == 1 && autoFlag == true) // === tắt hút chân không/ final step ===
+                    {
+                        int d200;
+                        int d400;
+                        plc.GetDevice("D200", out d200);
+                        plc.GetDevice("D400", out d400);
+                        if (d200 == 0 && d400 == 0)
+                        {
+                            plc.SetDevice("M1444", 1);
+                            flag1 = 0;
+                            flag2 = 0;
+                            flag3 = 0;
+                            i = 1;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (ExecutionThread != null)
+                {
+                    MessageBox.Show("Auto Mode Stop!");
+                    ExecutionThread.Abort();
+                }
+            }
+        }
+        public void ExecutePosXY(int i)
+        {
+            try
+            {
+                int[,] arrPosPinXY = C_arrPosXY;
+                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
+                int Yval = arrPosPinXY[i, 1];
+                int Xval = arrPosPinXY[i, 0] + (i / C_sumPosXY) * int.Parse(data.C_MotionShape_distance_X);
+                plc.SetDevice("D800", Xval % 65536); // X value
+                plc.SetDevice("D801", Xval / 65536); // X value
+                plc.SetDevice("D1000", Yval % 65536); // Y value
+                plc.SetDevice("D1001", Yval / 65536); // Y value
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void ExecutePosYX(int i)
+        {
+            try
+            {
+                int[,] arrPosPinYX = R_arrPosYX;
+                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
+                int Yval = arrPosPinYX[i, 0] + (i / R_sumPosYX) * int.Parse(data.C_MotionShape_distance_X);
+                int Xval = arrPosPinYX[i, 1];
+                plc.SetDevice("D800", Xval % 65536); // X value
+                plc.SetDevice("D801", Xval / 65536); // X value
+                plc.SetDevice("D1000", Yval % 65536); // Y value
+                plc.SetDevice("D1001", Yval / 65536); // Y value
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public void InvokeUI(Action a)
+        {
+            // System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(new System.Windows.Forms.MethodInvoker(a));
+            System.Windows.Application.Current.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(a));
+        }
+        #endregion
     }
 }

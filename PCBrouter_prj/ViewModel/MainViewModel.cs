@@ -19,6 +19,7 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
+        public static ControlAutoViewModel ctr1;
         public static ActUtlType plc = new ActUtlType();
         public static DispatcherTimer TimerCheckStatus;
         public ICommand LoadedWindowCommand { get; set; }
@@ -73,17 +74,31 @@ namespace PCBrouter_prj.ViewModel
             LoadedWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) => {
                 mwd = p;
                 Connection();
+                ctr1 = new ControlAutoViewModel();
                 UCview = new ControlAutoViewModel();
                 TimerCheckStatus = new DispatcherTimer();
                 TimerCheckStatus.Interval = new TimeSpan(0, 0, 0, 0, 250);
                 TimerCheckStatus.Tick += TimerCheckStatus_Tick;
                 TimerCheckStatus.Start();
+                StartThread1();
             });
         }
         private void TimerCheckStatus_Tick(object sender, EventArgs e)
         {
+            EmergencyCheck();
             ServoOnCheck();
-            ModeSelectionCheck();
+            //ModeSelectionCheck();
+        }
+        public Thread ExecutionThread1;
+        public void StartThread1()
+        {
+            if (ExecutionThread1 != null)
+            {
+                ExecutionThread1.Abort();
+            }
+            ExecutionThread1 = new Thread(new ThreadStart(ModeSelectionCheck));
+            ExecutionThread1.IsBackground = true;
+            ExecutionThread1.Start();
         }
         public void ServoOnCheck()
         {
@@ -108,26 +123,37 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ModeSelectionCheck()
         {
-            if (ControlAutoViewModel.autoFlag == true)
+            while(true)
             {
-                mwd.Dispatcher.Invoke(() =>
+                if (ControlAutoViewModel.autoFlag == true)
                 {
-                    mwd.badgedUI.IsEnabled = false;
-                    mwd.rad_btn_Auto.IsEnabled = false;
-                    mwd.rad_btn_Manual.IsEnabled = false;
-                });
+                    mwd.Dispatcher.Invoke(() =>
+                    {
+                        mwd.badgedUI.IsEnabled = false;
+                        mwd.rad_btn_Auto.IsEnabled = false;
+                        mwd.rad_btn_Manual.IsEnabled = false;
+                    });
+                }
+                else
+                {
+                    mwd.Dispatcher.Invoke(() =>
+                    {
+                        mwd.badgedUI.IsEnabled = true;
+                        mwd.rad_btn_Auto.IsEnabled = true;
+                        mwd.rad_btn_Manual.IsEnabled = true;
+                    });
+                }
             }    
-            else
-            {
-                mwd.Dispatcher.Invoke(() =>
-                {
-                    mwd.badgedUI.IsEnabled = true;
-                    mwd.rad_btn_Auto.IsEnabled = true;
-                    mwd.rad_btn_Manual.IsEnabled = true;
-                });
-            }
         }
-        
+        public void EmergencyCheck()
+        {
+            int m0;
+            plc.GetDevice("M0", out m0);
+            if (m0 == 1)
+            {
+                Application.Current.Shutdown();
+            }    
+        }
         public void Connection()
         {
             plc.ActLogicalStationNumber = 1;
