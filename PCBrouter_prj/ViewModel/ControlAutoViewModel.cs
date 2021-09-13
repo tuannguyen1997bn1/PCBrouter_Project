@@ -9,22 +9,14 @@ using System.Threading;
 using ActUtlTypeLib;
 using System.Windows.Threading;
 using PCBrouter_prj.ViewModel;
+using PCBrouter_prj.UserControlKteam;
+
 namespace PCBrouter_prj.ViewModel
 {
 
     public class ControlAutoViewModel : BaseViewModel
     {
         private ActUtlType plc;
-        private static  bool _flagtest;
-        public static bool flagtest
-        {
-            get { return _flagtest; }
-            set
-            {
-                _flagtest = value;
-            }
-        }
-        public static MainWindow mwd { get; set; }
         public static bool autoFlag = false;
         public static int C_sumPosXY;
         public static int R_sumPosYX;
@@ -101,29 +93,21 @@ namespace PCBrouter_prj.ViewModel
                 OnPropertyChanged("PCBsumSelected");
             }
         }
+        
         public ControlAutoViewModel()
         {
-            
             LoadedAutoUCCommand = new RelayCommand<UserControlKteam.ControlAuto>((p) => { return true; }, (p) =>
             {
-                mwd = new MainWindow();
                 ctrAuto = p;
+                CheckState(ctrAuto);
                 TimerStartAuto = new DispatcherTimer();
                 TimerStartAuto.Interval = new TimeSpan(0, 0, 0, 0, 250);
                 TimerStopAuto = new DispatcherTimer();
                 TimerStopAuto.Interval = new TimeSpan(0, 0, 0, 0, 250);
                 TimerStartAuto.Tick += TimerStartAuto_Tick;
                 TimerStopAuto.Tick += TimerStopAuto_Tick;
-                ctrAuto.Dispatcher.Invoke(() =>
-                {
-                    ctrAuto.btn_Run.IsEnabled = false;
-                    ctrAuto.btn_Stop.IsEnabled = false;
-                    ctrAuto.btn_Reset.IsEnabled = true;
-                    ctrAuto.btn_Home.IsEnabled = true;
-                    ctrAuto.btn_LoadModel.IsEnabled = true;
-                    ctrAuto.grid_dataBox.IsEnabled = true;
-                    ctrAuto.grid_tableDB.IsEnabled = true;
-                });
+                TimerStartAuto.IsEnabled = true;
+                TimerStartAuto.Start();
                 ImportData();
             });
             RunCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
@@ -132,7 +116,6 @@ namespace PCBrouter_prj.ViewModel
                 {
                     autoFlag = true;
                 });
-               
                 //StartThread();
                 StartTest();
                 ctrAuto.Dispatcher.Invoke(() =>
@@ -207,7 +190,42 @@ namespace PCBrouter_prj.ViewModel
                 }
             });
         }
-
+        public void CheckState(ControlAuto user)
+        {
+            if (autoFlag == false)
+            {
+                user.Dispatcher.Invoke(() =>
+                {
+                    if (ModelSelected != null && XvalSelected != null && YvalSelected != null && PCBsumSelected != null)
+                    {
+                        user.btn_Run.IsEnabled = true;
+                    }    
+                    else 
+                    {
+                        user.btn_Run.IsEnabled = false;
+                    }    
+                    user.btn_Stop.IsEnabled = false;
+                    user.btn_Reset.IsEnabled = true;
+                    user.btn_Home.IsEnabled = true;
+                    user.btn_LoadModel.IsEnabled = true;
+                    user.grid_dataBox.IsEnabled = true;
+                    user.grid_tableDB.IsEnabled = true;
+                });
+            }    
+            else
+            {
+                user.Dispatcher.Invoke(() =>
+                {
+                    user.btn_Run.IsEnabled = false;
+                    user.btn_Stop.IsEnabled = true;
+                    user.btn_Reset.IsEnabled = false;
+                    user.btn_Home.IsEnabled = false;
+                    user.btn_LoadModel.IsEnabled = false;
+                    user.grid_dataBox.IsEnabled = false;
+                    user.grid_tableDB.IsEnabled = false;
+                });
+            }    
+        }
         private void TimerStopAuto_Tick(object sender, EventArgs e)
         {
             if (ctrAuto.btn_Stop.IsEnabled == true)
@@ -242,10 +260,11 @@ namespace PCBrouter_prj.ViewModel
 
         private void TimerStartAuto_Tick(object sender, EventArgs e)
         {
+            
             if (ctrAuto.btn_Run.IsEnabled == true)
             {
-                int bit;
-                plc.GetDevice("M0", out bit);
+                int bit = 0;
+                //plc.GetDevice("M0", out bit);
                 if (bit == 1)
                 {
                     try
@@ -524,10 +543,6 @@ namespace PCBrouter_prj.ViewModel
                 int i = 0;
                 int[,] arr = new int[4, 2] { { 200000, 20000 }, { 500000, 200000 }, { 500000, 500000 }, { 200000, 500000 } };
                 int total = arr.Length / 2;
-                if (autoFlag == true)
-                {
-                    //MessageBox.Show("Auto Mode Running!");
-                }
                 while (flag1 == 0 && flag2 == 0 && autoFlag == true)
                     {
                         int m1666;
@@ -613,11 +628,6 @@ namespace PCBrouter_prj.ViewModel
                 }
                 while (autoFlag == true)
                 {
-                    InvokeUI(() =>
-                    {
-                        flagtest = true;
-                    });
-
                     int i = 0;
                     int j = 0;
                     while (flag1 == 0 && flag2 == 0 && flag3 == 0 && autoFlag == true)
@@ -759,7 +769,6 @@ namespace PCBrouter_prj.ViewModel
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

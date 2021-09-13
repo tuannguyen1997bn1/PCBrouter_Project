@@ -19,7 +19,7 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
-        public static ControlAutoViewModel ctr1;
+        public static bool CheckStart = false;
         public static ActUtlType plc = new ActUtlType();
         public static DispatcherTimer TimerCheckStatus;
         public ICommand LoadedWindowCommand { get; set; }
@@ -28,8 +28,8 @@ namespace PCBrouter_prj.ViewModel
         public ICommand ServoOnCommand { get; set; }
 
 
-        private Object _UCview;
-        public Object UCview
+        private object _UCview;
+        public object UCview
         {
             get { return _UCview; }
             set
@@ -56,7 +56,10 @@ namespace PCBrouter_prj.ViewModel
             });
             ClosingWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) =>
             {
-               
+                if (CheckStatusThread != null)
+                {
+                    CheckStatusThread.Abort();
+                }
             });
             ModeCommand = new RelayCommand<object>((p) => { return true; }, (p)=>
             {
@@ -74,31 +77,21 @@ namespace PCBrouter_prj.ViewModel
             LoadedWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) => {
                 mwd = p;
                 Connection();
-                ctr1 = new ControlAutoViewModel();
                 UCview = new ControlAutoViewModel();
-                TimerCheckStatus = new DispatcherTimer();
-                TimerCheckStatus.Interval = new TimeSpan(0, 0, 0, 0, 250);
-                TimerCheckStatus.Tick += TimerCheckStatus_Tick;
-                TimerCheckStatus.Start();
-                StartThread1();
+                CheckStart = true;
+                StartCheckStatusThread();
             });
         }
-        private void TimerCheckStatus_Tick(object sender, EventArgs e)
+        public Thread CheckStatusThread;
+        public void StartCheckStatusThread()
         {
-            EmergencyCheck();
-            ServoOnCheck();
-            //ModeSelectionCheck();
-        }
-        public Thread ExecutionThread1;
-        public void StartThread1()
-        {
-            if (ExecutionThread1 != null)
+            if (CheckStatusThread != null)
             {
-                ExecutionThread1.Abort();
+                CheckStatusThread.Abort();
             }
-            ExecutionThread1 = new Thread(new ThreadStart(ModeSelectionCheck));
-            ExecutionThread1.IsBackground = true;
-            ExecutionThread1.Start();
+            CheckStatusThread = new Thread(new ThreadStart(ThreadCheckExecution));
+            CheckStatusThread.IsBackground = true;
+            CheckStatusThread.Start();
         }
         public void ServoOnCheck()
         {
@@ -123,26 +116,32 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ModeSelectionCheck()
         {
+            if (ControlAutoViewModel.autoFlag == true)
+            {
+                mwd.Dispatcher.Invoke(() =>
+                {
+                    mwd.badgedUI.IsEnabled = false;
+                    mwd.rad_btn_Auto.IsEnabled = false;
+                    mwd.rad_btn_Manual.IsEnabled = false;
+                });
+            }
+            else
+            {
+                mwd.Dispatcher.Invoke(() =>
+                {
+                    mwd.badgedUI.IsEnabled = true;
+                    mwd.rad_btn_Auto.IsEnabled = true;
+                    mwd.rad_btn_Manual.IsEnabled = true;
+                });
+            }
+        }
+        public void ThreadCheckExecution()
+        {
             while(true)
             {
-                if (ControlAutoViewModel.autoFlag == true)
-                {
-                    mwd.Dispatcher.Invoke(() =>
-                    {
-                        mwd.badgedUI.IsEnabled = false;
-                        mwd.rad_btn_Auto.IsEnabled = false;
-                        mwd.rad_btn_Manual.IsEnabled = false;
-                    });
-                }
-                else
-                {
-                    mwd.Dispatcher.Invoke(() =>
-                    {
-                        mwd.badgedUI.IsEnabled = true;
-                        mwd.rad_btn_Auto.IsEnabled = true;
-                        mwd.rad_btn_Manual.IsEnabled = true;
-                    });
-                }
+                EmergencyCheck();
+                ModeSelectionCheck();
+                ServoOnCheck();
             }    
         }
         public void EmergencyCheck()
