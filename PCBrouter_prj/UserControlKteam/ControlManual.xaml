@@ -1,0 +1,1828 @@
+﻿<UserControl x:Class="PCBrouter_prj.UserControlKteam.ControlManual"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             DataContext="{StaticResource ManualModeVM}"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             x:Name="ucManual"
+             d:DesignHeight="600" d:DesignWidth="1200">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedManualUCCommand}" CommandParameter="{Binding ElementName=ucManual}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingManualUCCommand}" CommandParameter="{Binding ElementName=ucManual}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <materialDesign:Card
+            Padding="10"
+            UniformCornerRadius="15"
+            VerticalAlignment="Stretch" 
+            HorizontalAlignment="Stretch">
+            <materialDesign:Card.Background>
+                <ImageBrush ImageSource="pcb1.jpg" Stretch="UniformToFill"/>
+            </materialDesign:Card.Background>
+
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <!--4 engine-->
+                <materialDesign:Card 
+                    Margin="5"
+                    UniformCornerRadius="5"
+                    Grid.Row="0"
+                    Grid.Column="0" 
+                    BorderThickness="5"
+                    VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"
+                        Background="{x:Null}" OpacityMask="Black">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="70"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="0"
+                                Margin="5 0"
+                                Background="#FFAE9AD3"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <StackPanel 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        Orientation="Horizontal">
+                                <materialDesign:PackIcon 
+                                                Kind="Engine" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" 
+                                                Width="40" Height="40"
+                                                Margin="0 0 15 0"/>
+                                <TextBlock 
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Text="AXIS-X"
+                                                HorizontalAlignment="Center"     
+                                                VerticalAlignment="Center"  />
+                            </StackPanel>
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="1"
+                            Padding="5"
+                                Margin="5 5 5 0"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                            
+                                UniformCornerRadius="10">
+                            <materialDesign:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Color="#FFD07070" Offset="0.066"/>
+                                </LinearGradientBrush>
+                            </materialDesign:Card.Background>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:Card
+                                    Grid.Row="0" Grid.ColumnSpan="2"
+                                    UniformCornerRadius="10"
+                                    Margin="5"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch" 
+                                    Background="#FFAE9AD3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock 
+                                         Grid.Column="0"
+                                        Margin="10 0 0 0"
+                                        FontSize="18"
+                                        FontWeight="Bold"
+                                        Text="ERROR CODE :"
+                                        HorizontalAlignment="Left"     
+                                        VerticalAlignment="Center"  />
+                                        <TextBlock 
+                                         Grid.Column="1"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Text="{Binding ErrorCodeX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                    </Grid>
+                                </materialDesign:Card>
+                                <Grid 
+                                    Grid.Row="1" 
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SpeedValueX, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        materialDesign:HintAssist.Hint="SPEED VALUE"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DDFFFFFF" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" CaretBrush="#FFAE9AD3" SelectionBrush="#FFAE9AD3" />
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Button
+                                        x:Name="btn_SetSpeedX"
+                                        Command="{Binding SetSpeedCommand}"
+                                        CommandParameter="btn_SetSpeedX"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="SET SPEED" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Speedometer"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="0">
+                                    <Button
+                                        x:Name="btn_ReverseX"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="REVERSE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowLeftBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ReverseUpCommand}" CommandParameter="btn_ReverseX"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ReverseDownCommand}" CommandParameter="btn_ReverseX"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1">
+                                    <Button
+                                        x:Name="btn_ForwardX"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="FORWARD" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowRightBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ForwardUpCommand}" CommandParameter="btn_ForwardX"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ForwardDownCommand}" CommandParameter="btn_ForwardX"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button
+                                        x:Name="btn_ResetX"
+                                        Command="{Binding ResetCommand}"
+                                        CommandParameter="btn_ResetX"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="RESET" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Sync"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                                    <Button
+                                        x:Name="btn_HomeX"
+                                        Command="{Binding HomeCommand}"
+                                        CommandParameter="btn_HomeX"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="HOME" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowDownDropCircleOutline"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="2"
+                                Margin="5 5 5 0"
+                                Background="#FFDBF1B9"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid 
+                                    
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding PositionNoX, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        materialDesign:HintAssist.Hint="POSITION NO"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DD000000" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" />
+                                </Grid>
+                                <Grid  Grid.Column="1">
+                                    <Button
+                                          x:Name="btn_ExcuteNoX"
+                                        Command="{Binding ExcuteNoCommand}"
+                                        CommandParameter="btn_ExcuteNoX"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="EXECUTE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ReplyAll"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card 
+                    UniformCornerRadius="5"
+                    Margin="5"
+                    Grid.Row="0"
+                    Grid.Column="1" 
+                    BorderThickness="5"
+                    VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"
+                        Background="{x:Null}">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="70"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="0"
+                                Margin="5 0"
+                                Background="#FFAE9AD3"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <StackPanel 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        Orientation="Horizontal">
+                                <materialDesign:PackIcon 
+                                                Kind="Engine" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" 
+                                                Width="40" Height="40"
+                                                Margin="0 0 15 0"/>
+                                <TextBlock 
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Text="AXIS-Y"
+                                                HorizontalAlignment="Center"     
+                                                VerticalAlignment="Center"  />
+                            </StackPanel>
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="1"
+                            Padding="5"
+                                Margin="5 5 5 0"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <materialDesign:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Color="#FFD07070" Offset="0.066"/>
+                                </LinearGradientBrush>
+                            </materialDesign:Card.Background>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:Card
+                                    Grid.Row="0" Grid.ColumnSpan="2"
+                                    UniformCornerRadius="10"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch" 
+                                    Margin="5" Background="#FFAE9AD3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock 
+                                         Grid.Column="0"
+                                        Margin="10 0 0 0"
+                                        FontSize="18"
+                                        FontWeight="Bold"
+                                        Text="ERROR CODE :"
+                                        HorizontalAlignment="Left"     
+                                        VerticalAlignment="Center"  />
+                                        <TextBlock 
+                                         Grid.Column="1"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Text="{Binding ErrorCodeY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                    </Grid>
+                                </materialDesign:Card>
+                                <Grid 
+                                    Grid.Row="1" 
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SpeedValueY, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        materialDesign:HintAssist.Hint="SPEED VALUE"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DDFFFFFF" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" CaretBrush="#FFAE9AD3" SelectionBrush="#FFAE9AD3" />
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Button
+                                         x:Name="btn_SetSpeedY"
+                                        Command="{Binding SetSpeedCommand}"
+                                       CommandParameter="btn_SetSpeedY"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="SET SPEED" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Speedometer"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="0">
+                                    <Button
+                                         x:Name="btn_ReverseY"
+                                       
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="REVERSE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowLeftBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ReverseUpCommand}" CommandParameter="btn_ReverseY"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ReverseDownCommand}" CommandParameter="btn_ReverseY"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1">
+                                    <Button
+                                         x:Name="btn_ForwardY"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        
+                                        FontWeight="Bold" FontSize="20">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ForwardUpCommand}" CommandParameter="btn_ForwardY"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ForwardDownCommand}" CommandParameter="btn_ForwardY"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="FORWARD" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowRightBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button
+                                         x:Name="btn_ResetY"
+                                        Command="{Binding ResetCommand}"
+                                        CommandParameter="btn_ResetY"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="RESET" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Sync"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                                    <Button
+                                         x:Name="btn_HomeY"
+                                        Command="{Binding HomeCommand}"
+                                        CommandParameter="btn_HomeY"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="HOME" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowDownDropCircleOutline"        
+                                                    Width="16"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="2"
+                                Margin="5 5 5 0"
+                                Background="#FFDBF1B9"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid 
+                                    
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="POSITION NO"
+                                        Text="{Binding PositionNoY, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DD000000" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" />
+                                </Grid>
+                                <Grid  Grid.Column="1">
+                                    <Button
+                                         x:Name="btn_ExcuteNoY"
+                                        Command="{Binding ExcuteNoCommand}"
+                                        CommandParameter="btn_ExcuteNoY"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="EXECUTE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ReplyAll"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card 
+                    UniformCornerRadius="5"
+                    Margin="5"
+                    Grid.Row="0"
+                    Grid.Column="2" 
+                    BorderThickness="5"
+                    VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"
+                        Background="{x:Null}">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="70"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="0"
+                                Margin="5 0"
+                                Background="#FFAE9AD3"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <StackPanel 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        Orientation="Horizontal">
+                                <materialDesign:PackIcon 
+                                                Kind="Engine" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" 
+                                                Width="40" Height="40"
+                                                Margin="0 0 15 0"/>
+                                <TextBlock 
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Text="AXIS-Z1"
+                                                HorizontalAlignment="Center"     
+                                                VerticalAlignment="Center"  />
+                            </StackPanel>
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="1"
+                            Padding="5"
+                                Margin="5 5 5 0"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <materialDesign:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Color="#FFD07070" Offset="0.066"/>
+                                </LinearGradientBrush>
+                            </materialDesign:Card.Background>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:Card
+                                    Grid.Row="0" Grid.ColumnSpan="2"
+                                    UniformCornerRadius="10"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch" 
+                                    Margin="5" Background="#FFAE9AD3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock 
+                                         Grid.Column="0"
+                                        Margin="10 0 0 0"
+                                        FontSize="18"
+                                        FontWeight="Bold"
+                                        Text="ERROR CODE :"
+                                        HorizontalAlignment="Left"     
+                                        VerticalAlignment="Center"  />
+                                        <TextBlock 
+                                         Grid.Column="1"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Text="{Binding ErrorCodeZ1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                    </Grid>
+                                </materialDesign:Card>
+                                <Grid 
+                                    Grid.Row="1" 
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SpeedValueZ1, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        materialDesign:HintAssist.Hint="SPEED VALUE"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DDFFFFFF" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" CaretBrush="#FFAE9AD3" SelectionBrush="#FFAE9AD3" />
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Button
+                                        x:Name="btn_SetSpeedZ1"
+                                        Command="{Binding SetSpeedCommand}"
+                                        CommandParameter="btn_SetSpeedZ1"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="SET SPEED" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Speedometer"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="0">
+                                    <Button
+                                         x:Name="btn_ReverseZ1"
+                                       
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="REVERSE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowLeftBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ReverseUpCommand}" CommandParameter="btn_ReverseZ1"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ReverseDownCommand}" CommandParameter="btn_ReverseZ1"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1">
+                                    <Button
+                                          x:Name="btn_ForwardZ1"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ForwardUpCommand}" CommandParameter="btn_ForwardZ1"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ForwardDownCommand}" CommandParameter="btn_ForwardZ1"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="FORWARD" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowRightBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button
+                                         x:Name="btn_ResetZ1"
+                                        Command="{Binding ResetCommand}"
+                                        CommandParameter="btn_ResetZ1"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110" FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="RESET" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Sync"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                                    <Button
+                                        x:Name="btn_HomeZ1"
+                                        Command="{Binding HomeCommand}"
+                                        CommandParameter="btn_HomeZ1"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="HOME" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowDownDropCircleOutline"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="2"
+                                Margin="5 5 5 0"
+                                Background="#FFDBF1B9"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid 
+                                    
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="POSITION NO"
+                                        Text="{Binding PositionNoZ1, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DD000000" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" />
+                                </Grid>
+                                <Grid  Grid.Column="1">
+                                    <Button
+                                         x:Name="btn_ExcuteNoZ1"
+                                        Command="{Binding ExcuteNoCommand}"
+                                        CommandParameter="btn_ExcuteNoZ1"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="EXECUTE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ReplyAll"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card 
+                    Margin="5"
+                    UniformCornerRadius="5"
+                    Grid.Row="0"
+                    Grid.Column="3" 
+                    BorderThickness="5"
+                    VerticalAlignment="Stretch" 
+                        HorizontalAlignment="Stretch"
+                        Background="{x:Null}" BorderBrush="Black">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="70"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="0"
+                                Margin="5 0"
+                                Background="#FFAE9AD3"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <StackPanel 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center" 
+                                        Orientation="Horizontal">
+                                <materialDesign:PackIcon 
+                                                Kind="Engine" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" 
+                                                Width="40" Height="40"
+                                                Margin="0 0 15 0"/>
+                                <TextBlock 
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Text="AXIS-Z2"
+                                                HorizontalAlignment="Center"     
+                                                VerticalAlignment="Center"  />
+                            </StackPanel>
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="1"
+                            Padding="5"
+                                Margin="5 5 5 0"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <materialDesign:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Color="#FFD07070" Offset="0.066"/>
+                                </LinearGradientBrush>
+                            </materialDesign:Card.Background>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:Card
+                                    Grid.Row="0" Grid.ColumnSpan="2"
+                                    UniformCornerRadius="10"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch" 
+                                    Margin="5" Background="#FFAE9AD3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock 
+                                         Grid.Column="0"
+                                        Margin="10 0 0 0"
+                                        FontSize="18"
+                                        FontWeight="Bold"
+                                        Text="ERROR CODE :"
+                                        HorizontalAlignment="Left"     
+                                        VerticalAlignment="Center"  />
+                                        <TextBlock 
+                                         Grid.Column="1"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Text="{Binding ErrorCodeZ2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                    </Grid>
+                                </materialDesign:Card>
+                                <Grid 
+                                    Grid.Row="1" 
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SpeedValueZ2, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        materialDesign:HintAssist.Hint="SPEED VALUE"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DDFFFFFF" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" CaretBrush="#FFAE9AD3" SelectionBrush="#FFAE9AD3" />
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Button
+                                        x:Name="btn_SetSpeedZ2"
+                                        Command="{Binding SetSpeedCommand}"
+                                        CommandParameter="btn_SetSpeedZ2"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="SET SPEED" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Speedometer"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="0">
+                                    <Button
+                                         x:Name="btn_ReverseZ2"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="REVERSE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowLeftBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ReverseUpCommand}" CommandParameter="btn_ReverseZ2"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ReverseDownCommand}" CommandParameter="btn_ReverseZ2"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1">
+                                    <Button
+                                        x:Name="btn_ForwardZ2"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         
+                                        FontWeight="Bold" FontSize="20">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding ForwardUpCommand}" CommandParameter="btn_ForwardZ2"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDown">
+                                                <i:InvokeCommandAction Command="{Binding ForwardDownCommand}" CommandParameter="btn_ForwardZ2"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="FORWARD" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowRightBold"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                    <Button
+                                         x:Name="btn_ResetZ2"
+                                        Command="{Binding ResetCommand}"
+                                        CommandParameter="btn_ResetZ2"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="RESET" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="Sync"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                                    <Button
+                                         x:Name="btn_HomeZ2"
+                                        Command="{Binding HomeCommand}"
+                                        CommandParameter="btn_HomeZ2"
+                                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                         FontWeight="Bold" FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="HOME" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ArrowDownDropCircleOutline"        
+                                                    Width="17"
+                                                    Height="17"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                                Grid.Row="2"
+                                Margin="5 5 5 0"
+                                Background="#FFDBF1B9"
+                                Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth5"
+                                UniformCornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid 
+                                    
+                                    Grid.Column="0">
+                                    <TextBox
+                                        Margin="0 0 0 10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        materialDesign:HintAssist.Hint="POSITION NO"
+                                        Text="{Binding PositionNoZ2, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="#DD000000" BorderBrush="#89000000" 
+                                        FontSize="15" 
+                                        FontWeight="Bold" />
+                                </Grid>
+                                <Grid  Grid.Column="1">
+                                    <Button
+                                          x:Name="btn_ExcuteNoZ2"
+                                        Command="{Binding ExcuteNoCommand}"
+                                        CommandParameter="btn_ExcuteNoZ2"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                         Height="40"
+                                        Width="110"
+                                        FontWeight="Bold" 
+                                        FontSize="20">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0" >
+                                                <TextBlock 
+                                                    Text="EXECUTE" 
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"     
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <materialDesign:PackIcon 
+                                                    Kind="ReplyAll"        
+                                                    Width="15"
+                                                    Height="15"
+                                                    HorizontalAlignment="Center"                  
+                                                    VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!--knife-->
+                <materialDesign:Card 
+                    UniformCornerRadius="15"
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Stretch" 
+                    Margin="10 5"
+                    Grid.Row="1" 
+                    Grid.ColumnSpan="4" >
+                    <materialDesign:Card.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFD07070"/>
+                            <GradientStop Color="#FFEAC77E" Offset="0.773"/>
+                        </LinearGradientBrush>
+                    </materialDesign:Card.Background>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="255"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:Card 
+                            Margin="3"
+                            Grid.Row="0" 
+                            UniformCornerRadius="15"
+                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch" Background="#FFDBF1B9" Opacity="0.75" >
+                            
+                        </materialDesign:Card>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3" Grid.Row="0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <RadioButton
+                                Margin="0 10 0 0"
+                                x:Name="rad_btn_knife1"
+                                GroupName="ModeKnife"
+                                    ToolTip="KNIFE-1"
+                                Grid.Column="0" 
+                                Grid.Row="0"
+                                Command="{Binding KnifeSelectCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandParameter="rad_btn_knife1"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                IsChecked="True"
+                                Style="{StaticResource MaterialDesignRadioButton}">
+                            </RadioButton>
+                            <RadioButton
+                                Margin="0 10 0 0"
+                                x:Name="rad_btn_knife2"
+                                GroupName="ModeKnife"
+                                    ToolTip="KNIFE-2"
+                                Grid.Column="1" Grid.Row="0"
+                                Command="{Binding KnifeSelectCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandParameter="rad_btn_knife2"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignRadioButton}"
+                                Tag="True" Background="#FF5C3F90"/>
+                            <materialDesign:Card
+                                Grid.Column="0" Grid.Row="1"  
+                                Background="#FF051105"
+                                Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                Margin="10 5 10 6"        
+                                UniformCornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" FontWeight="Bold">
+                                 KNIFE 1
+                                </TextBlock>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                                Grid.Column="1" Grid.Row="1"  
+                                
+                                Background="#FF051105"
+                                Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                Margin="10 5 10 6"     
+                                UniformCornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" FontWeight="Bold">
+                                 KNIFE 2
+                                </TextBlock>
+                            </materialDesign:Card>
+                        </Grid>
+                        <Button
+                            Command="{Binding RunKnifeCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Grid.Column="1"
+                            Margin="25"
+                            Height="40"
+                            Width="110"
+                            FontWeight="Bold" 
+                            FontSize="20">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" >
+                                    <TextBlock 
+                                        Text="RUN KNIFE" 
+                                        FontSize="14"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <materialDesign:PackIcon 
+                                        Kind="ArrowRightBoldHexagonOutline"        
+                                        Width="17"
+                                        Height="17"
+                                        HorizontalAlignment="Center"        
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Button>
+                        <Button
+                            Command="{Binding Knife_Speed1_Command}"
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                         
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Grid.Column="2"
+                            Height="40"
+                            Width="110"
+                            FontWeight="Bold" 
+                            FontSize="20">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" >
+                                    <TextBlock 
+                                        Text="SPEED-1" 
+                                        FontSize="14"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <materialDesign:PackIcon 
+                                        Kind="Numeric1BoxMultipleOutline"        
+                                        Width="17"
+                                        Height="17"
+                                        HorizontalAlignment="Center"        
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Button>
+                        <Button
+                            Command="{Binding Knife_Speed2_Command}"
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                         
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Grid.Column="3"
+                            Height="40"
+                            Width="110"
+                            FontWeight="Bold" 
+                            FontSize="20">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" >
+                                    <TextBlock 
+                                        Text="SPEED-2" 
+                                        FontSize="14"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <materialDesign:PackIcon 
+                                        Kind="Numeric2BoxMultipleOutline"        
+                                        Width="17"
+                                        Height="17"
+                                        HorizontalAlignment="Center"        
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Button>
+                        <Button
+                            Command="{Binding Knife_Speed1_Command}"
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                             
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Grid.Column="4"
+                            Height="40"
+                            Width="110"
+                            FontWeight="Bold" 
+                            FontSize="20">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" >
+                                    <TextBlock 
+                                        Text="SPEED-3" 
+                                        FontSize="14"
+                                        HorizontalAlignment="Center"     
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <materialDesign:PackIcon 
+                                        Kind="Numeric3BoxMultipleOutline"        
+                                        Width="17"
+                                        Height="17"
+                                        HorizontalAlignment="Center"        
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Button>
+                        <materialDesign:Badged
+                            x:Name="badged_brake1"
+                            VerticalAlignment="Center" 
+                            HorizontalAlignment="Center"
+                            Height="40"
+                            Width="110"
+                            Grid.Column="5">
+
+                            <Button 
+                                x:Name="btn_brake1"
+                                Height="40"
+                                Width="110"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                
+                                Command="{Binding Brake1_Command}"   
+                                CommandParameter="{Binding ElementName=btn_brake1}"
+                                VerticalAlignment="Stretch" 
+                                HorizontalAlignment="Stretch"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth3" 
+                                Background="#FF673AB7">
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" >
+                                        <TextBlock 
+                                Text="BRAKE-1" 
+                                FontSize="14"
+                                HorizontalAlignment="Center"     
+                                VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <materialDesign:PackIcon 
+                                Kind="MusicNoteWhole"        
+                                Width="17"
+                                Height="17"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
+                            </Button>
+                        </materialDesign:Badged>
+                        <materialDesign:Badged
+                            x:Name="badged_brake2"
+                            VerticalAlignment="Center" 
+                            HorizontalAlignment="Center"
+                            Height="40"
+                            Width="110"
+                            Grid.Column="6">
+
+                            <Button 
+                                x:Name="btn_brake2"
+                                Height="40"
+                                Width="110"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                
+                                Command="{Binding Brake2_Command}"  
+                                CommandParameter="{Binding ElementName=badged_brake2}"
+                                VerticalAlignment="Stretch" 
+                                HorizontalAlignment="Stretch"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth3" 
+                                Background="#FF673AB7">
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" >
+                                        <TextBlock 
+                                Text="BRAKE-2" 
+                                FontSize="14"
+                                HorizontalAlignment="Center"     
+                                VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <materialDesign:PackIcon 
+                                Kind="MusicNoteWhole"        
+                                Width="17"
+                                Height="17"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
+                            </Button>
+                        </materialDesign:Badged>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:PCBrouter_prj.ViewModel">
+    <vm:MainViewModel x:Key="MainVM"></vm:MainViewModel>
+    <vm:ControlAutoViewModel x:Key="AutoModeVM"></vm:ControlAutoViewModel>
+    <vm:ControlManualViewModel x:Key="ManualModeVM"></vm:ControlManualViewModel>
+    <vm:LoginViewModel x:Key="LoginVM"></vm:LoginViewModel>
+</ResourceDictionary>
