@@ -24,27 +24,15 @@ namespace PCBrouter_prj.ViewModel
         {
             CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) => {
                 FrameworkElement window = GetWindowParent(p);
-
                 var w = window as Window;
-
                 if (w != null)
                 {
                     MessageBoxResult answer1;
-                    if (true) // if đang kết nối với PLC
+                    answer1 = MessageBox.Show("Do you want to exit?", "Notification", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                    if (answer1 == MessageBoxResult.OK)
                     {
-                        answer1 = MessageBox.Show("You are having a connection with PLC! Do you want to exit?", "Notification", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                        if (answer1 == MessageBoxResult.OK)
-                        {
-                            w.Close();
-                        }
-                    }
-                    else
-                    {
-                        answer1 = MessageBox.Show("Not conneted to PLC yet! Do you want to exit?","Notification", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                        if (answer1 == MessageBoxResult.OK)
-                        {
-                            w.Close();
-                        }
+                        Application.Current.Shutdown();
+                        //w.Close(); // nếu có nhiều window thì mới dùng close;
                     }
                 }
             }

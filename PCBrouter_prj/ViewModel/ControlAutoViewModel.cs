@@ -248,11 +248,11 @@ namespace PCBrouter_prj.ViewModel
                         });
                         StopModeEnable();
                         autoFlag = false;
-                        MessageBox.Show(" Auto mode is disabled!!!");
+                        //MessageBox.Show("Auto mode is disabled!!!");
                     }
                     catch
                     {
-                        MessageBox.Show("Error to stop Auto!!!");
+                        //MessageBox.Show("Error to stop Auto!!!");
                     }
                 }
             }    
@@ -283,11 +283,11 @@ namespace PCBrouter_prj.ViewModel
                         autoFlag = true;
                         StartTest();
                         //StartThread();
-                        MessageBox.Show(" Auto mode is enabled!!!");
+                        //MessageBox.Show(" Auto mode is enabled!!!");
                     }
                     catch
                     {
-                        MessageBox.Show("Error to start Auto!!!");
+                        //MessageBox.Show("Error to start Auto!!!");
                     }
                 }
             }    
@@ -306,13 +306,13 @@ namespace PCBrouter_prj.ViewModel
             TimerStartAuto.IsEnabled = true;
             TimerStartAuto.Start();
         }
-        public void RunExecute()
-        {
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                plc.SetDevice("M1666", 1);
-            });
-        }
+        //public void RunExecute()
+        //{
+        //    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        plc.SetDevice("M1666", 1);
+        //    });
+        //}
         private int[] SumPosCalculate(string StrPos)
         {
             if (StrPos[StrPos.Length - 1] != 44)
@@ -606,7 +606,7 @@ namespace PCBrouter_prj.ViewModel
             {
                 if (ExecutionThread != null)
                 {
-                    MessageBox.Show("Auto Mode Stop!");
+                   // MessageBox.Show("Auto Mode Stop!");
                     ExecutionThread.Abort();
                 }
             }
@@ -622,10 +622,10 @@ namespace PCBrouter_prj.ViewModel
                 int flag3 = 0;
                 int totalPosXY = C_sumPosXY * data.C_MotionShape_num;
                 int totalPosYX = R_sumPosYX * data.R_MotionShape_num;
-                if (autoFlag == true)
-                {
-                    MessageBox.Show("Auto Mode Running!");
-                }
+                //if (autoFlag == true)
+                //{
+                //    MessageBox.Show("Auto Mode Running!");
+                //}
                 while (autoFlag == true)
                 {
                     int i = 0;
@@ -731,7 +731,7 @@ namespace PCBrouter_prj.ViewModel
             {
                 if (ExecutionThread != null)
                 {
-                    MessageBox.Show("Auto Mode Stop!");
+                   // MessageBox.Show("Auto Mode Stop!");
                     ExecutionThread.Abort();
                 }
             }

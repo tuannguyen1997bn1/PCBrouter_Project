@@ -57,11 +57,15 @@
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="255"/>
+                    <ColumnDefinition Width="262"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <materialDesign:Card  
-                    Margin="5 5 0 5"
+                    Margin="5 5 7 5"
                     Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                     UniformCornerRadius="15"
                     HorizontalAlignment="Stretch" 
@@ -180,14 +184,380 @@
                         </materialDesign:Badged>
                     </Grid>
                 </materialDesign:Card>
+                
                 <materialDesign:Card
                     UniformCornerRadius="15"
-                    Margin="5"
+                    Margin="7 5 5 5"
                     Grid.Column="1"  
                     HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" Opacity="0.8" >
-
+                    VerticalAlignment="Stretch" Opacity="0.8" Background="#FFC8D753" >
                 </materialDesign:Card>
+                <materialDesign:Card
+                    UniformCornerRadius="15"
+                    Margin="7 5  5 5"
+                    Grid.Column="2"  
+                    Grid.ColumnSpan="4"
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" Opacity="0.8" >
+                </materialDesign:Card>
+                <Grid Margin="5"
+                      Grid.ColumnSpan="5"
+                    Grid.Column="1"  
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <materialDesign:Card Grid.Row="0" 
+                                         Grid.Column="0" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_PLC_Ready"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 PLC<LineBreak></LineBreak> READY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="0" 
+                                         Grid.Column="1" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid Background="#FF4D625E">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISX_Busy"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-X<LineBreak></LineBreak>BUSY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="0" 
+                                         Grid.Column="2" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISY_Busy"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Y<LineBreak></LineBreak>BUSY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="0" 
+                                         Grid.Column="3" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISZ1_Busy"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Z1<LineBreak></LineBreak>BUSY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="0" 
+                                         Grid.Column="4" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISZ2_Busy"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Z2<LineBreak></LineBreak>BUSY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Grid.Row="1" 
+                                         Grid.Column="0" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_QD75_Ready"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 QD75<LineBreak></LineBreak>READY
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="1" 
+                                         Grid.Column="1" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISX_Error"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-X<LineBreak></LineBreak>ERROR
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="1" 
+                                         Grid.Column="2" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISY_Error"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Y<LineBreak></LineBreak>ERROR
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="1" 
+                                         Grid.Column="3" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISZ1_Error"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Z1<LineBreak></LineBreak>ERROR
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                    <materialDesign:Card Grid.Row="1" 
+                                         Grid.Column="4" 
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Center"
+                                             UniformCornerRadius="5"
+                                             Background="#FF4D625E"
+                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                             Width="95"
+                                             Height="40"
+                                             >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon 
+                                x:Name="ico_AXISZ2_Error"
+                                    Margin="10 5 0 5"
+                                    Grid.Column="0"
+                                Kind="CloseNetwork"        
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Center"                  
+                                VerticalAlignment="Center" 
+                                Background="Red"/>
+                            <TextBlock Grid.Column="1" 
+                                           HorizontalAlignment="Center" 
+                                           FontSize="12" 
+                                           VerticalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#DDFFFFFF">
+                                 AXIS-Z2<LineBreak></LineBreak>ERROR
+                            </TextBlock>
+                        </Grid>
+                    </materialDesign:Card>
+                </Grid>
             </Grid>
             
         </materialDesign:Card>

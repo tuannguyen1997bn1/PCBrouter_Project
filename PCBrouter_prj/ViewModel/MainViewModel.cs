@@ -19,7 +19,7 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
-        public static bool CheckStart = false;
+        public static int iretCon;
         public static ActUtlType plc = new ActUtlType();
         public static DispatcherTimer TimerCheckStatus;
         public ICommand LoadedWindowCommand { get; set; }
@@ -78,7 +78,6 @@ namespace PCBrouter_prj.ViewModel
                 mwd = p;
                 Connection();
                 UCview = new ControlAutoViewModel();
-                CheckStart = true;
                 StartCheckStatusThread();
             });
         }
@@ -135,6 +134,12 @@ namespace PCBrouter_prj.ViewModel
                 });
             }
         }
+        public void SignalPanelCheck()
+        {
+            string BitAddress = "Y80\nX80\nX8C\nX8D\nX8E\nX8F\nX88\nX89\nX8A\nX8B";
+            MaterialDesignThemes.Wpf.PackIcon[] UIicons = new MaterialDesignThemes.Wpf.PackIcon[10] { mwd.ico_PLC_Ready, mwd.ico_QD75_Ready, mwd.ico_AXISX_Busy, mwd.ico_AXISY_Busy, mwd.ico_AXISZ1_Busy, mwd.ico_AXISZ2_Busy, mwd.ico_AXISX_Error, mwd.ico_AXISY_Error, mwd.ico_AXISZ1_Error, mwd.ico_AXISZ2_Error };
+            Checkgroup(BitAddress, UIicons);
+        }
         public void ThreadCheckExecution()
         {
             while(true)
@@ -142,6 +147,7 @@ namespace PCBrouter_prj.ViewModel
                 EmergencyCheck();
                 ModeSelectionCheck();
                 ServoOnCheck();
+                SignalPanelCheck();
             }    
         }
         public void EmergencyCheck()
@@ -156,8 +162,8 @@ namespace PCBrouter_prj.ViewModel
         public void Connection()
         {
             plc.ActLogicalStationNumber = 1;
-            int iret = plc.Open();
-            if (iret == 0)
+            iretCon = plc.Open();
+            if (iretCon == 0)
             {
                 MessageBox.Show("Connected", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -166,14 +172,73 @@ namespace PCBrouter_prj.ViewModel
                 MessageBox.Show("Failed Connection", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-        //public void Operation()
-        //{
-        //    plc.WriteDeviceRandom("M101\nM102\nM103\nM104\nM105\nM106\nM107\nM108\nM109\nM110", 10, ref ar1[0]);
-        //    plc.WriteDeviceRandom("M456\nM50\nM100\nM199\nM300\nM370\nM371", 7, ref ar1[0]);
-        //    plc.SetDevice("D200", 0);
-        //    plc.SetDevice("D100", 0);
-        //}
-
-
+        private void Checkgroup(string bit, MaterialDesignThemes.Wpf.PackIcon[] icons)
+        {
+            int iReturnCode = 99;
+            short[] lpshDeviceValue = new short[10];
+            try
+            {
+                //The ReadDeviceRandom2 method is executed.
+                iReturnCode = plc.ReadDeviceRandom2(bit, 10, out lpshDeviceValue[0]);
+            }
+            catch
+            {
+                //MessageBox.Show(exception.Message);
+                for (int i = 0; i < 10; i++)
+                {
+                    icons[i].Background = Brushes.Red;
+                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CloseNetwork;
+                }
+                return;
+            }
+            finally
+            {
+                mwd.Dispatcher.Invoke(() => 
+                {
+                    if (iReturnCode == 0)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            if (lpshDeviceValue[i] == 1)
+                            {
+                                if (i <= 1)
+                                {
+                                    icons[i].Background = Brushes.Lime;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanConnect;
+                                }    
+                                else if (i < 6 && i > 1)
+                                {
+                                    icons[i].Background = Brushes.Lime;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Wifi;
+                                }    
+                                else
+                                {
+                                    icons[i].Background = Brushes.Red;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Alert;
+                                }    
+                            }
+                            else
+                            {
+                                if (i <= 1)
+                                {
+                                    icons[i].Background = Brushes.Transparent;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanDisconnect;
+                                }
+                                else if (i < 6 && i > 1)
+                                {
+                                    icons[i].Background = Brushes.Transparent;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.WifiOff;
+                                }
+                                else
+                                {
+                                    icons[i].Background = Brushes.Transparent;
+                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CheckCircle;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 }
