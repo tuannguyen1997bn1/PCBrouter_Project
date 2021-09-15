@@ -19,6 +19,7 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
+        public static ControlManualViewModel mnwd;
         public static int iretCon;
         public static ActUtlType plc = new ActUtlType();
         public static DispatcherTimer TimerCheckStatus;
@@ -41,6 +42,7 @@ namespace PCBrouter_prj.ViewModel
        
         public MainViewModel()
         {
+            mnwd = new ControlManualViewModel();
             ServoOnCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 int m120;
@@ -193,12 +195,22 @@ namespace PCBrouter_prj.ViewModel
         {
             while(true)
             {
-                EmergencyCheck();
+                //EmergencyCheck();
                 ModeSelectionCheck();
+                //ErrorCheck();
                 ServoOnCheck();
                 SignalPanelCheck();
             }    
         }
+        //public void ErrorCheck()
+        //{
+        //    short[] errors = new short[4];
+        //    plc.ReadDeviceRandom2("D20\nD50\nD80\nD120", 4, out errors[0]);
+        //    mnwd.ErrorCodeX = errors[0].ToString();
+        //    mnwd.ErrorCodeY = errors[1].ToString();
+        //    mnwd.ErrorCodeZ1 = errors[2].ToString();
+        //    mnwd.ErrorCodeZ2 = errors[3].ToString();
+        //}
         public void EmergencyCheck()
         {
             int m0;
@@ -210,7 +222,7 @@ namespace PCBrouter_prj.ViewModel
         }
         public void Connection()
         {
-            plc.ActLogicalStationNumber = 1;
+            plc.ActLogicalStationNumber = 2;
             iretCon = plc.Open();
             if (iretCon == 0)
             {

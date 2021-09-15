@@ -24,15 +24,15 @@ namespace PCBrouter_prj.ViewModel
         {
             CloseWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) => {
                 FrameworkElement window = GetWindowParent(p);
-                var w = window as Window;
+                var w = window as MainWindow;// WinDow cungx dudowjc
                 if (w != null)
                 {
                     MessageBoxResult answer1;
                     answer1 = MessageBox.Show("Bạn có muốn thoát khỏi chương trình không ?", "Notification", MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if (answer1 == MessageBoxResult.OK)
                     {
-                        //Application.Current.Shutdown();
-                        w.Close(); // nếu có nhiều window thì mới dùng close;
+                        Application.Current.Shutdown();
+                        //w.Close(); // nếu có nhiều window thì mới dùng close;
                     }
                 }
             }
@@ -74,7 +74,6 @@ namespace PCBrouter_prj.ViewModel
             }
            );
         }
-
         FrameworkElement GetWindowParent(UserControl p)
         {
             FrameworkElement parent = p;
@@ -83,7 +82,6 @@ namespace PCBrouter_prj.ViewModel
             {
                 parent = parent.Parent as FrameworkElement;              
             }
-
             return parent;
         }
     }

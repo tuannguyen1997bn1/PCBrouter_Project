@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -181,12 +182,8 @@ namespace PCBrouter_prj.ViewModel
         }
         #endregion
         public ICommand LoadedManualUCCommand { get; set; }
-        public ICommand ClosingManualUCCommand { get; set; }
+        public ICommand ClosedManualUCCommand { get; set; }
         public ICommand SetSpeedCommand { get; set; }
-        public ICommand ReverseUpCommand { get; set; }
-        public ICommand ReverseDownCommand { get; set; }
-        public ICommand ForwardUpCommand { get; set; }
-        public ICommand ForwardDownCommand { get; set; }
         public ICommand ResetCommand { get; set; }
         public ICommand HomeCommand { get; set; }
         public ICommand ExcuteNoCommand { get; set; }
@@ -197,18 +194,142 @@ namespace PCBrouter_prj.ViewModel
         public ICommand Knife_Speed3_Command { get; set; }
         public ICommand Brake1_Command { get; set; }
         public ICommand Brake2_Command { get; set; }
+        public ICommand forward { get; set; }
+        public ICommand reverse { get; set; }
         public ControlManualViewModel()
         {
-            ClosingManualUCCommand = new RelayCommand<UserControlKteam.ControlManual>((p) => { return true; }, (p) =>
+            reverse = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+
+                if (p.ToString() == "btn_ReverseX")
+                {
+                    plc.GetDevice("M156", out int m156);
+                    if (m156 == 0)
+                    {
+                        if (int.Parse(SpeedValueX) != 0)
+                        {
+                            plc.SetDevice("M156", 1);
+                        }    
+                    }
+                    else
+                    {
+                        plc.SetDevice("M156", 0);
+                    }
+
+                }
+                else if (p.ToString() == "btn_ReverseY")
+                {
+                    plc.GetDevice("M166", out int m166);
+                    if (m166 == 0)
+                    {
+                        if (int.Parse(SpeedValueY) != 0)
+                            plc.SetDevice("M166", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M166", 0);
+                    }
+                }
+                else if (p.ToString() == "btn_ReverseZ1")
+                {
+
+                    plc.GetDevice("M176", out int m176);
+                    if (m176 == 0)
+                    {
+                        if (int.Parse(SpeedValueZ1) != 0)
+                            plc.SetDevice("M176", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M176", 0);
+                    }
+                }
+                else if (p.ToString() == "btn_ReverseZ2")
+                {
+
+                    plc.GetDevice("M186", out int m186);
+                    if (m186 == 0)
+                    {
+                        if (int.Parse(SpeedValueZ2) != 0)
+                            plc.SetDevice("M186", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M186", 0);
+                    }
+                }
+            });
+            forward = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                
+                if (p.ToString() == "btn_ForwardX")
+                {
+                    plc.GetDevice("M155", out int m155);
+                    if (m155 == 0 )
+                    {
+                        if (int.Parse(SpeedValueX) != 0)
+                            plc.SetDevice("M155", 1);
+                    }    
+                    else
+                    {
+                        plc.SetDevice("M155", 0);
+                    }    
+
+                }
+                else if (p.ToString() == "btn_ForwardY")
+                {
+                    plc.GetDevice("M165", out int m165);
+                    if (m165 == 0)
+                    {
+                        if (int.Parse(SpeedValueY) != 0)
+                            plc.SetDevice("M165", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M165", 0);
+                    }
+                }
+                else if (p.ToString() == "btn_ForwardZ1")
+                {
+
+                    plc.GetDevice("M175", out int m175);
+                    if (m175 == 0)
+                    {
+                        if (int.Parse(SpeedValueZ1) != 0)
+                            plc.SetDevice("M175", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M175", 0);
+                    }
+                }
+                else if (p.ToString() == "btn_ForwardZ2")
+                {
+
+                    plc.GetDevice("M175", out int m185);
+                    if (m185 == 0)
+                    {
+                        if (int.Parse(SpeedValueZ2) != 0)
+                            plc.SetDevice("M185", 1);
+                    }
+                    else
+                    {
+                        plc.SetDevice("M185", 0);
+                    }
+                }
+            });
+            ClosedManualUCCommand = new RelayCommand<UserControlKteam.ControlManual>((p) => { return true; }, (p) =>
             {
                 LoginViewModel.IsLogin = false;
+                TimerCheckErrors.Stop();
             });
             LoadedManualUCCommand = new RelayCommand<UserControlKteam.ControlManual>((p) => { return true; }, (p) =>
             {
                 plc = MainViewModel.plc;
                 ctrManual = p;
+                BrakeCheck();
                 TimerCheckErrors = new DispatcherTimer();
-                TimerCheckErrors.Interval = new TimeSpan(0, 0, 0, 0, 250);
+                TimerCheckErrors.Interval = new TimeSpan(0, 0, 0, 0, 300);
                 TimerCheckErrors.Tick += TimerCheckErrors_Tick;
                 TimerCheckErrors.Start();
             });
@@ -235,6 +356,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     plc.SetDevice("M115", 0);
                 }
+                BrakeCheck();
             });
             Brake2_Command = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
@@ -248,6 +370,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     plc.SetDevice("M116", 0);
                 }
+                BrakeCheck();
             });
             RunKnifeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
@@ -384,106 +507,6 @@ namespace PCBrouter_prj.ViewModel
                     SpeedSet(SpeedValueZ2, "D260", "D261");
                 }
             });
-            ForwardUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
-            {
-                if (p.ToString() == "btn_ForwardX")
-                {
-                    if (Convert.ToInt32(SpeedValueX) > 0)
-                    {
-                        plc.SetDevice("M155", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ForwardY")
-                {
-                    if (Convert.ToInt32(SpeedValueY) > 0)
-                    {
-                        plc.SetDevice("M165", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ForwardZ1")
-                {
-                    if (Convert.ToInt32(SpeedValueZ1) > 0)
-                    {
-                        plc.SetDevice("M175", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ForwardZ2")
-                {
-                    if (Convert.ToInt32(SpeedValueZ2) > 0)
-                    {
-                        plc.SetDevice("M185", 1);
-                    }
-                }
-            });
-            ForwardDownCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
-            {
-                if (p.ToString() == "btn_ForwardX")
-                {
-                    plc.SetDevice("M155", 0);
-                }
-                else if (p.ToString() == "btn_ForwardY")
-                {
-                    plc.SetDevice("M165", 0);
-                }
-                else if (p.ToString() == "btn_ForwardZ1")
-                {
-                    plc.SetDevice("M175", 0);
-                }
-                else if (p.ToString() == "btn_ForwardZ2")
-                {
-                    plc.SetDevice("M185", 0);
-                }
-            });
-            ReverseUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
-            {
-                if (p.ToString() == "btn_ReverseX")
-                {
-                    if (Convert.ToInt32(SpeedValueX) > 0)
-                    {
-                        plc.SetDevice("M156", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ReverseY")
-                {
-                    if (Convert.ToInt32(SpeedValueY) > 0)
-                    {
-                        plc.SetDevice("M166", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ReverseZ1")
-                {
-                    if (Convert.ToInt32(SpeedValueZ1) > 0)
-                    {
-                        plc.SetDevice("M176", 1);
-                    }
-                }
-                else if (p.ToString() == "btn_ReverseZ2")
-                {
-                    if (Convert.ToInt32(SpeedValueZ2) > 0)
-                    {
-                        plc.SetDevice("M186", 1);
-                    }
-                }
-            });
-            ReverseDownCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
-            {
-                if (p.ToString() == "btn_ReverseX")
-                {
-                    plc.SetDevice("M156", 0);
-                }
-                else if (p.ToString() == "btn_ReverseY")
-                {
-                    plc.SetDevice("M166", 0);
-                }
-                else if (p.ToString() == "btn_ReverseZ1")
-                {
-                    plc.SetDevice("M176", 0);
-                }
-                else if (p.ToString() == "btn_ReverseZ2")
-                {
-                    plc.SetDevice("M186", 0);
-                }
-            });
             ResetCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 if (p.ToString() == "btn_ResetX")
@@ -558,7 +581,7 @@ namespace PCBrouter_prj.ViewModel
                 }
             });
         }
-        private void CheckBrake()
+        public void BrakeCheck()
         {
             int m115;
             plc.GetDevice("M115", out m115);
@@ -597,22 +620,31 @@ namespace PCBrouter_prj.ViewModel
                 });
             }
         }
+        //public Thread CheckStatuThread;
+        //public void StartCheckStatusThread()
+        //{
+        //    if (CheckStatusThread != null)
+        //    {
+        //        CheckStatusThread.Abort();
+        //    }
+        //    CheckStatusThread = new Thread(new ThreadStart(ThreadCheckExecution));
+        //    CheckStatusThread.IsBackground = true;
+        //    CheckStatusThread.Start();
+        //}
         private void TimerCheckErrors_Tick(object sender, EventArgs e)
         {
             ErrorCheck();
-            CheckBrake();
+            BrakeCheck();
         }
+
         public void ErrorCheck()
         {
-            int errX, errY, errZ1, errZ2;
-            plc.GetDevice("D20",out errX);
-            plc.GetDevice("D50", out errY);
-            plc.GetDevice("D80", out errZ1);
-            plc.GetDevice("D120", out errZ2);
-            ErrorCodeX = errX.ToString();
-            ErrorCodeY = errY.ToString();
-            ErrorCodeZ1 = errZ1.ToString();
-            ErrorCodeZ2 = errZ2.ToString();
+            short[] errors = new short[4];
+            plc.ReadDeviceRandom2("D20\nD50\nD80\nD120", 4, out errors[0]);
+            ErrorCodeX = errors[0].ToString();
+            ErrorCodeY = errors[1].ToString();
+            ErrorCodeZ1 = errors[2].ToString();
+            ErrorCodeZ2 = errors[3].ToString();
         }
 
         private void SpeedSet(string speedVal, string buffer1, string buffer2)

@@ -29,6 +29,7 @@ namespace PCBrouter_prj.ViewModel
                 if (w != null)
                 {
                     w.Close();
+                    LoginViewModel.IsLogin = false;
                 }
             });
             MaximizeWindowCommand1 = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>

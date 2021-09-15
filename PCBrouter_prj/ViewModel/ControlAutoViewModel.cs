@@ -557,7 +557,7 @@ namespace PCBrouter_prj.ViewModel
                 int flag1 = 0;
                 int flag2 = 0;
                 int i = 0;
-                int[,] arr = new int[4, 2] { { 200000, 20000 }, { 500000, 200000 }, { 500000, 500000 }, { 200000, 500000 } };
+                int[,] arr = new int[4, 2] { { 200000, 200000 }, { 500000, 200000 }, { 500000, 500000 }, { 200000, 500000 } };
                 int total = arr.Length / 2;
                 while (flag1 == 0 && flag2 == 0 && autoFlag == true)
                     {
@@ -597,7 +597,34 @@ namespace PCBrouter_prj.ViewModel
                                     }
                                     Thread.Sleep(100);
                                     plc.SetDevice("M200", 1);
+                                //int flagtemp = 0;
                                     i++;
+                                //while (flagtemp == 0)
+                                //{
+                                //    if (i < 4 )
+                                //    {
+                                //        short[] currentVal = new short[4];
+                                //        plc.ReadDeviceRandom2("D0\nD1\nD30\nD31"/*nD60\nD61\nD90\nD91*/, 4, out currentVal[0]);
+                                //        int Zcut = 12000;
+                                //        if (currentVal[0] == (arr[i, 0] % 65536) && currentVal[1] == (arr[i, 0] / 65536) && currentVal[2] == (arr[i, 1] % 65536) && currentVal[3] == (arr[i, 1] / 65536))
+                                //        {
+                                //            plc.SetDevice("D1200", Zcut % 65536);
+                                //            plc.SetDevice("D1201", Zcut / 65536);
+                                //            Thread.Sleep(50);
+
+                                //            flagtemp = 1;
+                                //        }
+                                //    }
+                                //    else if ( i == 4 )
+                                //    {
+                                //        flagtemp = 1;
+                                //    }
+                                    
+                                //}
+                                // d0 : feed value X
+                                // d30 : feed value Y
+                                // d60 : feed value Z1
+                                // d90 : feed value Z2
                                 }
                                 else
                                 {

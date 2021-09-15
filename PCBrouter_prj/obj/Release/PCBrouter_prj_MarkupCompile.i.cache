@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project-PCBrouter_dev1\PCBrouter_prj\obj\Release\
+C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\obj\Release\
 PCBrouter_prj
 none
 false
 TRACE
-C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project-PCBrouter_dev1\PCBrouter_prj\App.xaml
+C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\App.xaml
 7632099737
 2-1556844510
 24776141921
-251673229749
+25281084284
 LoginWindow.xaml;MainWindow.xaml;ResourceXAML\MainResource.xaml;UserControlKteam\ControlAuto.xaml;UserControlKteam\ControlBarAll.xaml;UserControlKteam\ControlBarUC.xaml;UserControlKteam\ControlManual.xaml;
 
-True
+False
 

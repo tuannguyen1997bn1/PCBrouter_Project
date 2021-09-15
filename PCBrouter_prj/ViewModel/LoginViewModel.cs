@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ namespace PCBrouter_prj.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
+        public static bool KeyClick = false;
         public static bool IsLogin { get; set; }
         public static LoginWindow lg1;
         private string _UserName;
@@ -27,9 +29,10 @@ namespace PCBrouter_prj.ViewModel
         public LoginViewModel()
         {
             IsLogin = false;
+            
             LoadedCommand = new RelayCommand<LoginWindow>((p) => { return true; }, (p) => 
             { 
-                lg1 = p; 
+                lg1 = p;
             });
             LoginCommand = new RelayCommand<LoginWindow>((p) => { return true; }, (p) => 
             { 
@@ -47,24 +50,28 @@ namespace PCBrouter_prj.ViewModel
             KeyEnterCommand = new RelayCommand<LoginWindow>((p) => { return true; }, (p) => 
             {
                 p.PreviewKeyUp += P_PreviewKeyUp1; ;
+                
             });
         }
 
         private void P_PreviewKeyUp1(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                Login(lg1);
-            }
-            if (e.Key == Key.Escape)
-            {
-                IsLogin = false;
-                lg1.Close();
-            }
+                //if (e.Key == Key.Enter)
+                //{
+                    
+                //    Login(lg1);
+                //}
+                //if (e.Key == Key.Escape)
+                //{
+                //    IsLogin = false;
+                //    lg1.Close();
+                //}
+            
         }
         void Login(Window p)
         {
             //code dang nhap day
+            
             if (p == null)
                 return;
             string passEncode = "123456";
