@@ -35,8 +35,7 @@ namespace PCBrouter_prj.ViewModel
                         //w.Close(); // nếu có nhiều window thì mới dùng close;
                     }
                 }
-            }
-            );
+            });
             MaximizeWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>
             {
                 FrameworkElement window = GetWindowParent(p);
@@ -48,8 +47,7 @@ namespace PCBrouter_prj.ViewModel
                     else
                         w.WindowState = WindowState.Normal;
                 }
-            }
-            );
+            });
             MinimizeWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>
             {
                 FrameworkElement window = GetWindowParent(p);
@@ -61,8 +59,7 @@ namespace PCBrouter_prj.ViewModel
                     else
                         w.WindowState = WindowState.Maximized;
                 }
-            }
-            );
+            });
             MouseMoveWindowCommand = new RelayCommand<UserControl>((p) => { return p == null ? false : true; }, (p) =>
             {                
                 FrameworkElement window = GetWindowParent(p);
@@ -71,13 +68,11 @@ namespace PCBrouter_prj.ViewModel
                 {
                     w.DragMove();
                 }
-            }
-           );
+            });
         }
         FrameworkElement GetWindowParent(UserControl p)
         {
             FrameworkElement parent = p;
-
             while (parent.Parent != null)
             {
                 parent = parent.Parent as FrameworkElement;              

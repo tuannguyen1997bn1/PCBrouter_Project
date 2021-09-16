@@ -24,7 +24,6 @@ namespace PCBrouter_prj.ViewModel
         public ICommand LoginCommand { get; set; }
         public ICommand PasswordChangedCommand { get; set; }
         public ICommand FormClosedCommand { get; set; }
-        public ICommand KeyEnterCommand { get; set; }
         public ICommand LoadedCommand { get; set; }
         public LoginViewModel()
         {
@@ -47,26 +46,6 @@ namespace PCBrouter_prj.ViewModel
             { 
                 Password = p.Password; 
             });
-            KeyEnterCommand = new RelayCommand<LoginWindow>((p) => { return true; }, (p) => 
-            {
-                p.PreviewKeyUp += P_PreviewKeyUp1; ;
-                
-            });
-        }
-
-        private void P_PreviewKeyUp1(object sender, KeyEventArgs e)
-        {
-                //if (e.Key == Key.Enter)
-                //{
-                    
-                //    Login(lg1);
-                //}
-                //if (e.Key == Key.Escape)
-                //{
-                //    IsLogin = false;
-                //    lg1.Close();
-                //}
-            
         }
         void Login(Window p)
         {

@@ -235,4 +235,3 @@ C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Pro
 C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\obj\Release\PCBrouter_prj.csproj.CopyComplete
 C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\obj\Release\PCBrouter_prj.exe
 C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\obj\Release\PCBrouter_prj.pdb
-C:\Users\tuan\Desktop\RAV\PCBrouter_Project\PCBrouter_Project_file\PCBrouter_Project\PCBrouter_prj\obj\Release\PCBrouter_prj.csprojAssemblyReference.cache

@@ -19,7 +19,7 @@ namespace PCBrouter_prj.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public static MainWindow mwd;
-        public static ControlManualViewModel mnwd;
+        public Thread CheckStatusThread;
         public static int iretCon;
         public static ActUtlType plc = new ActUtlType();
         public static DispatcherTimer TimerCheckStatus;
@@ -27,8 +27,6 @@ namespace PCBrouter_prj.ViewModel
         public ICommand ClosingWindowCommand { get; set; }
         public ICommand ModeCommand { get; set; }
         public ICommand ServoOnCommand { get; set; }
-
-
         private object _UCview;
         public object UCview
         {
@@ -42,7 +40,6 @@ namespace PCBrouter_prj.ViewModel
        
         public MainViewModel()
         {
-            mnwd = new ControlManualViewModel();
             ServoOnCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 int m120;
@@ -83,6 +80,19 @@ namespace PCBrouter_prj.ViewModel
                 StartCheckStatusThread();
             });
         }
+        public void Connection()
+        {
+            plc.ActLogicalStationNumber = 1;
+            iretCon = plc.Open();
+            if (iretCon == 0)
+            {
+                MessageBox.Show("Đã kết nối tới PLC", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Không thể kết nối tới PLC", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
         public void AccessManualMode()
         {
             LoginWindow loginWD = new LoginWindow();
@@ -93,7 +103,6 @@ namespace PCBrouter_prj.ViewModel
                 plc.SetDevice("M105", 0);
             }
         }
-        public Thread CheckStatusThread;
         public void StartCheckStatusThread()
         {
             if (CheckStatusThread != null)
@@ -103,6 +112,15 @@ namespace PCBrouter_prj.ViewModel
             CheckStatusThread = new Thread(new ThreadStart(ThreadCheckExecution));
             CheckStatusThread.IsBackground = true;
             CheckStatusThread.Start();
+        }
+        public void ThreadCheckExecution()
+        {
+            while (true)
+            {
+                ModeSelection_Emergency_Check();
+                ServoOnCheck();
+                SignalPanelCheck();
+            }
         }
         public void ServoOnCheck()
         {
@@ -150,12 +168,15 @@ namespace PCBrouter_prj.ViewModel
                 });
             }
         }
-        public void ModeSelectionCheck()
+        public void ModeSelection_Emergency_Check()
         {
-            int m0;
-            int iretEmr = plc.GetDevice("M0", out m0);
+            int iretEmr = plc.GetDevice("M0", out int m0);
             if (iretEmr == 0)
             {
+                if (m0 == 1)
+                {
+                    Application.Current.Shutdown();
+                }
                 if (ControlAutoViewModel.autoFlag == true)
                 {
                     mwd.Dispatcher.Invoke(() =>
@@ -187,51 +208,9 @@ namespace PCBrouter_prj.ViewModel
         }
         public void SignalPanelCheck()
         {
-            string BitAddress = "Y80\nX80\nX8C\nX8D\nX8E\nX8F\nX88\nX89\nX8A\nX8B";
+            string BitAddress = "Y80\nY81\nX8C\nX8D\nX8E\nX8F\nX88\nX89\nX8A\nX8B";
             MaterialDesignThemes.Wpf.PackIcon[] UIicons = new MaterialDesignThemes.Wpf.PackIcon[10] { mwd.ico_PLC_Ready, mwd.ico_QD75_Ready, mwd.ico_AXISX_Busy, mwd.ico_AXISY_Busy, mwd.ico_AXISZ1_Busy, mwd.ico_AXISZ2_Busy, mwd.ico_AXISX_Error, mwd.ico_AXISY_Error, mwd.ico_AXISZ1_Error, mwd.ico_AXISZ2_Error };
             Checkgroup(BitAddress, UIicons);
-        }
-        public void ThreadCheckExecution()
-        {
-            while(true)
-            {
-                //EmergencyCheck();
-                ModeSelectionCheck();
-                //ErrorCheck();
-                ServoOnCheck();
-                SignalPanelCheck();
-            }    
-        }
-        //public void ErrorCheck()
-        //{
-        //    short[] errors = new short[4];
-        //    plc.ReadDeviceRandom2("D20\nD50\nD80\nD120", 4, out errors[0]);
-        //    mnwd.ErrorCodeX = errors[0].ToString();
-        //    mnwd.ErrorCodeY = errors[1].ToString();
-        //    mnwd.ErrorCodeZ1 = errors[2].ToString();
-        //    mnwd.ErrorCodeZ2 = errors[3].ToString();
-        //}
-        public void EmergencyCheck()
-        {
-            int m0;
-            plc.GetDevice("M0", out m0);
-            if (m0 == 1 )
-            {
-                Application.Current.Shutdown();
-            }    
-        }
-        public void Connection()
-        {
-            plc.ActLogicalStationNumber = 2;
-            iretCon = plc.Open();
-            if (iretCon == 0)
-            {
-                MessageBox.Show("Đã kết nối tới PLC", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Không thể kết nối tới PLC", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
         }
         private void Checkgroup(string bit, MaterialDesignThemes.Wpf.PackIcon[] icons)
         {

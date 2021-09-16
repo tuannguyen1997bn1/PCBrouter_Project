@@ -14,8 +14,7 @@ namespace PCBrouter_prj.ViewModel
 {
     public class ControlManualViewModel : BaseViewModel
     {
-
-        #region Defination
+        #region VARIABLE-BIDING DEFINATION
         public static DispatcherTimer TimerCheckErrors;
         public static string flag_KnifeSelect = "knife1";
         private ActUtlType plc;
@@ -181,6 +180,8 @@ namespace PCBrouter_prj.ViewModel
             }
         }
         #endregion
+
+        #region COMMANDS DEFINATION
         public ICommand LoadedManualUCCommand { get; set; }
         public ICommand ClosedManualUCCommand { get; set; }
         public ICommand SetSpeedCommand { get; set; }
@@ -194,13 +195,15 @@ namespace PCBrouter_prj.ViewModel
         public ICommand Knife_Speed3_Command { get; set; }
         public ICommand Brake1_Command { get; set; }
         public ICommand Brake2_Command { get; set; }
-        public ICommand forward { get; set; }
-        public ICommand reverse { get; set; }
+        public ICommand ForwardCommand { get; set; }
+        public ICommand ReverseCommand { get; set; }
+        #endregion
+
+        #region CONTRUCTOR AND COMMANDS'S EXECUTION
         public ControlManualViewModel()
         {
-            reverse = new RelayCommand<object>((p) => { return true; }, (p) =>
+            ReverseCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
-
                 if (p.ToString() == "btn_ReverseX")
                 {
                     plc.GetDevice("M156", out int m156);
@@ -259,7 +262,7 @@ namespace PCBrouter_prj.ViewModel
                     }
                 }
             });
-            forward = new RelayCommand<object>((p) => { return true; }, (p) =>
+            ForwardCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
                 
                 if (p.ToString() == "btn_ForwardX")
@@ -581,6 +584,9 @@ namespace PCBrouter_prj.ViewModel
                 }
             });
         }
+        #endregion
+
+        #region SUPPORT METHODS
         public void BrakeCheck()
         {
             int m115;
@@ -620,23 +626,11 @@ namespace PCBrouter_prj.ViewModel
                 });
             }
         }
-        //public Thread CheckStatuThread;
-        //public void StartCheckStatusThread()
-        //{
-        //    if (CheckStatusThread != null)
-        //    {
-        //        CheckStatusThread.Abort();
-        //    }
-        //    CheckStatusThread = new Thread(new ThreadStart(ThreadCheckExecution));
-        //    CheckStatusThread.IsBackground = true;
-        //    CheckStatusThread.Start();
-        //}
         private void TimerCheckErrors_Tick(object sender, EventArgs e)
         {
             ErrorCheck();
             BrakeCheck();
         }
-
         public void ErrorCheck()
         {
             short[] errors = new short[4];
@@ -646,7 +640,6 @@ namespace PCBrouter_prj.ViewModel
             ErrorCodeZ1 = errors[2].ToString();
             ErrorCodeZ2 = errors[3].ToString();
         }
-
         private void SpeedSet(string speedVal, string buffer1, string buffer2)
         {
             int speed;
@@ -678,5 +671,6 @@ namespace PCBrouter_prj.ViewModel
                 MessageBox.Show("Nhap sai vi tri, xin nhap lai!");
             }
         }
+        #endregion
     }
 }

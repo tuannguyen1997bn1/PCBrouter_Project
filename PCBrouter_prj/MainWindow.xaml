@@ -18,7 +18,7 @@
          WindowStartupLocation="CenterScreen"
          Name="mainWindow"
          DataContext="{StaticResource MainVM}"
-         Title="Phần mềm quản lý" Height="825" Width="1250">
+         Title="PCB ROUTER" Height="825" Width="1250">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedWindowCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
@@ -77,7 +77,6 @@
                             <GradientStop Color="#FFEAC77E" Offset="0.773"/>
                         </LinearGradientBrush>
                     </materialDesign:Card.Background>
-
                     <Grid >
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
@@ -127,7 +126,6 @@
                             </materialDesign:Card>
                             <materialDesign:Card
                                 Grid.Column="1" Grid.Row="1"  
-                                
                                 Background="{DynamicResource PrimaryHueDarkBrush}"
                                 Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -175,7 +173,7 @@
                                         <materialDesign:PackIcon 
                                 Kind="LoginVariant"        
                                 Width="15"
-                                Height="10"
+                                Height="15"
                                 HorizontalAlignment="Center"                  
                                 VerticalAlignment="Center"/>
                                     </Grid>
@@ -216,15 +214,16 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <materialDesign:Card Grid.Row="0" 
-                                         Grid.Column="0" 
-                                             HorizontalAlignment="Center" 
-                                             VerticalAlignment="Center"
-                                             UniformCornerRadius="5"
-                                             Background="#FF4D625E"
-                                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                                             Width="95"
-                                             Height="40"
+                    <materialDesign:Card 
+                        Grid.Row="0"             
+                        Grid.Column="0" 
+                        HorizontalAlignment="Center"     
+                        VerticalAlignment="Center"
+                        UniformCornerRadius="5" 
+                        Background="#FF4D625E"
+                        Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                        Width="95"
+                        Height="40"
                                              >
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -417,7 +416,7 @@
                                            FontSize="12" 
                                            VerticalAlignment="Center" 
                                            FontWeight="Bold" Foreground="#DDFFFFFF">
-                                 QD75<LineBreak></LineBreak>READY
+                                 ALL <LineBreak></LineBreak>AXIS ON
                             </TextBlock>
                         </Grid>
                     </materialDesign:Card>
@@ -568,7 +567,6 @@
             HorizontalAlignment="Stretch"
             Grid.Row="2">
             <UserControl 
-                x:Name="cmm"
                 Content="{Binding UCview, UpdateSourceTrigger=PropertyChanged}"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch">

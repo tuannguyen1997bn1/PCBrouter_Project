@@ -199,7 +199,7 @@
                                 <Grid Grid.Row="2" Grid.Column="0">
                                     <Button
                                         x:Name="btn_ReverseX"
-                                        Command="{Binding reverse}"
+                                        Command="{Binding ReverseCommand}"
                                         CommandParameter="btn_ReverseX"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
                                         HorizontalAlignment="Center"
@@ -233,7 +233,7 @@
                                 <Grid Grid.Row="2" Grid.Column="1">
                                     <Button
                                         x:Name="btn_ForwardX"
-                                        Command="{Binding forward}"
+                                        Command="{Binding ForwardCommand}"
                                         CommandParameter="btn_ForwardX"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
                                         HorizontalAlignment="Center"
@@ -555,7 +555,7 @@
                                 <Grid Grid.Row="2" Grid.Column="0">
                                     <Button
                                          x:Name="btn_ReverseY"
-                                       Command="{Binding reverse}"
+                                       Command="{Binding ReverseCommand}"
                                         CommandParameter="btn_ReverseY"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
                                         HorizontalAlignment="Center"
@@ -590,7 +590,7 @@
                                     <Button
                                          x:Name="btn_ForwardY"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        Command="{Binding forward}"
+                                        Command="{Binding ForwardCommand}"
                                         CommandParameter="btn_ForwardY"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -908,7 +908,7 @@
                                 <Grid Grid.Row="2" Grid.Column="0">
                                     <Button
                                          x:Name="btn_ReverseZ1"
-                                       Command="{Binding reverse}"
+                                       Command="{Binding ReverseCommand}"
                                         CommandParameter="btn_ReverseZ1"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
                                         HorizontalAlignment="Center"
@@ -943,7 +943,7 @@
                                     <Button
                                           x:Name="btn_ForwardZ1"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        Command="{Binding forward}"
+                                        Command="{Binding ForwardCommand}"
                                         CommandParameter="btn_ForwardZ1"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -1259,7 +1259,7 @@
                                 <Grid Grid.Row="2" Grid.Column="0">
                                     <Button
                                          x:Name="btn_ReverseZ2"
-                                        Command="{Binding reverse}"
+                                        Command="{Binding ReverseCommand}"
                                         CommandParameter="btn_ReverseZ2"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
                                         HorizontalAlignment="Center"
@@ -1294,7 +1294,7 @@
                                     <Button
                                         x:Name="btn_ForwardZ2"
                                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                        Command="{Binding forward}"
+                                        Command="{Binding ForwardCommand}"
                                         CommandParameter="btn_ForwardZ2"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"

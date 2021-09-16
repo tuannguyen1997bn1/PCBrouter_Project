@@ -100,7 +100,7 @@
                                 </LinearGradientBrush>
                             </materialDesign:Card.Background>
                         </materialDesign:Card>
-                        
+
                         <TextBlock 
                             Margin="15 0 0 0"
                             VerticalAlignment="Center"
@@ -213,17 +213,15 @@
                             piece
                         </TextBlock>
 
-                        <materialDesign:Card 
+                        <Grid
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"                     
-                            Margin="5"
-                            UniformCornerRadius="5"
+                            VerticalAlignment="Stretch"   
                             Grid.Column="0" 
                             Grid.Row="6" 
-                            Grid.ColumnSpan="3" Background="#FF383560">
+                            Grid.ColumnSpan="3">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -232,12 +230,102 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
+                                <materialDesign:Card 
+                            
+                            Background="#FFCAE089"
+                            UniformCornerRadius="5"
+                            Margin="5"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Grid.Row="0" 
+                            Grid.ColumnSpan="3" Height="38.04">
+                                    <TextBlock 
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center" 
+                                Foreground="#FF0C08C0"
+                                FontSize="18" 
+                                FontWeight="Bold">
+                                ĐO DAO
+                                    </TextBlock>
+                                </materialDesign:Card>
+                                <TextBlock 
+                            VerticalAlignment="Center"
+                                HorizontalAlignment="Center" 
+                                Foreground="White"
+                                FontSize="14" 
+                                FontWeight="Bold"
+                            Text="{Binding CalculatedZ1_Knife, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Grid.Row="1" 
+                            Grid.Column="1">
+                                </TextBlock>
+                                <TextBlock 
+                            VerticalAlignment="Center"
+                                HorizontalAlignment="Center" 
+                                Foreground="White"
+                                FontSize="14" 
+                                FontWeight="Bold"
+                            Text="{Binding CalculatedZ2_Knife, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Grid.Row="2" 
+                            Grid.Column="1">
+                                </TextBlock>
+                                <TextBlock 
+                            Margin="15 0 0 0"
+                            Grid.Row="1" Grid.Column="0" 
+                            VerticalAlignment="Center"
+                                HorizontalAlignment="Left" 
+                                Foreground="White"
+                                FontSize="14" 
+                                FontWeight="Bold">Tham số dao 1:</TextBlock>
+                                <TextBlock 
+                            Margin="15 0 0 0"
+                            Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
+                                HorizontalAlignment="Left" 
+                                Foreground="White"
+                                FontSize="14" 
+                                FontWeight="Bold">Tham số dao 2:</TextBlock>
+                                <Button 
+                                    x:Name="btn_CalculateKinfe"
+                                    Grid.Column="0"
+                                    Grid.Row="3"
+                                    Grid.ColumnSpan="2"
+                                    Command="{Binding CalculateKnifeCommand}" 
+                                    CommandParameter="{Binding ElementName=btn_CalculateKinfe}"
+                                    Width="110" 
+                                    Height="35"         
+                                    VerticalAlignment="Stretch" 
+                                    HorizontalAlignment="Stretch"
+                                    Style="{DynamicResource MaterialDesignRaisedButton}"   
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="#FF673AB7" >
+                                    <Grid 
+                                    VerticalAlignment="Stretch" 
+                                    HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0" >
+                                            <TextBlock 
+                                            Text="KNIFE CAL" 
+                                            FontSize="12"
+                                            HorizontalAlignment="Center"     
+                                            VerticalAlignment="Center" 
+                                            FontWeight="Bold"/>
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <materialDesign:PackIcon 
+                                            Kind="AppleKeyboardOption"        
+                                            Width="15"
+                                            Height="15"
+                                            HorizontalAlignment="Center"                  
+                                            VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Grid>
+                                </Button>
                             </Grid>
-                        </materialDesign:Card>
-
+                        </Grid>
                     </Grid>
                 </materialDesign:Card>
-                
+
                 <materialDesign:Card 
                         Grid.Row="1" 
                         Grid.ColumnSpan="2"
