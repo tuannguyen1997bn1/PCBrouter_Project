@@ -13,6 +13,7 @@ using PCBrouter_prj.ViewModel;
 using System.Threading;
 using System.Windows.Threading;
 using PCBrouter_prj.UserControlKteam;
+using MaterialDesignThemes.Wpf;
 
 namespace PCBrouter_prj.ViewModel
 {
@@ -27,6 +28,7 @@ namespace PCBrouter_prj.ViewModel
         public ICommand ClosingWindowCommand { get; set; }
         public ICommand ModeCommand { get; set; }
         public ICommand ServoOnCommand { get; set; }
+        public int SevoOnflag { get; set; }
         private object _UCview;
         public object UCview
         {
@@ -77,12 +79,13 @@ namespace PCBrouter_prj.ViewModel
                 mwd = p;
                 Connection();
                 UCview = new ControlAutoViewModel();
+                plc.SetDevice("M105", 1);
                 StartCheckStatusThread();
             });
         }
         public void Connection()
         {
-            plc.ActLogicalStationNumber = 1;
+            plc.ActLogicalStationNumber = 2;
             iretCon = plc.Open();
             if (iretCon == 0)
             {
@@ -132,6 +135,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     mwd.Dispatcher.Invoke(() =>
                     {
+                        SevoOnflag = 1;
                         mwd.badgedUI.Badge = "ON";
                         mwd.badgedUI.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Standard; 
                     });
@@ -140,6 +144,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     mwd.Dispatcher.Invoke(() =>
                     {
+                        SevoOnflag = 0;
                         mwd.badgedUI.Badge = "OFF";
                         mwd.badgedUI.BadgeColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Dark; 
                     });
@@ -173,10 +178,10 @@ namespace PCBrouter_prj.ViewModel
             int iretEmr = plc.GetDevice("M0", out int m0);
             if (iretEmr == 0)
             {
-                if (m0 == 1)
-                {
-                    Application.Current.Shutdown();
-                }
+                //if (m0 == 1)
+                //{
+                //    Application.Current.Shutdown();
+                //}
                 if (ControlAutoViewModel.autoFlag == true)
                 {
                     mwd.Dispatcher.Invoke(() =>
@@ -209,7 +214,7 @@ namespace PCBrouter_prj.ViewModel
         public void SignalPanelCheck()
         {
             string BitAddress = "Y80\nY81\nX8C\nX8D\nX8E\nX8F\nX88\nX89\nX8A\nX8B";
-            MaterialDesignThemes.Wpf.PackIcon[] UIicons = new MaterialDesignThemes.Wpf.PackIcon[10] { mwd.ico_PLC_Ready, mwd.ico_QD75_Ready, mwd.ico_AXISX_Busy, mwd.ico_AXISY_Busy, mwd.ico_AXISZ1_Busy, mwd.ico_AXISZ2_Busy, mwd.ico_AXISX_Error, mwd.ico_AXISY_Error, mwd.ico_AXISZ1_Error, mwd.ico_AXISZ2_Error };
+            PackIcon[] UIicons = new PackIcon[10] { mwd.ico_PLC_Ready, mwd.ico_QD75_Ready, mwd.ico_AXISX_Busy, mwd.ico_AXISY_Busy, mwd.ico_AXISZ1_Busy, mwd.ico_AXISZ2_Busy, mwd.ico_AXISX_Error, mwd.ico_AXISY_Error, mwd.ico_AXISZ1_Error, mwd.ico_AXISZ2_Error };
             Checkgroup(BitAddress, UIicons);
         }
         private void Checkgroup(string bit, MaterialDesignThemes.Wpf.PackIcon[] icons)

@@ -335,6 +335,7 @@ namespace PCBrouter_prj.ViewModel
                 TimerCheckErrors.Interval = new TimeSpan(0, 0, 0, 0, 300);
                 TimerCheckErrors.Tick += TimerCheckErrors_Tick;
                 TimerCheckErrors.Start();
+                plc.SetDevice("M105", 0);
             });
             KnifeSelectCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
             {
