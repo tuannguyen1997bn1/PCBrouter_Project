@@ -309,7 +309,7 @@ namespace PCBrouter_prj.ViewModel
                 else if (p.ToString() == "btn_ForwardZ2")
                 {
 
-                    plc.GetDevice("M175", out int m185);
+                    plc.GetDevice("M185", out int m185);
                     if (m185 == 0)
                     {
                         if (int.Parse(SpeedValueZ2) != 0)
@@ -328,6 +328,10 @@ namespace PCBrouter_prj.ViewModel
             });
             LoadedManualUCCommand = new RelayCommand<UserControlKteam.ControlManual>((p) => { return true; }, (p) =>
             {
+                ErrorCodeX = "0";
+                ErrorCodeY = "0";
+                ErrorCodeZ1 = "0";
+                ErrorCodeZ2 = "0";
                 plc = MainViewModel.plc;
                 ctrManual = p;
                 BrakeCheck();

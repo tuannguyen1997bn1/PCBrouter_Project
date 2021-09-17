@@ -19,7 +19,7 @@
         WindowStartupLocation="CenterScreen"
         DataContext="{StaticResource LoginVM}"
         Name="loginWindow"
-        Title="Chế độ Manual" Height="300" Width="400">
+        Title="MANUAL ACCESS" Height="250" Width="380">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedCommand}"

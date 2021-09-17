@@ -64,6 +64,14 @@ namespace PCBrouter_prj.ViewModel
             {
                 _SelectedItems = value;
                 OnPropertyChanged("SelectedItems");
+                if (SelectedItems != null )
+                {
+                    ModelSelected = SelectedItems.Model.ToString();
+                    XvalSelected = SelectedItems.Xval.ToString();
+                    YvalSelected = SelectedItems.Yval.ToString();
+                    PCBsumSelected = SelectedItems.PCBnum.ToString();
+                    ctrAuto.Dispatcher.Invoke(() => { ctrAuto.btn_LoadModel.IsEnabled = true; });
+                }    
             }
         }
         private string _ModelSelected;
@@ -217,38 +225,43 @@ namespace PCBrouter_prj.ViewModel
             });
             LoadModelCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
-                if (SelectedItems != null && ctrAuto.btn_LoadModel.IsEnabled == true)
-                {
-                    plc.SetDevice("M105", 0);
-                    // tham số hiển thị
-                    ModelSelected = SelectedItems.Model.ToString();
-                    XvalSelected = SelectedItems.Xval.ToString();
-                    YvalSelected = SelectedItems.Yval.ToString();
-                    PCBsumSelected = SelectedItems.PCBnum.ToString();
-                    var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable();
-
-                    // tham số tọa độ chạy
-                    C_arrPosXY = ExecutePosValue(data.LastOrDefault().C_pos_X, data.LastOrDefault().C_distance_Y); // format toa do (X,Y)
-                    R_arrPosYX = ExecutePosValue(data.LastOrDefault().R_pos_Y, data.LastOrDefault().R_distance_X); // format toa do (Y,X)
-                    C_sumPosXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[0]; // tổng số điểm theo C - 20
-                    R_sumPosYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[0]; // tổng số điểm theo R - 7
-                    C_sumXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[1]; // tổng số line/col theo C - 17
-                    R_sumYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[1]; // tổng số line/col theo R - 7
-
-                    // set dao
-                    plc.SetDevice("M2222", 1);
-                    Thread.Sleep(50);
-                    plc.SetDevice("M2222", 0);
-                    flagCal = true;
-                    StartKnifeThread();
-                }
-                else
-                {
-                    MessageBox.Show("Xin hãy chọn Model trên bảng Model!");
-                }    
+                LoadDataForAuto();
             });
         }
+        private void LoadDataForAuto()
+        {
+            if (SelectedItems != null && ctrAuto.btn_LoadModel.IsEnabled == true)
+            {
 
+                // tham số hiển thị
+                ModelSelected = SelectedItems.Model.ToString();
+                XvalSelected = SelectedItems.Xval.ToString();
+                YvalSelected = SelectedItems.Yval.ToString();
+                PCBsumSelected = SelectedItems.PCBnum.ToString();
+
+
+                // tham số tọa độ chạy
+                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable();
+                C_arrPosXY = ExecutePosValue(data.LastOrDefault().C_pos_X, data.LastOrDefault().C_distance_Y); // format toa do (X,Y)
+                R_arrPosYX = ExecutePosValue(data.LastOrDefault().R_pos_Y, data.LastOrDefault().R_distance_X); // format toa do (Y,X)
+                C_sumPosXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[0]; // tổng số điểm theo C - 20
+                R_sumPosYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[0]; // tổng số điểm theo R - 7
+                C_sumXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[1]; // tổng số line/col theo C - 17
+                R_sumYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[1]; // tổng số line/col theo R - 7
+
+                // set dao
+                plc.SetDevice("M105", 0);
+                plc.SetDevice("M2222", 1);
+                Thread.Sleep(50);
+                plc.SetDevice("M2222", 0);
+                flagCal = true;
+                StartKnifeThread();
+            }
+            else
+            {
+                MessageBox.Show("Sai trình tự vận hành ( load data )!");
+            }
+        }
         private void TimerSetKnife_Tick(object sender, EventArgs e)
         {
             plc.GetDevice("M7", out int m7);
@@ -257,12 +270,7 @@ namespace PCBrouter_prj.ViewModel
                 flagCal = true;
                 TimerSetKnife.IsEnabled = false;
                 TimerSetKnife.Stop();
-                //plc.SetDevice("M7", 0);
-                plc.SetDevice("M105", 0);
-                plc.SetDevice("M2222", 1);
-                Thread.Sleep(50);
-                plc.SetDevice("M2222", 0);
-                StartKnifeThread();
+                LoadDataForAuto();
             }
         }
         private void TimerStartAuto_Tick1(object sender, EventArgs e)
@@ -335,7 +343,7 @@ namespace PCBrouter_prj.ViewModel
                             user.btn_Run.IsEnabled = false;
                         }
                         user.btn_Home.IsEnabled = true;
-                        user.btn_LoadModel.IsEnabled = true;
+                        user.btn_LoadModel.IsEnabled = false;
                         user.btn_Stop.IsEnabled = false;
                         user.btn_Reset.IsEnabled = true;
                         user.grid_dataBox.IsEnabled = true;
@@ -717,8 +725,10 @@ namespace PCBrouter_prj.ViewModel
                 plc.SetDevice("M7", 0);
                 ctrAuto.Dispatcher.Invoke(() =>
                 {
-                    CalculatedZ1_Knife = Convert.ToString(Z1_Auto_Val);
-                    CalculatedZ2_Knife = Convert.ToString(Z2_Auto_Val);
+                    double tempDouble1 = Math.Truncate(Convert.ToDouble(Z1_Auto_Val) / 10000 * 100) / 100;
+                    double tempDouble2 = Math.Truncate(Convert.ToDouble(Z2_Auto_Val) / 10000 * 100) / 100;
+                    CalculatedZ1_Knife = Convert.ToString(tempDouble1) + " mm";
+                    CalculatedZ2_Knife = Convert.ToString(tempDouble2) + " mm";
                     int[] z1Val_new = new int[2] { -(Z1_Auto_Val % 65536), -(Z1_Auto_Val / 65536) };
                     int[] z2Val_new = new int[2] { -(Z2_Auto_Val % 65536), -(Z2_Auto_Val / 65536) };
                     plc.SetDevice("D1200", z1Val_new[0]);

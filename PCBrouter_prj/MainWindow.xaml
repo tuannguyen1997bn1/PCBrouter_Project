@@ -167,11 +167,11 @@
                                 Text="SERVO ON" 
                                 FontSize="12"
                                 HorizontalAlignment="Center"     
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center" FontWeight="Bold"/>
                                     </Grid>
                                     <Grid Grid.Row="1">
                                         <materialDesign:PackIcon 
-                                Kind="LoginVariant"        
+                                Kind="Sitemap"        
                                 Width="15"
                                 Height="15"
                                 HorizontalAlignment="Center"                  
