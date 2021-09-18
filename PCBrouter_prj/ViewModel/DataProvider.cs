@@ -24,13 +24,13 @@ namespace PCBrouter_prj.ViewModel
             }
         }
 
-        public PCBrouterDBEntities DB { get; set; }
+        public PCBrouterDBfinalEntities DB { get; set; }
 
 
         private DataProvider()
         {
 
-            DB = new PCBrouterDBEntities();
+            DB = new PCBrouterDBfinalEntities();
         }
     }
 }

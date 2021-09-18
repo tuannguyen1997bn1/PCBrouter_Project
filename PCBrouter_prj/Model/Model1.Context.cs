@@ -13,16 +13,11 @@ namespace PCBrouter_prj.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PCBrouterDBEntities : DbContext
+    public partial class PCBrouterDBfinalEntities : DbContext
     {
-        public PCBrouterDBEntities()
-            : base(@"name=PCBrouterDBEntities") // đọc ra từ App.config, hoặc đọc trực tiếp từ đây ( entry point của Model )
+        public PCBrouterDBfinalEntities()
+            : base(@"metadata = res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-QRDMR9C\SQLRAV;initial catalog=PCBrouterDBfinal;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';")
         {
-            // chuỗi mới (M4800)
-            //@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-QRDMR9C\SQLRAV;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';"
-
-            // chuỗi mẫu (cho máy intelNUC - KST)
-            //@"metadata=res://*/Model.Model1.csdl|res://*/Model.Model1.ssdl|res://*/Model.Model1.msl;provider=System.Data.SqlClient;provider connection string=';data source=DESKTOP-FPLJSMH\KSTDATABASE;initial catalog=PCBrouterDB;user id=sa;password=13011408Bn;MultipleActiveResultSets=True';"
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

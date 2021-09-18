@@ -19,13 +19,13 @@ namespace PCBrouter_prj.Model
         public int Xval { get; set; }
         public int Yval { get; set; }
         public int PCBnum { get; set; }
-        public int R_MotionShape_num { get; set; }
-        public string R_MotionShape_distance_Y { get; set; }
-        public string R_distance_X { get; set; }
+        public int Cutting_length { get; set; }
+        public int Cutting_groove { get; set; }
+        public int R_shape_num_Y { get; set; }
+        public int R_distance_Y { get; set; }
         public string R_pos_Y { get; set; }
-        public int C_MotionShape_num { get; set; }
-        public string C_MotionShape_distance_X { get; set; }
-        public string C_distance_Y { get; set; }
+        public int C_shape_num__X { get; set; }
+        public int C_distance_X { get; set; }
         public string C_pos_X { get; set; }
     }
 }

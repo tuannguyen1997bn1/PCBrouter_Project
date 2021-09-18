@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="PCBrouterDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="PCBrouterDBfinalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <!--Errors Found During Generation:
-warning 6002: The table/view 'PCBrouterDB.dbo.ModelList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PCBrouterDBfinal.dbo.ModelList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ModelList">
     <Key>
       <PropertyRef Name="Id" />
@@ -9,13 +9,13 @@ warning 6002: The table/view 'PCBrouterDB.dbo.ModelList' does not have a primary
       <PropertyRef Name="Xval" />
       <PropertyRef Name="Yval" />
       <PropertyRef Name="PCBnum" />
-      <PropertyRef Name="R_MotionShape_num" />
-      <PropertyRef Name="R_MotionShape_distance_Y" />
-      <PropertyRef Name="R_distance_X" />
+      <PropertyRef Name="Cutting_length" />
+      <PropertyRef Name="Cutting_groove" />
+      <PropertyRef Name="R_shape_num_Y" />
+      <PropertyRef Name="R_distance_Y" />
       <PropertyRef Name="R_pos_Y" />
-      <PropertyRef Name="C_MotionShape_num" />
-      <PropertyRef Name="C_MotionShape_distance_X" />
-      <PropertyRef Name="C_distance_Y" />
+      <PropertyRef Name="C_shape_num _X" />
+      <PropertyRef Name="C_distance_X" />
       <PropertyRef Name="C_pos_X" />
     </Key>
     <Property Name="Id" Type="int" Nullable="false" />
@@ -23,16 +23,16 @@ warning 6002: The table/view 'PCBrouterDB.dbo.ModelList' does not have a primary
     <Property Name="Xval" Type="int" Nullable="false" />
     <Property Name="Yval" Type="int" Nullable="false" />
     <Property Name="PCBnum" Type="int" Nullable="false" />
-    <Property Name="R_MotionShape_num" Type="int" Nullable="false" />
-    <Property Name="R_MotionShape_distance_Y" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="R_distance_X" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Cutting_length" Type="int" Nullable="false" />
+    <Property Name="Cutting_groove" Type="int" Nullable="false" />
+    <Property Name="R_shape_num_Y" Type="int" Nullable="false" />
+    <Property Name="R_distance_Y" Type="int" Nullable="false" />
     <Property Name="R_pos_Y" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="C_MotionShape_num" Type="int" Nullable="false" />
-    <Property Name="C_MotionShape_distance_X" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="C_distance_Y" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="C_shape_num _X" Type="int" Nullable="false" />
+    <Property Name="C_distance_X" Type="int" Nullable="false" />
     <Property Name="C_pos_X" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
-  <EntityContainer Name="PCBrouterDBModelStoreContainer">
+  <EntityContainer Name="PCBrouterDBfinalModelStoreContainer">
     <EntitySet Name="ModelList" EntityType="Self.ModelList" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [ModelList].[Id] AS [Id], 
@@ -40,13 +40,13 @@ warning 6002: The table/view 'PCBrouterDB.dbo.ModelList' does not have a primary
     [ModelList].[Xval] AS [Xval], 
     [ModelList].[Yval] AS [Yval], 
     [ModelList].[PCBnum] AS [PCBnum], 
-    [ModelList].[R_MotionShape_num] AS [R_MotionShape_num], 
-    [ModelList].[R_MotionShape_distance_Y] AS [R_MotionShape_distance_Y], 
-    [ModelList].[R_distance_X] AS [R_distance_X], 
+    [ModelList].[Cutting_length] AS [Cutting_length], 
+    [ModelList].[Cutting_groove] AS [Cutting_groove], 
+    [ModelList].[R_shape_num_Y] AS [R_shape_num_Y], 
+    [ModelList].[R_distance_Y] AS [R_distance_Y], 
     [ModelList].[R_pos_Y] AS [R_pos_Y], 
-    [ModelList].[C_MotionShape_num] AS [C_MotionShape_num], 
-    [ModelList].[C_MotionShape_distance_X] AS [C_MotionShape_distance_X], 
-    [ModelList].[C_distance_Y] AS [C_distance_Y], 
+    [ModelList].[C_shape_num _X] AS [C_shape_num _X], 
+    [ModelList].[C_distance_X] AS [C_distance_X], 
     [ModelList].[C_pos_X] AS [C_pos_X]
     FROM [dbo].[ModelList] AS [ModelList]</DefiningQuery>
     </EntitySet>

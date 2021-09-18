@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using PCBrouter_prj.ViewModel;
 using PCBrouter_prj.UserControlKteam;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace PCBrouter_prj.ViewModel
 {
@@ -19,20 +20,25 @@ namespace PCBrouter_prj.ViewModel
     {
         #region DEFINATION
 
-        private ActUtlType plc;
+        IEnumerable<ModelList> dataSource;
         public static bool flagCal = true;
         public static bool autoFlag = false;
-        public static int C_sumPosXY;
-        public static int R_sumPosYX;
-        public static int C_sumXY;
-        public static int R_sumYX;
-
+        public static int sumPos_X;
+        public static int sumPos_Y;
+        public static int sumShape_X;
+        public static int sumShape_Y;
+        public static int cuttingLength;
+        public static int cuttingGroove;
+        public static int shapeDistance_X;
+        public static int shapeDistance_Y;
         public static int Z1_Auto_Val = 0; // khoảng lệch giữa Z1 cắt và điểm đo dao
         public static int Z2_Auto_Val = 0;
-
         public static int DistanceDefault_Z = 404648;
-        public static int[,] C_arrPosXY;
-        public static int[,] R_arrPosYX;
+        public static int[,] arrPos_X;
+        public static int[,] arrPos_Y;
+        
+
+        private ActUtlType plc;
         public static DispatcherTimer TimerStartAuto;
         public static DispatcherTimer TimerStopAuto;
         public static DispatcherTimer TimerSetKnife;
@@ -255,14 +261,19 @@ namespace PCBrouter_prj.ViewModel
                 YvalSelected = SelectedItems.Yval.ToString();
                 PCBsumSelected = SelectedItems.PCBnum.ToString();
 
-                // tham số tọa độ chạy
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable();
-                C_arrPosXY = ExecutePosValue(data.LastOrDefault().C_pos_X, data.LastOrDefault().C_distance_Y); // format toa do (X,Y)
-                R_arrPosYX = ExecutePosValue(data.LastOrDefault().R_pos_Y, data.LastOrDefault().R_distance_X); // format toa do (Y,X)
-                C_sumPosXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[0]; // tổng số điểm theo C - 20
-                R_sumPosYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[0]; // tổng số điểm theo R - 7
-                C_sumXY = SumPosCalculate(data.LastOrDefault().C_pos_X)[1]; // tổng số line/col theo C - 17
-                R_sumYX = SumPosCalculate(data.LastOrDefault().R_pos_Y)[1]; // tổng số line/col theo R - 7
+                //// tham số tọa độ chạy
+                dataSource= DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable();
+                arrPos_X = ArrayPositionExecute(dataSource.LastOrDefault().C_pos_X); // 20,2
+                arrPos_Y = ArrayPositionExecute(dataSource.LastOrDefault().R_pos_Y); // 7,2
+                sumPos_X = intSumPosCalculate(dataSource.LastOrDefault().C_pos_X); // 20
+                sumPos_Y = intSumPosCalculate(dataSource.LastOrDefault().R_pos_Y); // 7
+                sumShape_X = dataSource.LastOrDefault().C_shape_num__X; //2
+                sumShape_Y = dataSource.LastOrDefault().R_shape_num_Y; //4
+                cuttingGroove = dataSource.LastOrDefault().Cutting_groove; //6978
+                cuttingLength = dataSource.LastOrDefault().Cutting_length; //32889
+                shapeDistance_X = dataSource.LastOrDefault().C_distance_X; //528868
+                shapeDistance_Y = dataSource.LastOrDefault().R_distance_Y; //305624
+
 
                 // set dao
                 plc.SetDevice("M105", 0);
@@ -453,93 +464,159 @@ namespace PCBrouter_prj.ViewModel
             TimerStartAuto.IsEnabled = true;
             TimerStartAuto.Start();
         }
-        private int[] SumPosCalculate(string StrPos)
+        private int intSumPosCalculate(string StrPos)
         {
             if (StrPos[StrPos.Length - 1] != 44)
             {
                 StrPos = StrPos + ",";
             }
             int len = StrPos.Length;
-            int[] rs = new int[2] ;
+            int rs = 0;
             for (int i = 0; i < len; i++)
             {
-                if (StrPos[i] == 44 || StrPos[i] == 47)
+                if (StrPos[i] == 44)
                 {
-                    rs[0]++;
-                    if(StrPos[i] == 44)
-                    {
-                        rs[1]++;
-                    }
+                   rs++;
                 }
+                
             }
             return rs;
         }
-        private int[,] ExecutePosValue(string StrPos, string StringDistance)
+        //private int[,] ExecutePosValue(string StrPos, string StringDistance)
+        //{
+        //    // text coordinate cắt ngang : 4185034/-1914115,4331691/-2040651,4568255/-1799060,4713902/-1914115,4860559/-2040651,5097123/-1799060,5242770/-1914115
+        //    // text coordinate cắt dọc : 4486561/-2051348,4234720/-1987582,4430244/-1899653,4621751/-1810799,4488143/-1746814,4370443/-1746814,4234720/-1681958,4430244/-1594029,4621751/-1505175,4488143/-1441190,4370445/-1441190,4234720/-1376334,4430244/-1288405,4621751/-1199551,4488143/-1135566,4370443/-1135566,4234720/-1070710,4430244/-982781,4621751/-893927,4370443/-829942
+        //    string[] arrPosPin = ExecuteStringModel(StrPos); // toa do 1 (string)
+        //    string[] arrPosPinRowCol = ExecuteStringModel(StringDistance); // toa do 2 (string)
+        //    int sumPinVal = SumPosCalculate(StrPos)[0];
+        //    int sumPinsStr = SumPosCalculate(StrPos)[1];
+        //    int[,] intPosPin = new int[sumPinVal, 2];
+        //    int j = 0;
+        //    for (int i = 0; i < sumPinsStr; i++)
+        //    {
+        //        int rs;
+        //        bool canParse = int.TryParse(arrPosPin[i], out rs);
+        //        if (canParse == true)
+        //        {
+        //            intPosPin[j, 0] = rs;
+        //            intPosPin[j, 1] = int.Parse(arrPosPinRowCol[i]);
+        //        }
+        //        else if (arrPosPin[i] != null)
+        //        {
+        //            string[] temp = ExecuteStringModel2(arrPosPin[i]);
+        //            for (int u = 0; u < temp.Length; u++)
+        //            {
+        //                if (temp[u] != null)
+        //                {
+        //                    intPosPin[j, 0] = int.Parse(temp[u]);
+        //                    intPosPin[j, 1] = int.Parse(arrPosPinRowCol[i]);
+        //                    if (u < (temp.Length - 1))
+        //                    {
+        //                        j++;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        j++;
+        //    }
+        //    return intPosPin;
+        //}
+        //private string[] ExecuteStringModel2(string arrPosPin)
+        //{
+        //    if (arrPosPin[arrPosPin.Length - 1] != 47)
+        //    {
+        //        arrPosPin = arrPosPin + "/";
+        //    }
+        //    int len = arrPosPin.Length;
+        //    int sumPin = 0;
+        //    for (int i = 0; i < len; i++)
+        //    {
+        //        if (arrPosPin[i] == 47)
+        //        {
+        //            sumPin++;
+        //        }
+        //    }
+        //    string[] rs = new string[sumPin];
+        //    if (len > 0)
+        //    {
+        //        int count = 0;
+        //        int arrLen = 0;
+        //        for (int i = 0; i < len; i++)
+        //        {
+        //            if (arrPosPin[i] == 47)
+        //            {
+        //                int index1 = i - count;
+        //                string strTemp = arrPosPin.Substring(index1, count);
+        //                if (strTemp != null)
+        //                {
+        //                    rs[arrLen] = strTemp;
+        //                    count = 0;
+        //                    arrLen++;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return rs;
+        //}
+        //private string[] ExecuteStringModel1(string StrPos)
+        //{
+        //    if (StrPos[StrPos.Length - 1] != 44)
+        //    {
+        //        StrPos = StrPos + ",";
+        //    }
+        //    int len = StrPos.Length;
+        //    int sumPinsStr = SumPosCalculate(StrPos)[1];
+        //    string[] arrPosPin = new string[sumPinsStr];
+        //    if (len > 0)
+        //    {
+        //        int count = 0;
+        //        int arrLen = 0;
+        //        for (int i = 0; i < len; i++)
+        //        {
+        //            if (StrPos[i] == 44)
+        //            {
+        //                int index1 = i - count;
+        //                string  strTemp = StrPos.Substring(index1, count);
+        //                if (strTemp != null)
+        //                {
+        //                    arrPosPin[arrLen] = strTemp;
+        //                    count = 0;
+        //                    arrLen++;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                count++;
+        //            }
+        //        }
+        //    }
+        //    return arrPosPin;
+        //}
+        public int[] StringExecute(string StrCoor)
         {
-            string[] arrPosPin = ExecuteStringModel(StrPos); // toa do 1 (string)
-            string[] arrPosPinRowCol = ExecuteStringModel(StringDistance); // toa do 2 (string)
-            int sumPinVal = SumPosCalculate(StrPos)[0];
-            int sumPinsStr = SumPosCalculate(StrPos)[1];
-            int[,] intPosPin = new int[sumPinVal, 2];
-            int j = 0;
-            for (int i = 0; i < sumPinsStr; i++)
+            if (StrCoor[StrCoor.Length - 1] != 47)
             {
-                int rs;
-                bool canParse = int.TryParse(arrPosPin[i], out rs);
-                if (canParse == true)
-                {
-                    intPosPin[j, 0] = rs;
-                    intPosPin[j, 1] = int.Parse(arrPosPinRowCol[i]);
-                }
-                else if (arrPosPin[i] != null)
-                {
-                    string[] temp = ExecuteStringModel2(arrPosPin[i]);
-                    for (int u = 0; u < temp.Length; u++)
-                    {
-                        if (temp[u] != null)
-                        {
-                            intPosPin[j, 0] = int.Parse(temp[u]);
-                            intPosPin[j, 1] = int.Parse(arrPosPinRowCol[i]);
-                            if (u < (temp.Length - 1))
-                            {
-                                j++;
-                            }
-                        }
-                    }
-                }
-                j++;
+                StrCoor = StrCoor + "/";
             }
-            return intPosPin;
-        }
-        private string[] ExecuteStringModel2(string arrPosPin)
-        {
-            if (arrPosPin[arrPosPin.Length - 1] != 47)
-            {
-                arrPosPin = arrPosPin + "/";
-            }
-            int len = arrPosPin.Length;
-            int sumPin = 0;
-            for (int i = 0; i < len; i++)
-            {
-                if (arrPosPin[i] == 47)
-                {
-                    sumPin++;
-                }
-            }
-            string[] rs = new string[sumPin];
+            int len = StrCoor.Length;
+            int[] coor = new int[2];
             if (len > 0)
             {
                 int count = 0;
                 int arrLen = 0;
                 for (int i = 0; i < len; i++)
                 {
-                    if (arrPosPin[i] == 47)
+                    if (StrCoor[i] == 47)
                     {
                         int index1 = i - count;
-                        string strTemp = arrPosPin.Substring(index1, count);
-                        if (strTemp != null)
+                        bool canParse = int.TryParse(StrCoor.Substring(index1, count), out int rs);
+                        if (canParse == true)
                         {
-                            rs[arrLen] = strTemp;
+                            coor[arrLen] = rs;
                             count = 0;
                             arrLen++;
                         }
@@ -550,18 +627,21 @@ namespace PCBrouter_prj.ViewModel
                     }
                 }
             }
-            return rs;
+            return coor;
         }
-        private string[] ExecuteStringModel(string StrPos)
+        public int[,] ArrayPositionExecute(string StrPos)
         {
+            // text coordinate cắt ngang : 4185034/-1914115,4331691/-2040651,4568255/-1799060,4713902/-1914115,4860559/-2040651,5097123/-1799060,5242770/-1914115
+            // text coordinate cắt dọc : 4486561/-2051348,4234720/-1987582,4430244/-1899653,4621751/-1810799,4488143/-1746814,4370443/-1746814,4234720/-1681958,4430244/-1594029,4621751/-1505175,4488143/-1441190,4370445/-1441190,4234720/-1376334,4430244/-1288405,4621751/-1199551,4488143/-1135566,4370443/-1135566,4234720/-1070710,4430244/-982781,4621751/-893927,4370443/-829942
+
             if (StrPos[StrPos.Length - 1] != 44)
             {
                 StrPos = StrPos + ",";
             }
             int len = StrPos.Length;
-            int sumPinsStr = SumPosCalculate(StrPos)[1];
-            string[] arrPosPin = new string[sumPinsStr];
-            if (len > 0)
+            int sumPin = intSumPosCalculate(StrPos);
+            int[,] arrInt = new int[sumPin, 2];
+            if (len>0)
             {
                 int count = 0;
                 int arrLen = 0;
@@ -570,10 +650,12 @@ namespace PCBrouter_prj.ViewModel
                     if (StrPos[i] == 44)
                     {
                         int index1 = i - count;
-                        string  strTemp = StrPos.Substring(index1, count);
+                        string strTemp = StrPos.Substring(index1, count);
                         if (strTemp != null)
                         {
-                            arrPosPin[arrLen] = strTemp;
+                            //arrString[arrLen] = strTemp;
+                            arrInt[arrLen,0] = StringExecute(strTemp)[0];
+                            arrInt[arrLen,1] = StringExecute(strTemp)[1];
                             count = 0;
                             arrLen++;
                         }
@@ -583,8 +665,9 @@ namespace PCBrouter_prj.ViewModel
                         count++;
                     }
                 }
+                
             }
-            return arrPosPin;
+            return arrInt;
         }
         public void InvokeUI(Action a)
         {
@@ -706,8 +789,8 @@ namespace PCBrouter_prj.ViewModel
                 }
                 while (flagStep1 == 1 && flagStep2 == 1 && flagStep3 == 0 &&flagCal == true)
                 {
-                    Z1_Auto_Val = Convert.ToInt32(z1Val[1]) * 65536 + z1Val[0] + DistanceDefault_Z;
-                    Z2_Auto_Val = Convert.ToInt32(z2Val[1]) * 65536 + z2Val[0] + DistanceDefault_Z;
+                    Z1_Auto_Val = Convert.ToInt32((z1Val[1] << 16) + z1Val[0]) + DistanceDefault_Z;
+                    Z2_Auto_Val = Convert.ToInt32((z2Val[1] << 16) + z2Val[0]) + DistanceDefault_Z;
                     flagStep3 = 1;
                 }
                 while (flagStep1 == 1 && flagStep2 == 1 && flagStep3 == 1 && flagCal == true)
@@ -740,12 +823,12 @@ namespace PCBrouter_prj.ViewModel
                     double tempDouble2 = Math.Truncate(Convert.ToDouble(Z2_Auto_Val) / 10000 * 100) / 100;
                     CalculatedZ1_Knife = Convert.ToString(tempDouble1) + " mm";
                     CalculatedZ2_Knife = Convert.ToString(tempDouble2) + " mm";
-                    int[] z1Val_new = new int[2] { -(Z1_Auto_Val % 65536), -(Z1_Auto_Val / 65536) };
-                    int[] z2Val_new = new int[2] { -(Z2_Auto_Val % 65536), -(Z2_Auto_Val / 65536) };
-                    plc.SetDevice("D1200", z1Val_new[0]);
-                    plc.SetDevice("D1201", z1Val_new[1]);
-                    plc.SetDevice("D1300", z2Val_new[0]);
-                    plc.SetDevice("D1301", z2Val_new[1]);
+                    //int[] z1Val_new = new int[2] { -(Z1_Auto_Val % 65536), -(Z1_Auto_Val / 65536) };
+                    //int[] z2Val_new = new int[2] { -(Z2_Auto_Val % 65536), -(Z2_Auto_Val / 65536) };
+                    //plc.SetDevice("D1200", z1Val_new[0]);
+                    //plc.SetDevice("D1201", z1Val_new[1]);
+                    //plc.SetDevice("D1300", z2Val_new[0]);
+                    //plc.SetDevice("D1301", z2Val_new[1]);
                     if (Z1_Auto_Val != 0 && Z2_Auto_Val != 0)
                     {
                         ctrAuto.btn_Run.IsEnabled = true;
@@ -907,26 +990,25 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ExecutionMethod()
         {
-            // D1000 : X
-            // D1100 : Y
+       //D1000: X
+       //D1100 : Y
 
-            // D1200 : Z1 cắt
-            // D1300 : Z2 cắt 
+       //D1200 : Z1 cắt
+       //D1300: Z2 cắt
 
-            // D1400 : Z1 chờ
-            // D1500 : Z2 chờ
+       //D1400: Z1 chờ
+       //D1500: Z2 chờ
 
-            // D1600 : Y tịnh tiến
-            // D1700 : X tịnh tiến
+       //D1600: Y tịnh tiến
+       //D1700 : X tịnh tiến
             try
             {
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int totalPosXY = C_sumPosXY * data.C_MotionShape_num;
-                int totalPosYX = R_sumPosYX * data.R_MotionShape_num;
-                
+                int totalPos_X = sumPos_X * sumShape_X;
+                int totalPos_Y = sumPos_Y * sumShape_Y;
+
                 while (autoFlag == true)
                 {
-                    ExecutePosZ();
+                    ExecuteUpDown();
                     int flag1 = 0;
                     int flag2 = 0;
                     int flag3 = 0;
@@ -944,13 +1026,13 @@ namespace PCBrouter_prj.ViewModel
                     }
                     while (flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true) // === YX === tịnh tiến ngang
                     {
-                        if (R_arrPosYX.Length > 0 && i <= R_sumPosYX)
+                        if (sumPos_Y > 0 && i <= sumPos_Y)
                         {
                             plc.GetDevice("M1777", out int m1777);
                             if (m1777 == 1)
                             {
                                 plc.SetDevice("M1777", 0);
-                                if (i == totalPosYX)
+                                if (i == totalPos_Y)
                                 {
                                     plc.SetDevice("M1444", 1);
                                     Thread.Sleep(50);
@@ -959,13 +1041,13 @@ namespace PCBrouter_prj.ViewModel
                                     flag2 = 1;
                                     flagWait = false;
                                 }
-                                if (i < totalPosYX)
+                                if (i < totalPos_Y)
                                 {
-                                    ExecutePosYX(i);// X + Y1 + Y2
+                                    ExecutePos_Y(i);// X + Y1 + Y2
                                     Thread.Sleep(300);
                                     plc.SetDevice("M200", 1); // bit tịnh tiến ngang (theo Y)
                                     flagWait = true;
-                                    
+
                                 }
                                 while (flagWait == true && flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true)
                                 {
@@ -989,14 +1071,14 @@ namespace PCBrouter_prj.ViewModel
                     }
                     while (flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true) // === XY === tịnh tiến dọc
                     {
-                        if ( C_arrPosXY.Length > 0 && j <= C_sumPosXY)
+                        if (sumPos_X > 0 && j <= sumPos_X)
                         {
                             plc.GetDevice("M1888", out int m1888);
                             if (m1888 == 1)
                             {
                                 plc.SetDevice("M1888", 0);
                                 m1888 = 0;
-                                if (j == totalPosXY)
+                                if (j == totalPos_X)
                                 {
                                     plc.SetDevice("M1555", 1);
                                     Thread.Sleep(50);
@@ -1004,9 +1086,9 @@ namespace PCBrouter_prj.ViewModel
                                     flag3 = 1;
                                     flagWait = false;
                                 }
-                                if (j < totalPosXY)
+                                if (j < totalPos_X)
                                 {
-                                    ExecutePosXY(j); // X1 +X2 + Y
+                                    ExecutePos_X(j); // X1 +X2 + Y
                                     Thread.Sleep(300);
                                     plc.SetDevice("M250", 1); // bit tịnh tiến dọc (theo X)
                                     flagWait = true;
@@ -1044,7 +1126,7 @@ namespace PCBrouter_prj.ViewModel
                             flag1 = 0;
                             flag2 = 0;
                             flag3 = 0;
-                            
+
                         }
                     }
                 }
@@ -1061,13 +1143,13 @@ namespace PCBrouter_prj.ViewModel
                 }
             }
         }
-        public void ExecutePosZ()
+        public void ExecuteUpDown()
         {
             if (Z1_Auto_Val != 0 && Z2_Auto_Val != 0)
             {
                 int[] z1Val_new = new int[4] { (-Z1_Auto_Val % 65536), (-Z1_Auto_Val / 65536), (-Z1_Auto_Val - DistanceDefault_Z) % 65536, (-Z1_Auto_Val - DistanceDefault_Z) / 65536 };
                 int[] z2Val_new = new int[4] { (-Z2_Auto_Val % 65536), (-Z2_Auto_Val / 65536), (-Z2_Auto_Val - DistanceDefault_Z) % 65536, (-Z2_Auto_Val - DistanceDefault_Z) / 65536 };
-                if (z1Val_new[2] < 0 && z1Val_new[3] < 0)
+                if (z1Val_new[2] > 0 && z1Val_new[3] > 0)
                 {
                     plc.SetDevice("D1400", z1Val_new[2]); // Z1 chờ
                     plc.SetDevice("D1401", z1Val_new[3]);
@@ -1086,7 +1168,6 @@ namespace PCBrouter_prj.ViewModel
                     MessageBox.Show("Cài đặt gốc dao lỗi!");
                     autoFlag = false;
                 }    
-                
             }    
             else
             {
@@ -1094,22 +1175,21 @@ namespace PCBrouter_prj.ViewModel
                 autoFlag = false;
             }    
         }
-        public void ExecutePosXY(int i)// (20,2) - tịnh tiến dọc
+        public void ExecutePos_X(int i)// (20,2) - tịnh tiến dọc
         {
             try
             {
-                int[,] arrPosPinXY = C_arrPosXY;
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int Yval = arrPosPinXY[i % C_sumPosXY, 1];
-                int Xval = arrPosPinXY[i % C_sumPosXY, 0] + (i / C_sumPosXY) * int.Parse(data.C_MotionShape_distance_X);
+                int Xval = arrPos_X[i % sumPos_X, 1] + (i / sumPos_X) * shapeDistance_X;
+                int Yval = arrPos_X[i % sumPos_X, 0];
+                
                 plc.SetDevice("D800", Xval % 65536); // X1
                 plc.SetDevice("D801", Xval / 65536);
 
-                plc.SetDevice("D1700", (Xval + 35880) % 65536);// X2
-                plc.SetDevice("D1701", (Xval + 35880) / 65536);
+                plc.SetDevice("D1700", (Xval + cuttingLength) % 65536);// X2
+                plc.SetDevice("D1701", (Xval + cuttingLength) / 65536);
 
                 plc.SetDevice("D1000", Yval % 65536); // Y 
-                plc.SetDevice("D1001", Yval / 65536); 
+                plc.SetDevice("D1001", Yval / 65536);
 
             }
             catch (Exception)
@@ -1117,23 +1197,22 @@ namespace PCBrouter_prj.ViewModel
                 throw;
             }
         }
-        public void ExecutePosYX(int i) // (7,2) - tịnh tiến ngang
+        public void ExecutePos_Y(int i) // (7,2) - tịnh tiến ngang
         {
-            try 
+            try
             {
-                int[,] arrPosPinYX = R_arrPosYX;
-                var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int Yval = arrPosPinYX[i % R_sumPosYX, 0] + (i / R_sumPosYX) * int.Parse(data.R_MotionShape_distance_Y);
-                int Xval = arrPosPinYX[i % R_sumPosYX, 1];
+                int Xval = arrPos_Y[i % sumPos_Y, 0];
+                int Yval = arrPos_Y[i % sumPos_Y, 1] + (i / sumPos_Y) * shapeDistance_Y;
+                
+
                 plc.SetDevice("D800", Xval % 65536); // X 
-                plc.SetDevice("D801", Xval / 65536); 
+                plc.SetDevice("D801", Xval / 65536);
 
-                plc.SetDevice("D1000", Yval % 65536); // Y1 
-                plc.SetDevice("D1001", Yval / 65536); 
+                plc.SetDevice("D1000", -Yval % 65536); // Y1 
+                plc.SetDevice("D1001", -Yval / 65536);
 
-                plc.SetDevice("D1600", (Yval - 35880) % 65536);// Y2
-                plc.SetDevice("D1601", (Yval - 35880) / 65536);
-
+                plc.SetDevice("D1600", (-Yval - cuttingLength) % 65536);// Y2
+                plc.SetDevice("D1601", (-Yval - cuttingLength) / 65536);
             }
             catch (Exception)
             {
