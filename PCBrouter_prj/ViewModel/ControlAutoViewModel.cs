@@ -26,8 +26,10 @@ namespace PCBrouter_prj.ViewModel
         public static int R_sumPosYX;
         public static int C_sumXY;
         public static int R_sumYX;
-        public static int Z1_Auto_Val = 0;
+
+        public static int Z1_Auto_Val = 404648; // khoảng lệch giữa Z1 cắt và điểm đo dao
         public static int Z2_Auto_Val = 0;
+
         public static int DistanceDefault_Z = 0;
         public static int[,] C_arrPosXY;
         public static int[,] R_arrPosYX;
@@ -70,7 +72,10 @@ namespace PCBrouter_prj.ViewModel
                     XvalSelected = SelectedItems.Xval.ToString();
                     YvalSelected = SelectedItems.Yval.ToString();
                     PCBsumSelected = SelectedItems.PCBnum.ToString();
-                    ctrAuto.Dispatcher.Invoke(() => { ctrAuto.btn_LoadModel.IsEnabled = true; });
+                    ctrAuto.Dispatcher.Invoke(() => { 
+                        ctrAuto.btn_LoadModel.IsEnabled = true;
+                        ctrAuto.btn_Run.IsEnabled = true; // test
+                    });
                 }    
             }
         }
@@ -143,6 +148,10 @@ namespace PCBrouter_prj.ViewModel
             {
                 plc = MainViewModel.plc;
                 ctrAuto = p;
+                plc.SetDevice("M103", 1);
+                Thread.Sleep(50);
+                plc.SetDevice("M103", 0);
+                
                 CheckState(ctrAuto);
                 TimerStartAuto = new DispatcherTimer();
                 TimerStartAuto.Interval = new TimeSpan(0, 0, 0, 0, 50);
@@ -159,7 +168,11 @@ namespace PCBrouter_prj.ViewModel
                 TimerStartAuto.Start();
                 TimerSetKnife.IsEnabled = true;
                 TimerSetKnife.Start();
+
                 ImportData();
+                plc.SetDevice("M104", 1);
+                Thread.Sleep(50);
+                plc.SetDevice("M104", 0);
             });
             RunCommand = new RelayCommand<System.Windows.Controls.Button>((p) => { return true; }, (p) =>
             {
@@ -167,6 +180,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     autoFlag = true;
                 });
+                plc.SetDevice("M105", 1);
                 //StartAutoThread();
                 StartTestThread();
                 ctrAuto.Dispatcher.Invoke(() =>
@@ -179,6 +193,7 @@ namespace PCBrouter_prj.ViewModel
                     ctrAuto.grid_dataBox.IsEnabled = false;
                     ctrAuto.grid_tableDB.IsEnabled = false;
                 });
+                StopModeEnable();
                 plc.SetDevice("M101", 1);
                 Thread.Sleep(100);
                 plc.SetDevice("M101", 0);
@@ -189,7 +204,7 @@ namespace PCBrouter_prj.ViewModel
                 {
                     autoFlag = false;
                 });
-                
+                plc.SetDevice("M2", 0);
                 ctrAuto.Dispatcher.Invoke(() =>
                 {
                     ctrAuto.btn_Run.IsEnabled = true;
@@ -200,6 +215,7 @@ namespace PCBrouter_prj.ViewModel
                     ctrAuto.grid_dataBox.IsEnabled = true;
                     ctrAuto.grid_tableDB.IsEnabled = true;
                 });
+                RunModeEnable();
                 plc.SetDevice("M102", 1);
                 Thread.Sleep(100);
                 plc.SetDevice("M102", 0);
@@ -257,10 +273,6 @@ namespace PCBrouter_prj.ViewModel
                 flagCal = true;
                 StartKnifeThread();
             }
-            else
-            {
-                MessageBox.Show("Sai trình tự vận hành ( load data )!");
-            }
         }
         private void TimerSetKnife_Tick(object sender, EventArgs e)
         {
@@ -276,29 +288,25 @@ namespace PCBrouter_prj.ViewModel
         private void TimerStartAuto_Tick1(object sender, EventArgs e)
         {
             plc.GetDevice("M1", out int m1);
-            plc.GetDevice("M2", out int m2);
-            
             if (ctrAuto.btn_Run.IsEnabled == false && m1 == 1)
             {
-                MessageBox.Show("Sai trình tự vận hành ( chạy tự động )!");
-                plc.SetDevice("M1", 0);
-                plc.SetDevice("M103", 1);
-                Thread.Sleep(100);
-                plc.SetDevice("M103", 0);
-            }
-
-            if (ctrAuto.btn_Stop.IsEnabled == false && m2 == 1)
-            {
-                MessageBox.Show("Sai trình tự vận hành ( dừng tự động )!");
-                plc.SetDevice("M2", 0);
-                plc.SetDevice("M103", 1);
-                Thread.Sleep(100);
-                plc.SetDevice("M103", 0);
+                //MessageBox.Show("Sai trình tự vận hành ( chạy tự động )!");
+                //plc.SetDevice("M1", 0);
+                //plc.SetDevice("M103", 1);
+                //Thread.Sleep(100);
+                //plc.SetDevice("M103", 0);
             }
             if (ctrAuto.btn_Run.IsEnabled == true && m1 == 1)
             {
+                plc.SetDevice("M1", 0);
+                m1 = 0;
                 try
                 {
+                    RunModeEnable();
+                    Dispatcher.CurrentDispatcher.Invoke(() =>
+                    {
+                        autoFlag = true;
+                    });
                     ctrAuto.Dispatcher.Invoke(() =>
                     {
                         ctrAuto.btn_Run.IsEnabled = false;
@@ -310,7 +318,7 @@ namespace PCBrouter_prj.ViewModel
                         ctrAuto.grid_tableDB.IsEnabled = false;
                     });
                     plc.SetDevice("M105", 1);
-                    RunModeEnable();
+                    
                     autoFlag = true;
                     //StartTest();
                     StartAutoThread();
@@ -321,6 +329,46 @@ namespace PCBrouter_prj.ViewModel
 
                 }
             }
+            
+        }
+        private void TimerStopAuto_Tick(object sender, EventArgs e)
+        {
+            plc.GetDevice("M2", out int m2);
+            if (ctrAuto.btn_Stop.IsEnabled == true && m2 == 1)
+            {
+                m2 = 0;
+                plc.SetDevice("M2", 0);
+                try
+                {
+                    StopModeEnable();
+                    ctrAuto.Dispatcher.Invoke(() =>
+                    {
+                        ctrAuto.btn_Run.IsEnabled = true;
+                        ctrAuto.btn_Stop.IsEnabled = false;
+                        ctrAuto.btn_Reset.IsEnabled = true;
+                        ctrAuto.btn_Home.IsEnabled = true;
+                        ctrAuto.btn_LoadModel.IsEnabled = true;
+                        ctrAuto.grid_dataBox.IsEnabled = true;
+                        ctrAuto.grid_tableDB.IsEnabled = true;
+                    });
+
+                    autoFlag = false;
+                    plc.SetDevice("M2", 0);
+                }
+                catch
+                {
+
+                }
+            }
+            else if (ctrAuto.btn_Stop.IsEnabled == false && m2 == 1)
+            {
+                //MessageBox.Show("Sai trình tự vận hành ( dừng tự động )!");
+                //plc.SetDevice("M2", 0);
+                //plc.SetDevice("M103", 1);
+                //Thread.Sleep(100);
+                //plc.SetDevice("M103", 0);
+            }
+
         }
         #endregion
 
@@ -391,42 +439,6 @@ namespace PCBrouter_prj.ViewModel
                 });
             }
            
-        }
-        private void TimerStopAuto_Tick(object sender, EventArgs e)
-        {
-            plc.GetDevice("M2", out int m2);
-            if (ctrAuto.btn_Stop.IsEnabled == true && m2 == 1)
-            {
-                try
-                {
-                    ctrAuto.Dispatcher.Invoke(() =>
-                    {
-                        ctrAuto.btn_Run.IsEnabled = true;
-                        ctrAuto.btn_Stop.IsEnabled = false;
-                        ctrAuto.btn_Reset.IsEnabled = true;
-                        ctrAuto.btn_Home.IsEnabled = true;
-                        ctrAuto.btn_LoadModel.IsEnabled = true;
-                        ctrAuto.grid_dataBox.IsEnabled = true;
-                        ctrAuto.grid_tableDB.IsEnabled = true;
-                    });
-                    StopModeEnable();
-                    autoFlag = false;
-                    plc.SetDevice("M2", 0);
-                }
-                catch
-                {
-
-                }
-            }    
-            else if (ctrAuto.btn_Stop.IsEnabled == false && m2 == 1)
-            {
-                MessageBox.Show("Sai trình tự vận hành ( dừng tự động )!");
-                plc.SetDevice("M2", 0);
-                plc.SetDevice("M103", 1);
-                Thread.Sleep(100);
-                plc.SetDevice("M103", 0);
-            }    
-               
         }
         private void RunModeEnable()
         {
@@ -638,7 +650,7 @@ namespace PCBrouter_prj.ViewModel
                 ExecutionThread.Abort();
             }
             ExecutionThread = new Thread(new ThreadStart(ExecutionMethod));
-            KnifeThread.Priority = ThreadPriority.Lowest;
+            ExecutionThread.Priority = ThreadPriority.Lowest;
             ExecutionThread.IsBackground = true;
             ExecutionThread.Start();
         }
@@ -676,7 +688,7 @@ namespace PCBrouter_prj.ViewModel
                 ctrAuto.Dispatcher.Invoke(() =>
                 {
                     ctrAuto.btn_LoadModel.IsEnabled = false;
-                    ctrAuto.btn_Run.IsEnabled = false;
+                    //ctrAuto.btn_Run.IsEnabled = false; 
                 });
                 while ((flagStep1 == 0 || flagStep2 == 0)&& flagStep3 == 0 && flagCal == true)
                 {
@@ -742,7 +754,7 @@ namespace PCBrouter_prj.ViewModel
                     }    
                     else
                     {
-                        ctrAuto.btn_Run.IsEnabled = false;
+                        //ctrAuto.btn_Run.IsEnabled = false;
                         MessageBox.Show("Set Dao Lỗi !! ");
                     }
                     TimerSetKnife.IsEnabled = true;
@@ -762,87 +774,121 @@ namespace PCBrouter_prj.ViewModel
 
         public void ExecutionTest()
         {
-            // m200 ghi tọa độ + chạy
-            // D1000 X
-            // D1100 Y
-            // bit vào chu trình M1666
-            // bit hoàn thành M1777
-            // bit ngắt chu trình M1444
-            // d0 : feed value X
-            // d30 : feed value Y
-            // d60 : feed value Z1
-            // d90 : feed value Z2
+            // d1000 : X
+            // D1100 : Y
+
+            // D1200 : Z1 cắt
+            // D1300 : Z2 cắt 
+
+            // D1400 : Z1 chờ
+            // D1500 : Z2 chờ
+
+            // D1600 : Y tịnh tiến
+            // D1700 : X tịnh tiến
             try
             {
-                int[] z1Val_new = new int[2] { -(Z1_Auto_Val % 65536), -(Z1_Auto_Val / 65536) };
-                int[] z2Val_new = new int[2] { -(Z2_Auto_Val % 65536), -(Z2_Auto_Val / 65536) };
-                plc.SetDevice("D1200", z1Val_new[0]);
-                plc.SetDevice("D1201", z1Val_new[1]);
-                plc.SetDevice("D1300", z2Val_new[0]);
-                plc.SetDevice("D1301", z2Val_new[1]);
-                int flag1 = 0;
-                int flag2 = 0;
-                int i = 0;
-                int[,] arr = new int[4, 2] { { 200000, 200000 }, { 500000, 200000 }, { 500000, 500000 }, { 200000, 500000 } };
+                int[] z1Val_new = new int[4] { (-Z1_Auto_Val - 70000 % 65536), (-Z1_Auto_Val - 800000 / 65536), (-Z1_Auto_Val - 800000 - 500000) % 65536, (-Z1_Auto_Val - 800000 - 500000) / 65536 };
+                int[] z2Val_new = new int[4] { (-Z2_Auto_Val % 65536), (-Z2_Auto_Val / 65536), (-Z2_Auto_Val - 500000) % 65536, (-Z2_Auto_Val - 500000) / 65536 };
+                int[,] arr = new int[4, 2] { { 4185034, 1906844 }, { 4185034, 1599318 }, { 4185034, 1295099 }, { 4185034, 989970 } }; // đã nhân -1 với y
                 int total = arr.Length / 2;
-                while (flag1 == 0 && flag2 == 0 && autoFlag == true)
+                while (autoFlag == true)
                 {
-                    int m1666;
-                    plc.GetDevice("M1666", out m1666);
-                    if (m1666 == 1)
+                    int flag1 = 0;
+                    int flag2 = 0;
+                    bool flagWait = false;
+                    int i = 0;
+                    
+                    while (flag1 == 0 && flag2 == 0 && autoFlag == true)
                     {
-                        plc.SetDevice("M1777", 1);
-                        flag1 = 1;
-
-                    }
-                }
-                while (flag1 == 1 && flag2 == 0 && autoFlag == true)
-                {
-                    if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
-                    {
-                        int m1777;
-                        plc.GetDevice("M1777", out m1777);
-                        if (m1777 == 1)
+                        plc.GetDevice("M1666", out int m1666);
+                        if (m1666 == 1)
                         {
-                            if (i <= 4)
-                            {
-                                plc.SetDevice("M1777", 0);
-                                if (i < 4)
-                                {
-                                    plc.SetDevice("D1000", arr[i, 0] % 65536);
-                                    plc.SetDevice("D1001", arr[i, 0] / 65536);
-                                    plc.SetDevice("D1100", arr[i, 1] % 65536);
-                                    plc.SetDevice("D1101", arr[i, 1] / 65536);
-                                }
-                                else if (i == 4)
-                                {
-                                    plc.SetDevice("D1000", 0 % 65536);
-                                    plc.SetDevice("D1001", 0 / 65536);
-                                    plc.SetDevice("D1100", 0 % 65536);
-                                    plc.SetDevice("D1101", 0 / 65536);
-                                }
-                                Thread.Sleep(100);
-                                plc.SetDevice("M200", 1);
-                                i++;
-                            }
-                            else
-                            {
-                                flag2 = 1;
-                            }
+                            plc.SetDevice("M1777", 1);
+                            flag1 = 1;
                         }
                     }
-                }
-                while (flag1 == 1 && flag2 == 1 && autoFlag == true)
-                {
-                    plc.SetDevice("M1444", 1);
-                    flag1 = 0;
-                    flag2 = 0;
-                }
-               
-            }
-            catch
-            {
+                    while (flag1 == 1 && flag2 == 0 && autoFlag == true)
+                    {
 
+                        if (i < 4)
+                        {
+                            plc.GetDevice("M1777", out int m1777);
+                            if (m1777 == 1)
+                            {
+                                m1777 = 0;
+                                plc.SetDevice("M1777", 0);
+                                if (i == 4)
+                                {
+                                    plc.SetDevice("M1555", 1);
+                                    flag2 = 1;
+                                }
+                                if (i < 4)
+                                {
+
+                                    plc.SetDevice("D1000", arr[i, 0] % 65536);//X
+                                    plc.SetDevice("D1001", arr[i, 0] / 65536);
+
+                                    plc.SetDevice("D1100", arr[i, 1] % 65536);//Y1
+                                    plc.SetDevice("D1101", arr[i, 1] / 65536);
+
+                                    plc.SetDevice("D1600", (arr[i, 1] - 35880) % 65536);// Y2 tịnh tiến
+                                    plc.SetDevice("D1601", (arr[i, 1] - 35880) / 65536);
+
+                                    plc.SetDevice("D1400", 800000 % 65536); // Z1 chờ
+                                    plc.SetDevice("D1401", 800000 / 65536);
+
+                                    //plc.SetDevice("D1300", z2Val_new[2]); // Z2 chờ
+                                    //plc.SetDevice("D1301", z2Val_new[3]);
+
+                                    plc.SetDevice("D1200", 800000 + 200000 % 65536); // Z1 cắt
+                                    plc.SetDevice("D1201", 800000 + 200000 % 65536);
+
+                                    //plc.SetDevice("D1300", z2Val_new[0]); // Z2 cắt
+                                    //plc.SetDevice("D1301", z2Val_new[1]);
+
+                                    Thread.Sleep(300);
+                                    flagWait = true;
+                                    plc.SetDevice("M200", 1);
+
+                                }
+                                while (flagWait == true && flag1 == 1 && flag2 == 0 && autoFlag == true)
+                                {
+                                    short[] Bits = new short[16];
+                                    plc.ReadDeviceRandom2("D0\nD1\nD30\nD31\nD60\nD61\nD90\nD91\nD1000\nD1001\nD1610\nD1611\nD1410\nD1411\nD1510\nD1511", 16, out Bits[0]);
+                                    if (Bits[0] == Bits[8]
+                                        && Bits[1] == Bits[9]
+                                        && Bits[2] == Bits[10]
+                                        && Bits[3] == Bits[11]
+                                        && Bits[4] == Bits[12]
+                                        && Bits[5] == Bits[13])
+                                    //&& Bits[6] == Bits[14]
+                                    //&& Bits[7] == Bits[15])
+                                    {
+                                        i++;
+                                        flagWait = false;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    while (flag1 == 1 && flag2 == 1 && autoFlag == true)
+                    {
+                        short[] Bits = new short[4];
+                        plc.ReadDeviceRandom2("D0\nD1\nD30\nD31", 4, out Bits[0]);
+                        if (Bits[0] == 0 && Bits[1] == 0 && Bits[2] == 0 && Bits[3] == 0)
+                        {
+                            i = 0;
+                            flag1 = 0;
+                            flag2 = 0;
+                            flagWait = false;
+                        }
+                    }
+                } 
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error to start Test_Execution thread: " + e.ToString());
             }
             finally
             {
@@ -854,77 +900,120 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ExecutionMethod()
         {
+            // D1000 : X
+            // D1100 : Y
+
+            // D1200 : Z1 cắt
+            // D1300 : Z2 cắt 
+
+            // D1400 : Z1 chờ
+            // D1500 : Z2 chờ
+
+            // D1600 : Y tịnh tiến
+            // D1700 : X tịnh tiến
             try
             {
-                int[] z1Val_new = new int[2] { -(Z1_Auto_Val % 65536), -(Z1_Auto_Val / 65536) };
-                int[] z2Val_new = new int[2] { -(Z2_Auto_Val % 65536), -(Z2_Auto_Val / 65536) };
-                plc.SetDevice("D1200", z1Val_new[0]);
-                plc.SetDevice("D1201", z1Val_new[1]);
-                plc.SetDevice("D1300", z2Val_new[0]);
-                plc.SetDevice("D1301", z2Val_new[1]);
                 var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int flag1 = 0;
-                int flag2 = 0;
-                int flag3 = 0;
                 int totalPosXY = C_sumPosXY * data.C_MotionShape_num;
                 int totalPosYX = R_sumPosYX * data.R_MotionShape_num;
                 while (autoFlag == true)
                 {
+                    int flag1 = 0;
+                    int flag2 = 0;
+                    int flag3 = 0;
                     int i = 0;
                     int j = 0;
+                    bool flagWait = false;
                     while (flag1 == 0 && flag2 == 0 && flag3 == 0 && autoFlag == true)
                     {
-                        int m1666; // bắt đầu chu trình
-                        plc.GetDevice("M1666", out m1666);
+                        plc.GetDevice("M1666", out int m1666);
                         if (m1666 == 1)
                         {
                             plc.SetDevice("M1777", 1);
                             flag1 = 1;
                         }
                     }
-                    while (flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true) // === YX ===
+                    while (flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true) // === YX === tịnh tiến ngang
                     {
-                        if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
+                        if (R_arrPosYX.Length > 0 )
                         {
                             plc.GetDevice("M1777", out int m1777);
                             if (m1777 == 1)
                             {
                                 plc.SetDevice("M1777", 0);
-                                if (i < totalPosYX)
-                                {
-                                    ExecutePosYX(i);
-                                    Thread.Sleep(100);
-                                    plc.SetDevice("M200", 1); // bit chạy dọc
-                                    i++;
-                                }
-                                else if (i == totalPosYX)
+                                if (i == totalPosYX)
                                 {
                                     plc.SetDevice("M1444", 1);
                                     plc.SetDevice("M1888", 1);
                                     flag2 = 1;
                                 }
+                                if (i < totalPosYX)
+                                {
+                                    ExecutePosYX(i);// X + Y1 + Y2
+                                    ExecutePosZ();
+                                    Thread.Sleep(300);
+                                    plc.SetDevice("M200", 1); // bit tịnh tiến ngang (theo Y)
+                                    flagWait = true;
+                                    
+                                }
+                                while (flagWait == true && flag1 == 1 && flag2 == 0 && flag3 == 0 && autoFlag == true)
+                                {
+                                    short[] Bits = new short[16];
+                                    plc.ReadDeviceRandom2("D0\nD1\nD30\nD31\nD60\nD61\nD90\nD91\nD1000\nD1001\nD1610\nD1611\nD1410\nD1411\nD1510\nD1511", 16, out Bits[0]);
+                                    if (Bits[0] == Bits[8]
+                                        && Bits[1] == Bits[9]
+                                        && Bits[2] == Bits[10]
+                                        && Bits[3] == Bits[11]
+                                        && Bits[4] == Bits[12]
+                                        && Bits[5] == Bits[13]
+                                        && Bits[6] == Bits[14]
+                                        && Bits[7] == Bits[15])
+                                    {
+                                        i++;
+                                        flagWait = false;
+                                    }
+                                }
                             }
                         }
                     }
-                    while (flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true) // === XY ===
+                    while (flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true) // === XY === tịnh tiến dọc
                     {
-                        if (ModelSelected != "" && XvalSelected != "" && YvalSelected != "" && PCBsumSelected != "")
+                        if ( C_arrPosXY.Length > 0)
                         {
                             plc.GetDevice("M1888", out int m1888);
                             if (m1888 == 1)
                             {
                                 plc.SetDevice("M1888", 0);
-                                if (j < totalPosXY)
-                                {
-                                    ExecutePosXY(j);
-                                    Thread.Sleep(100);
-                                    plc.SetDevice("M250", 1); // bit chạy dọc
-                                    j++;
-                                }
-                                else if (j == totalPosXY)
+                                m1888 = 0;
+                                if (j == totalPosXY)
                                 {
                                     plc.SetDevice("M1555", 1);
                                     flag3 = 1;
+                                }
+                                if (j < totalPosXY)
+                                {
+                                    ExecutePosXY(j); // X1 +X2 + Y
+                                    ExecutePosZ();
+                                    Thread.Sleep(300);
+                                    plc.SetDevice("M250", 1); // bit tịnh tiến dọc (theo X)
+                                    flagWait = true;
+                                }
+                                while (flagWait == true && flag1 == 1 && flag2 == 1 && flag3 == 0 && autoFlag == true)
+                                {
+                                    short[] Bits = new short[16];
+                                    plc.ReadDeviceRandom2("D0\nD1\nD30\nD31\nD60\nD61\nD90\nD91\nD1700\nD1701\nD1110\nD1111\nD1410\nD1411\nD1510\nD1511", 16, out Bits[0]);
+                                    if (Bits[0] == Bits[8]
+                                        && Bits[1] == Bits[9]
+                                        && Bits[2] == Bits[10]
+                                        && Bits[3] == Bits[11]
+                                        && Bits[4] == Bits[12]
+                                        && Bits[5] == Bits[13]
+                                        && Bits[6] == Bits[14]
+                                        && Bits[7] == Bits[15])
+                                    {
+                                        j++;
+                                        flagWait = false;
+                                    }
                                 }
                             }
                         }
@@ -935,6 +1024,9 @@ namespace PCBrouter_prj.ViewModel
                         plc.ReadDeviceRandom2("D0\nD1\nD30\nD31", 4, out Bits[0]);
                         if (Bits[0] == 0 && Bits[1] == 0 && Bits[2] == 0 && Bits[3] == 0)
                         {
+                            flagWait = false;
+                            i = 0;
+                            j = 0;
                             flag1 = 0;
                             flag2 = 0;
                             flag3 = 0;
@@ -942,9 +1034,9 @@ namespace PCBrouter_prj.ViewModel
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                MessageBox.Show("Error to start Auto_Execution thread: " + e.ToString());
             }
             finally
             {
@@ -954,7 +1046,23 @@ namespace PCBrouter_prj.ViewModel
                 }
             }
         }
-        public void ExecutePosXY(int i)
+        public void ExecutePosZ()
+        {
+            int[] z1Val_new = new int[4] { (-Z1_Auto_Val % 65536), (-Z1_Auto_Val / 65536), (-Z1_Auto_Val - DistanceDefault_Z) % 65536, (-Z1_Auto_Val - DistanceDefault_Z) / 65536 };
+            int[] z2Val_new = new int[4] { (-Z2_Auto_Val % 65536), (-Z2_Auto_Val / 65536), (-Z2_Auto_Val - DistanceDefault_Z) % 65536, (-Z2_Auto_Val - DistanceDefault_Z) / 65536 };
+            plc.SetDevice("D1400", z1Val_new[2]); // Z1 chờ
+            plc.SetDevice("D1401", z1Val_new[3]);
+
+            plc.SetDevice("D1500", z2Val_new[2]); // Z2 chờ
+            plc.SetDevice("D1501", z2Val_new[3]);
+
+            plc.SetDevice("D1200", z1Val_new[0]); // Z1 cắt
+            plc.SetDevice("D1201", z1Val_new[1]);
+
+            plc.SetDevice("D1300", z2Val_new[0]); // Z2 cắt
+            plc.SetDevice("D1301", z2Val_new[1]);
+        }
+        public void ExecutePosXY(int i)// (20,2) - tịnh tiến dọc
         {
             try
             {
@@ -962,28 +1070,38 @@ namespace PCBrouter_prj.ViewModel
                 var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
                 int Yval = arrPosPinXY[i % C_sumPosXY, 1];
                 int Xval = arrPosPinXY[i % C_sumPosXY, 0] + (i / C_sumPosXY) * int.Parse(data.C_MotionShape_distance_X);
-                plc.SetDevice("D800", Xval % 65536); // X value
-                plc.SetDevice("D801", Xval / 65536); // X value
-                plc.SetDevice("D1000", Yval % 65536); // Y value
-                plc.SetDevice("D1001", Yval / 65536); // Y value
+                plc.SetDevice("D800", Xval % 65536); // X1
+                plc.SetDevice("D801", Xval / 65536);
+
+                plc.SetDevice("D1700", (Xval + 35880) % 65536);// X2
+                plc.SetDevice("D1701", (Xval + 35880) / 65536);
+
+                plc.SetDevice("D1000", Yval % 65536); // Y 
+                plc.SetDevice("D1001", Yval / 65536); 
+
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public void ExecutePosYX(int i)
+        public void ExecutePosYX(int i) // (7,2) - tịnh tiến ngang
         {
-            try
+            try 
             {
                 int[,] arrPosPinYX = R_arrPosYX;
                 var data = DataProvider.Ins.DB.ModelLists.Where(u => u.Id == SelectedItems.Id).AsEnumerable().LastOrDefault();
-                int Yval = arrPosPinYX[i % R_sumPosYX, 0] + (i / R_sumPosYX) * int.Parse(data.C_MotionShape_distance_X);
+                int Yval = arrPosPinYX[i % R_sumPosYX, 0] + (i / R_sumPosYX) * int.Parse(data.R_MotionShape_distance_Y);
                 int Xval = arrPosPinYX[i % R_sumPosYX, 1];
-                plc.SetDevice("D800", Xval % 65536); // X value
-                plc.SetDevice("D801", Xval / 65536); // X value
-                plc.SetDevice("D1000", Yval % 65536); // Y value
-                plc.SetDevice("D1001", Yval / 65536); // Y value
+                plc.SetDevice("D800", Xval % 65536); // X 
+                plc.SetDevice("D801", Xval / 65536); 
+
+                plc.SetDevice("D1000", Yval % 65536); // Y1 
+                plc.SetDevice("D1001", Yval / 65536); 
+
+                plc.SetDevice("D1600", (Yval - 35880) % 65536);// Y2
+                plc.SetDevice("D1601", (Yval - 35880) / 65536);
+
             }
             catch (Exception)
             {

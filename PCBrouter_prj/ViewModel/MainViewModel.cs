@@ -231,8 +231,7 @@ namespace PCBrouter_prj.ViewModel
             }
             finally
             {
-                mwd.Dispatcher.Invoke(() => 
-                {
+                
                     if (iReturnCode == 0)
                     {
                         for (int i = 0; i < 10; i++)
@@ -241,36 +240,55 @@ namespace PCBrouter_prj.ViewModel
                             {
                                 if (i <= 1)
                                 {
-                                    icons[i].Background = Brushes.Lime;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanConnect;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Lime;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanConnect;
+                                    });
                                 }    
                                 else if (i < 6 && i > 1)
                                 {
-                                    icons[i].Background = Brushes.Lime;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Wifi;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Lime;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Wifi;
+                                    });
+                                    
                                 }    
                                 else
                                 {
-                                    icons[i].Background = Brushes.Red;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Alert;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Red;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.Alert;
+                                    });
                                 }    
                             }
                             else
                             {
                                 if (i <= 1)
                                 {
-                                    icons[i].Background = Brushes.Transparent;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanDisconnect;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Transparent;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.LanDisconnect;
+                                    });
                                 }
                                 else if (i < 6 && i > 1)
                                 {
-                                    icons[i].Background = Brushes.Transparent;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.WifiOff;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Transparent;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.WifiOff;
+                                    });
                                 }
                                 else
                                 {
-                                    icons[i].Background = Brushes.Transparent;
-                                    icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CheckCircle;
+                                    mwd.Dispatcher.Invoke(() =>
+                                    {
+                                        icons[i].Background = Brushes.Transparent;
+                                        icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CheckCircle;
+                                    });
                                 }
                             }
                         }
@@ -279,11 +297,13 @@ namespace PCBrouter_prj.ViewModel
                     {
                         for (int i = 0; i < 10; i++)
                         {
-                            icons[i].Background = Brushes.Red;
-                            icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CloseNetwork;
+                            mwd.Dispatcher.Invoke(() =>
+                            {
+                                icons[i].Background = Brushes.Red;
+                                icons[i].Kind = MaterialDesignThemes.Wpf.PackIconKind.CloseNetwork;
+                            });
                         }
                     }
-                });
             }
         }
     }
