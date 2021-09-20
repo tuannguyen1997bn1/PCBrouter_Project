@@ -127,8 +127,7 @@ namespace PCBrouter_prj.ViewModel
         }
         public void ServoOnCheck()
         {
-            int m120;
-            int iretSvOn = plc.GetDevice("M120", out m120);
+            int iretSvOn = plc.GetDevice("M120", out int m120);
             if (iretSvOn == 0)
             {
                 if (m120 == 1)
@@ -182,7 +181,7 @@ namespace PCBrouter_prj.ViewModel
                 //{
                 //    Application.Current.Shutdown();
                 //}
-                if (ControlAutoViewModel.autoFlag == true)
+                if (ControlAutoViewModel.autoFlag == true || ControlAutoViewModel.flagCal == true)
                 {
                     mwd.Dispatcher.Invoke(() =>
                     {
@@ -191,7 +190,7 @@ namespace PCBrouter_prj.ViewModel
                         mwd.rad_btn_Manual.IsEnabled = false;
                     });
                 }
-                else
+                else 
                 {
                     mwd.Dispatcher.Invoke(() =>
                     {
