@@ -85,7 +85,7 @@ namespace PCBrouter_prj.ViewModel
         }
         public void Connection()
         {
-            plc.ActLogicalStationNumber = 1;
+            plc.ActLogicalStationNumber = 2;
             iretCon = plc.Open();
             if (iretCon == 0)
             {
