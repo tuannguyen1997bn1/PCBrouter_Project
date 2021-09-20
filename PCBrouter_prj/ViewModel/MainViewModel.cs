@@ -19,6 +19,7 @@ namespace PCBrouter_prj.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
+        public static bool ServoOnBit = true;
         public static MainWindow mwd;
         public Thread CheckStatusThread;
         public static int iretCon;
@@ -49,10 +50,12 @@ namespace PCBrouter_prj.ViewModel
                 if (m120 == 1)
                 {
                     plc.SetDevice("M120", 0);
+                    ServoOnBit = false;
                 }   
                 else
                 {
                     plc.SetDevice("M120", 1);
+                    ServoOnBit = true;
                 }    
             });
             ClosingWindowCommand = new RelayCommand<MainWindow>((p) => { return true; }, (p) =>
@@ -85,7 +88,7 @@ namespace PCBrouter_prj.ViewModel
         }
         public void Connection()
         {
-            plc.ActLogicalStationNumber = 2;
+            plc.ActLogicalStationNumber = 1;
             iretCon = plc.Open();
             if (iretCon == 0)
             {
@@ -177,10 +180,6 @@ namespace PCBrouter_prj.ViewModel
             int iretEmr = plc.GetDevice("M0", out int m0);
             if (iretEmr == 0)
             {
-                //if (m0 == 1)
-                //{
-                //    Application.Current.Shutdown();
-                //}
                 if (ControlAutoViewModel.autoFlag == true || ControlAutoViewModel.flagCal == true)
                 {
                     mwd.Dispatcher.Invoke(() =>

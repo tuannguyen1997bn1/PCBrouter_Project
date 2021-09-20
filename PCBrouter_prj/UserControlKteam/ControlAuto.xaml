@@ -59,15 +59,103 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="80"></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition Height="145"></RowDefinition>
+                            <RowDefinition Height="100"></RowDefinition>
                         </Grid.RowDefinitions>
+                        <materialDesign:Card
+                            Grid.Row="0"
+                            Margin="5 5 5 0"
+                            UniformCornerRadius="5"
+                            Grid.ColumnSpan="3"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            >
+                            <materialDesign:Card.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFE7EEED" Offset="1"/>
+                                    <GradientStop Color="#FFD3D45E"/>
+                                </LinearGradientBrush>
+                            </materialDesign:Card.Background>
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            Width="100"
+                                Grid.Column="0" Grid.Row="0"  
+                                Background="Black"
+                                Foreground="#FF0C08C0"
+                                HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                                Margin="10 15 10 10"        
+                                UniformCornerRadius="5">
+                            <TextBlock HorizontalAlignment="Center" FontSize="18" VerticalAlignment="Center" FontWeight="Bold" Foreground="White">
+                                 MODE
+                            </TextBlock>
+                        </materialDesign:Card>
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="-15 0 10 0"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:Card
+                                Grid.Row="0"  Grid.Column="0"
+                                Background="#FFE02222"
+                                Foreground="#FF0C08C0"
+                                HorizontalAlignment="Stretch" 
+                                Margin="4 12 4 2"
+                                VerticalAlignment="Stretch"        
+                                UniformCornerRadius="5">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontFamily="Yu Gothic UI Semibold" FontWeight="Bold" Foreground="White">
+                                 SINGLE
+                                </TextBlock>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                                Grid.Row="0"  Grid.Column="1"
+                                Background="#FFE02222"
+                                Foreground="#FF0C08C0"
+                                HorizontalAlignment="Stretch" 
+                                Margin="4 12 4 2"
+                                VerticalAlignment="Stretch"        
+                                UniformCornerRadius="5">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontFamily="Yu Gothic UI Semibold" FontWeight="Bold" Foreground="White">
+                                 DUAL
+                                </TextBlock>
+                            </materialDesign:Card>
+                            <RadioButton
+                                x:Name="rad_btn_single"
+                                GroupName="SelectZonePos"
+                                ToolTip="SINGLE"
+                                Grid.Column="0" Grid.Row="1"
+                                Command="{Binding CheckPosSumCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandParameter="Single_Zone"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignRadioButton}">
+                            </RadioButton>
+                            <RadioButton
+                                x:Name="rad_btn_dual"
+                                GroupName="SelectZonePos"
+                                ToolTip="DUAL"
+                                IsChecked="True"
+                                Grid.Column="1" Grid.Row="1"
+                                Command="{Binding CheckPosSumCommand, UpdateSourceTrigger=PropertyChanged}"
+                                CommandParameter="Dual_Zone"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignRadioButton}"
+                                Tag="True" Background="#FF5C3F90"/>
+
+                        </Grid>
+
                         <materialDesign:Card 
                             
                             Background="#FFCAE089"
@@ -75,7 +163,7 @@
                             Margin="5"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
-                            Grid.Row="0" 
+                            Grid.Row="1" 
                             Grid.ColumnSpan="3">
                             <TextBlock 
                                 VerticalAlignment="Center"
@@ -91,8 +179,8 @@
                             UniformCornerRadius="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Grid.Row="1" 
-                            Grid.RowSpan="5"                 
+                            Grid.Row="2" 
+                            Grid.RowSpan="4"                 
                             Grid.ColumnSpan="3">
                             <materialDesign:Card.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -123,13 +211,13 @@
                                 Foreground="White"
                                 FontSize="14" 
                                 FontWeight="Bold"
-                            Grid.Row="1" 
+                            Grid.Row="2" 
                             Grid.Column="0">
                             Model's name :
                         </TextBlock>
                         <TextBlock 
                             Margin="15 0 0 0"
-                            Grid.Row="2" Grid.Column="0" 
+                            Grid.Row="3" Grid.Column="0" 
                             VerticalAlignment="Center"
                                 HorizontalAlignment="Left" 
                                 Foreground="White"
@@ -137,14 +225,14 @@
                                 FontWeight="Bold">PCB's Height (x):</TextBlock>
                         <TextBlock 
                             Margin="15 0 0 0"
-                            Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
+                            Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
                                 HorizontalAlignment="Left" 
                                 Foreground="White"
                                 FontSize="14" 
                                 FontWeight="Bold">PCB's Width (y):</TextBlock>
                         <TextBlock 
                             Margin="15 0 0 0"
-                            Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
+                            Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
                                 HorizontalAlignment="Left" 
                                 Foreground="White"
                                 FontSize="14" 
@@ -157,7 +245,7 @@
                                 Foreground="White"
                                 FontSize="14" 
                                 FontWeight="Bold"
-                            Grid.Row="1" 
+                            Grid.Row="2" 
                             Grid.Column="1"
                             Grid.ColumnSpan="2"
                             Text="{Binding ModelSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -170,16 +258,6 @@
                                 FontSize="14" 
                                 FontWeight="Bold"
                             Text="{Binding XvalSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Grid.Row="2" 
-                            Grid.Column="1">
-                        </TextBlock>
-                        <TextBlock 
-                            VerticalAlignment="Center"
-                                HorizontalAlignment="Center" 
-                                Foreground="White"
-                                FontSize="14" 
-                                FontWeight="Bold"
-                            Text="{Binding YvalSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="3" 
                             Grid.Column="1">
                         </TextBlock>
@@ -189,22 +267,21 @@
                                 Foreground="White"
                                 FontSize="14" 
                                 FontWeight="Bold"
-                            Text="{Binding PCBsumSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding YvalSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="4" 
                             Grid.Column="1">
                         </TextBlock>
-
-                        <TextBlock
-                            Margin="0 0 10 0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" 
-                             Foreground="White"
-                            FontWeight="Bold"
+                        <TextBlock 
+                            VerticalAlignment="Center"
+                                HorizontalAlignment="Center" 
+                                Foreground="White"
                                 FontSize="14" 
-                            Grid.Row="2"
-                            Grid.Column="2">
-                            mm
+                                FontWeight="Bold"
+                            Text="{Binding PCBsumSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Grid.Row="5" 
+                            Grid.Column="1">
                         </TextBlock>
+
                         <TextBlock
                             Margin="0 0 10 0"
                             HorizontalAlignment="Center"
@@ -217,13 +294,24 @@
                             mm
                         </TextBlock>
                         <TextBlock
-                            Margin="0 0 15 0"
+                            Margin="0 0 10 0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center" 
                              Foreground="White"
                             FontWeight="Bold"
                                 FontSize="14" 
                             Grid.Row="4"
+                            Grid.Column="2">
+                            mm
+                        </TextBlock>
+                        <TextBlock
+                            Margin="0 0 15 0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" 
+                             Foreground="White"
+                            FontWeight="Bold"
+                                FontSize="14" 
+                            Grid.Row="5"
                             Grid.Column="2">
                             piece
                         </TextBlock>
@@ -247,7 +335,8 @@
                         </materialDesign:Card>
                         <Grid
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"   
+                            VerticalAlignment="Stretch"
+                            Margin=" 0 0 0 10"
                             Grid.Column="0" 
                             Grid.Row="7" 
                             Grid.ColumnSpan="3">
@@ -257,7 +346,6 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
@@ -291,14 +379,14 @@
                                 HorizontalAlignment="Left" 
                                 Foreground="White"
                                 FontSize="14" 
-                                FontWeight="Bold">Depth of Knife_1 :</TextBlock>
+                                FontWeight="Bold">Cut_Coordinates_Z1:</TextBlock>
                                 <TextBlock 
-                            Margin="15 0 0 0"
+                            Margin="15 0 0 10"
                             Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                 HorizontalAlignment="Left" 
                                 Foreground="White"
                                 FontSize="14" 
-                                FontWeight="Bold">Depth of Knife_2 :</TextBlock>
+                                FontWeight="Bold">Cut_Coordinates_Z2:</TextBlock>
 
                             </Grid>
                         </Grid>
