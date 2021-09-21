@@ -23,26 +23,35 @@ namespace PCBrouter_prj.ViewModel
         #region DEFINATION
 
         IEnumerable<ModelList> dataSource;
-        public static bool flagCal = true;
-        public static bool autoFlag = false;
-        public static int posSum_X = 0;
-        public static int posSum_Y = 0;
-        public static int sumPos_X;
-        public static int sumPos_Y;
-        public static int sumShape_X;
-        public static int sumShape_Y;
-        public static int cuttingLength;
-        public static int cuttingGroove;
-        public static int shapeDistance_X;
-        public static int shapeDistance_Y;
-        public static int Z1_Auto_Val = 0; // khoảng lệch giữa Z1 cắt và điểm đo dao
-        public static int Z2_Auto_Val = 0;
-        public static int PiecePCB_distance_X = 2198000;
-        public static int PiecePCB_distance_Y = 1000;
-        public static int DistanceDefault_Z1 = 477100; 
-        public static int DistanceDefault_Z2 = 478600; 
-        public static int[,] arrPos_X;
-        public static int[,] arrPos_Y;
+        public static bool flagCal = true; // cờ đo dao
+        public static bool autoFlag = false; // cờ tự đôngj
+
+        public static int posSum_X = 0; // tổng số điểm cắt
+        public static int posSum_Y = 0; // để xác định số cụm cắt (1 hoặc 2)
+
+        public static int sumPos_X; // tổng số điểm chạy cắt tịnh tiến theo chiều X
+        public static int sumPos_Y; // tổng số điểm chạy cắt tịnh tiến theo chiều Y
+
+        public static int sumShape_X; // số biên dạng trong 1 PCB cắt tịnh tiến theo chiều X(2)
+        public static int sumShape_Y; // số biên dạng trong 1 PCB cắt tịnh tiến theo chiều Y(4)
+
+        public static int cuttingLength; // độ dài cắt  
+        public static int cuttingGroove; // khoảng cách giữa 2 đường cắt
+
+        public static int shapeDistance_X; // khoảng cách giữa các biên dạng ( theo X - cụm 20 điểm )
+        public static int shapeDistance_Y; // khoảng cách giữa các biên dạng ( theo Y - cụm 7 điểm )
+
+        public static int Z1_Auto_Val = 0; // khoảng lệch giữa Z1 cắt và điểm đo dao Z1
+        public static int Z2_Auto_Val = 0; // khoảng lệch giữa Z1 cắt và điểm đo dao Z2
+
+        public static int PiecePCB_distance_X = 2198000; // khoảng cách giữa 2 PCB ngoài và 2 PCB trong - theo X
+        public static int PiecePCB_distance_Y = 1000; // offset giữa 2 PCB ngoài và trong - theo Y
+
+        public static int DistanceDefault_Z1 = 477100; // độ dài cố định giữa điểm đo dao và điểm cắt Z1
+        public static int DistanceDefault_Z2 = 479000; // độ dài cố định giữa điểm đo dao và điểm cắt Z2
+
+        public static int[,] arrPos_X; // tọa độ các điểm bắt đầu cắt tịnh tiến theo chiều X (20;2)
+        public static int[,] arrPos_Y; // tọa độ các điểm bắt đầu cắt tịnh tiến theo chiều Y (7;2)
         
 
         private ActUtlType plc;
@@ -61,6 +70,7 @@ namespace PCBrouter_prj.ViewModel
         public ICommand LoadModelCommand { get; set; }
         public ICommand LoadedAutoUCCommand { get; set; }
         public ICommand CheckPosSumCommand { get; set; }
+
         private ObservableCollection<ModelList> _ListData;
         public ObservableCollection<ModelList> ListData
         {
@@ -303,8 +313,9 @@ namespace PCBrouter_prj.ViewModel
                 shapeDistance_X = dataSource.LastOrDefault().C_distance_X; //528868
                 shapeDistance_Y = dataSource.LastOrDefault().R_distance_Y; //305624
 
-                posSum_X = sumPos_X * sumShape_X * 2;
-                posSum_Y = sumPos_Y * sumShape_Y * 2;
+                // mặc định cắt cả 4 PCB
+                posSum_X = sumPos_X * sumShape_X * 2; // 80
+                posSum_Y = sumPos_Y * sumShape_Y * 2; // 56
 
                 //set dao
                 plc.SetDevice("M105", 0);
@@ -329,7 +340,7 @@ namespace PCBrouter_prj.ViewModel
         private void TimerStartAuto_Tick1(object sender, EventArgs e)
         {
             plc.GetDevice("M0", out int m0);
-            if ( m0 == 1)
+            if ( m0 == 0)
             {
                 InvokeUI(() =>
                 {
@@ -667,6 +678,8 @@ namespace PCBrouter_prj.ViewModel
                 {
                     TimerSetKnife.IsEnabled = false;
                     TimerSetKnife.Stop();
+                    ctrAuto.rad_btn_dual.IsEnabled = false;
+                    ctrAuto.rad_btn_single.IsEnabled = false;
                     ctrAuto.btn_Stop.IsEnabled = true;
                     ctrAuto.btn_Reset.IsEnabled = false;
                     ctrAuto.btn_Home.IsEnabled = false;
@@ -682,9 +695,9 @@ namespace PCBrouter_prj.ViewModel
                 Thread.Sleep(1000);
                 while (flagCal == true)
                 {
-                    short[] currentVal = new short[4];
-                    plc.ReadDeviceRandom2("D0\nD30\nD60\nD90", 4, out currentVal[0]);
-                    if (currentVal[0] == 0 && currentVal[1] == 0 && currentVal[2] == 0 && currentVal[3] == 0)
+                    short[] Bits = new short[4];
+                    plc.ReadDeviceRandom2("D0\nD30\nD60\nD90", 4, out Bits[0]);
+                    if (Math.Abs(Bits[0]) < 100 && Math.Abs(Bits[1]) < 100 && Math.Abs(Bits[2]) < 100 && Math.Abs(Bits[3]) < 100)
                     {
                         plc.GetDevice("D1250", out int z11);
                         plc.GetDevice("D1251", out int z12);
@@ -766,14 +779,16 @@ namespace PCBrouter_prj.ViewModel
                 while (autoFlag == true)
                 {
                     //ExecuteUpDown();
+                    int totalPos_X = sumPos_X * sumShape_X;
+                    int totalPos_Y = sumPos_Y * sumShape_Y;
                     int flag1 = 0;
                     int flag2 = 0;
                     int flag3 = 0;
                     int i = 0;
                     int j = 0;
+                    //int i = 28; // chỉ chạy cụm trong
+                    //int j = 40;
                     bool flagWait = false;
-                    int totalPos_X = sumPos_X * sumShape_X;
-                    int totalPos_Y = sumPos_Y * sumShape_Y;
                     // bắt đầu chu trình
                     while (flag1 == 0 && flag2 == 0 && flag3 == 0  && autoFlag == true)
                     {
@@ -793,7 +808,7 @@ namespace PCBrouter_prj.ViewModel
                                         //                    | |
                                         //                    | |
                                         //     *x1/y1 =====> x1/y2
-                        if (sumPos_Y > 0 && i <= sumPos_X)
+                        if (posSum_Y > 0 && i <= posSum_Y)
                         {
                             plc.GetDevice("M1777", out int m1777);
                             if (m1777 == 1)
@@ -807,13 +822,13 @@ namespace PCBrouter_prj.ViewModel
                                     flagWait = true;
 
                                 }
-                                else if ( i >= totalPos_Y && i < sumPos_Y) // cụm trong
+                                else if ( i >= totalPos_Y && i < posSum_Y) // cụm trong
                                 {
                                     ExecutePos_Y(i, 2);
                                     plc.SetDevice("M200", 1); // bit tịnh tiến ngang (theo Y)
                                     flagWait = true;
-                                }    
-                                if (i == sumPos_Y)
+                                }
+                                if (i == posSum_Y)
                                 {
                                     plc.SetDevice("M1444", 1);
                                     plc.SetDevice("M1999", 1);
@@ -849,13 +864,13 @@ namespace PCBrouter_prj.ViewModel
                     }
                     while (flag1 == 1 && flag2 == 1 && flag3 == 0  && autoFlag == true) // === XY === tịnh tiến dọc
                     {
-                                        // so sánh với x1-d1000, y2-d1910, z1-d1410, z2-d1510
-                                        // (end)x1/y2      *x1/y1
-                                        //      ^           | |
-                                        //     | |          | |
-                                        //     | |           v
-                                        //    x2/y2 <===== x2/y1
-                        if (sumPos_X > 0 && j <= sumPos_X)
+                        // so sánh với x1-d1000, y2-d1910, z1-d1410, z2-d1510
+                        // (end)x1/y2      *x1/y1
+                        //      ^           | |
+                        //     | |          | |
+                        //     | |           v
+                        //    x2/y2 <===== x2/y1
+                        if (posSum_X > 0 && j <= posSum_X)
                         {
                             plc.GetDevice("M1999", out int m1999);
                             if (m1999 == 1)
@@ -869,20 +884,17 @@ namespace PCBrouter_prj.ViewModel
                                     plc.SetDevice("M250", 1); // bit tịnh tiến dọc (theo X)
                                     flagWait = true;
                                 }
-                                else if ( j >= totalPos_X && j < sumPos_X) // cụm trong
+                                else if ( j >= totalPos_X && j < posSum_X) // cụm trong
                                 {
                                     
                                     ExecutePos_X(j, 2);
                                     plc.SetDevice("M250", 1); // bit tịnh tiến dọc (theo X)
                                     flagWait = true;
-                                }    
+                                }
                                 if (j == sumPos_X)
                                 {
                                     plc.SetDevice("M1444", 1);
                                     plc.SetDevice("M1555", 1);
-                                    Thread.Sleep(50);
-                                    plc.SetDevice("M1444", 0);
-                                    plc.SetDevice("M1555", 0);
                                     flag3 = 1;
                                     flagWait = false;
                                 }
@@ -918,7 +930,7 @@ namespace PCBrouter_prj.ViewModel
                     {
                         short[] Bits = new short[4];
                         plc.ReadDeviceRandom2("D0\nD1\nD30\nD31", 4, out Bits[0]);
-                        if (Bits[0] == 0 && Bits[1] == 0 && Bits[2] == 0 && Bits[3] == 0)
+                        if (Math.Abs(Bits[0]) <100  && Math.Abs(Bits[1]) < 100 && Math.Abs(Bits[2]) < 100 && Math.Abs(Bits[3]) < 100)
                         {
                             flagWait = false;
                             autoFlag = false;
