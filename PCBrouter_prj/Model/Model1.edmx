@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PCBrouterDBfinalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PCBrouterDBfinal.dbo.ModelList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ModelList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Model" />
+            <PropertyRef Name="Xval" />
+            <PropertyRef Name="Yval" />
+            <PropertyRef Name="PCBnum" />
+            <PropertyRef Name="Cutting_length" />
+            <PropertyRef Name="Cutting_groove" />
+            <PropertyRef Name="R_shape_num_Y" />
+            <PropertyRef Name="R_distance_Y" />
+            <PropertyRef Name="R_pos_Y" />
+            <PropertyRef Name="C_shape_num _X" />
+            <PropertyRef Name="C_distance_X" />
+            <PropertyRef Name="C_pos_X" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Model" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Xval" Type="int" Nullable="false" />
+          <Property Name="Yval" Type="int" Nullable="false" />
+          <Property Name="PCBnum" Type="int" Nullable="false" />
+          <Property Name="Cutting_length" Type="int" Nullable="false" />
+          <Property Name="Cutting_groove" Type="int" Nullable="false" />
+          <Property Name="R_shape_num_Y" Type="int" Nullable="false" />
+          <Property Name="R_distance_Y" Type="int" Nullable="false" />
+          <Property Name="R_pos_Y" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="C_shape_num _X" Type="int" Nullable="false" />
+          <Property Name="C_distance_X" Type="int" Nullable="false" />
+          <Property Name="C_pos_X" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="PCBrouterDBfinalModelStoreContainer">
+          <EntitySet Name="ModelList" EntityType="Self.ModelList" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ModelList].[Id] AS [Id], 
+    [ModelList].[Model] AS [Model], 
+    [ModelList].[Xval] AS [Xval], 
+    [ModelList].[Yval] AS [Yval], 
+    [ModelList].[PCBnum] AS [PCBnum], 
+    [ModelList].[Cutting_length] AS [Cutting_length], 
+    [ModelList].[Cutting_groove] AS [Cutting_groove], 
+    [ModelList].[R_shape_num_Y] AS [R_shape_num_Y], 
+    [ModelList].[R_distance_Y] AS [R_distance_Y], 
+    [ModelList].[R_pos_Y] AS [R_pos_Y], 
+    [ModelList].[C_shape_num _X] AS [C_shape_num _X], 
+    [ModelList].[C_distance_X] AS [C_distance_X], 
+    [ModelList].[C_pos_X] AS [C_pos_X]
+    FROM [dbo].[ModelList] AS [ModelList]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PCBrouterDBfinalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ModelList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Model" />
+            <PropertyRef Name="Xval" />
+            <PropertyRef Name="Yval" />
+            <PropertyRef Name="PCBnum" />
+            <PropertyRef Name="Cutting_length" />
+            <PropertyRef Name="Cutting_groove" />
+            <PropertyRef Name="R_shape_num_Y" />
+            <PropertyRef Name="R_distance_Y" />
+            <PropertyRef Name="R_pos_Y" />
+            <PropertyRef Name="C_shape_num__X" />
+            <PropertyRef Name="C_distance_X" />
+            <PropertyRef Name="C_pos_X" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Model" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Xval" Type="Int32" Nullable="false" />
+          <Property Name="Yval" Type="Int32" Nullable="false" />
+          <Property Name="PCBnum" Type="Int32" Nullable="false" />
+          <Property Name="Cutting_length" Type="Int32" Nullable="false" />
+          <Property Name="Cutting_groove" Type="Int32" Nullable="false" />
+          <Property Name="R_shape_num_Y" Type="Int32" Nullable="false" />
+          <Property Name="R_distance_Y" Type="Int32" Nullable="false" />
+          <Property Name="R_pos_Y" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_shape_num__X" Type="Int32" Nullable="false" />
+          <Property Name="C_distance_X" Type="Int32" Nullable="false" />
+          <Property Name="C_pos_X" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="PCBrouterDBfinalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ModelLists" EntityType="Self.ModelList" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PCBrouterDBfinalModelStoreContainer" CdmEntityContainer="PCBrouterDBfinalEntities">
+          <EntitySetMapping Name="ModelLists">
+            <EntityTypeMapping TypeName="PCBrouterDBfinalModel.ModelList">
+              <MappingFragment StoreEntitySet="ModelList">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Xval" ColumnName="Xval" />
+                <ScalarProperty Name="Yval" ColumnName="Yval" />
+                <ScalarProperty Name="PCBnum" ColumnName="PCBnum" />
+                <ScalarProperty Name="Cutting_length" ColumnName="Cutting_length" />
+                <ScalarProperty Name="Cutting_groove" ColumnName="Cutting_groove" />
+                <ScalarProperty Name="R_shape_num_Y" ColumnName="R_shape_num_Y" />
+                <ScalarProperty Name="R_distance_Y" ColumnName="R_distance_Y" />
+                <ScalarProperty Name="R_pos_Y" ColumnName="R_pos_Y" />
+                <ScalarProperty Name="C_shape_num__X" ColumnName="C_shape_num _X" />
+                <ScalarProperty Name="C_distance_X" ColumnName="C_distance_X" />
+                <ScalarProperty Name="C_pos_X" ColumnName="C_pos_X" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
