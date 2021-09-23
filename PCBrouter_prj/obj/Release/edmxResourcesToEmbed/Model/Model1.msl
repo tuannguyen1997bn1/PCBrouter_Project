@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PCBrouterDBfinalModelStoreContainer" CdmEntityContainer="PCBrouterDBfinalEntities">
+    <EntitySetMapping Name="ModelLists">
+      <EntityTypeMapping TypeName="PCBrouterDBfinalModel.ModelList">
+        <MappingFragment StoreEntitySet="ModelList">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="Xval" ColumnName="Xval" />
+          <ScalarProperty Name="Yval" ColumnName="Yval" />
+          <ScalarProperty Name="PCBnum" ColumnName="PCBnum" />
+          <ScalarProperty Name="Cutting_length" ColumnName="Cutting_length" />
+          <ScalarProperty Name="Cutting_groove" ColumnName="Cutting_groove" />
+          <ScalarProperty Name="R_shape_num_Y" ColumnName="R_shape_num_Y" />
+          <ScalarProperty Name="R_distance_Y" ColumnName="R_distance_Y" />
+          <ScalarProperty Name="R_pos_Y" ColumnName="R_pos_Y" />
+          <ScalarProperty Name="C_shape_num__X" ColumnName="C_shape_num _X" />
+          <ScalarProperty Name="C_distance_X" ColumnName="C_distance_X" />
+          <ScalarProperty Name="C_pos_X" ColumnName="C_pos_X" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
